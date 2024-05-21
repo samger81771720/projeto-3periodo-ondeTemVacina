@@ -1,24 +1,26 @@
 create schema if not exists VACINAS;
 
 create table if not exists VACINAS.ENDERECO(
-	id integer auto_increment not null,
-	logradouro varchar(250) not null,
-	numero varchar(10),
-	complemento varchar(250),
-	bairro varchar(100) not null,
-	cidade varchar(100) not null,
-	estado varchar(100) not null,
-	cep integer not null,
-	pais varchar(10) not null,
-	constraint ENDERECO_pk primary key(id)
+	id INT AUTO_INCREMENT NOT NULL,
+    logradouro VARCHAR(250) NOT NULL,
+    numero VARCHAR(10),
+    complemento VARCHAR(250),
+    bairro VARCHAR(100) NOT NULL,
+    localidade VARCHAR(100) NOT NULL,
+    estado VARCHAR(100) NOT NULL,
+    cep VARCHAR(9) NOT NULL,
+    pais VARCHAR(10) NOT NULL,
+    CONSTRAINT ENDERECO_pk PRIMARY KEY (id)
 ); -- OK
 
+	
 create table if not exists VACINAS.CONTATO(
 	id integer auto_increment not null,
 	tefefone varchar(15) not null,
 	email varchar(100),
 	constraint CONTATO_pk primary key(id)
 ); -- OK
+
 
 create table if not exists VACINAS.PESSOA(
 	id integer auto_increment not null,
