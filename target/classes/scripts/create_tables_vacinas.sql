@@ -16,7 +16,7 @@ create table if not exists VACINAS.ENDERECO(
 	
 create table if not exists VACINAS.CONTATO(
 	id integer auto_increment not null,
-	tefefone varchar(15) not null,
+	telefone varchar(15) not null,
 	email varchar(100),
 	constraint CONTATO_pk primary key(id)
 ); -- OK
@@ -30,12 +30,15 @@ create table if not exists VACINAS.PESSOA(
 	dataNascimento date not null,
 	sexo char(1) not null comment 'M = MASCULINO, F = FEMININO, O = OUTROS',
 	cpf varchar(11) unique not null,
+	login varchar(255) not null unique,
+	senha varchar(255) not null,
 	tipo integer not null comment '1 = USUÁRIO, 2 = ADMINISTRADOR',
 	doencaPreexistente boolean not null default false comment 'TRUE = Possui doença preexistente, FALSE = Não possui doença preexistente',
 	constraint PESSOA_pk primary key(id),
 	constraint CONTATO_PESSOA_fk foreign key(idContato) references VACINAS.CONTATO(id),
 	constraint ENDERECO_PESSOA_fk foreign key (idEndereco) references VACINAS.ENDERECO(id)
 ); -- OK
+
 
 create table if not exists VACINAS.UNIDADE(
 	id integer auto_increment not null,
@@ -92,16 +95,3 @@ create table if not exists VACINAS.ESTOQUE(
 	constraint UNIDADE_ESTOQUE_fk foreign key(idUnidade) references VACINAS.UNIDADE(id),
 	constraint VACINA_ESTOQUE_fk foreign key(idVacina) references VACINAS.VACINA(id)
 );
-
-/*
-select * from VACINAS.ENDERECO;
-select * from VACINAS.CONTATO;
-select * from VACINAS.PESSOA;
-select * from VACINAS.VACINA;
-select * from VACINAS.FABRICANTE;
-select * from VACINAS.APLICACAO;
-select * from VACINAS.ESTOQUE;
-select * from VACINAS.UNIDADE;
-*/
-
-

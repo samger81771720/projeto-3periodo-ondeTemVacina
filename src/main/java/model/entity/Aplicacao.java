@@ -4,30 +4,26 @@ import java.time.LocalDate;
 
 public class Aplicacao {
 	
-	private int idAplicacao;
-	private int idPessoa;
+	private int id;
+	private Pessoa pessoaQueRecebeu;
 	private Vacina vacinaAplicada;
+	private Unidade unidadeOndeAplicou;
 	private LocalDate dataAplicacao;
-	private int avaliacaoReacao;
-
-	public int getIdAplicacao() {
-		return idAplicacao;
-	}
 	
-	public void setIdAplicacao(int idAplicacao) {
-		this.idAplicacao = idAplicacao;
+	private Aplicacao() {
+		super();
 	}
-	public int getIdPessoa() {
-		return idPessoa;
+	public int getId() {
+		return id;
 	}
-	public void setIdPessoa(int idPessoa) {
-		this.idPessoa = idPessoa;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public LocalDate getDataAplicacao() {
-		return dataAplicacao;
+	public Pessoa getPessoaQueRecebeu() {
+		return pessoaQueRecebeu;
 	}
-	public void setDataAplicacao(LocalDate dataAplicacao) {
-		this.dataAplicacao = dataAplicacao;
+	public void setPessoaQueRecebeu(Pessoa pessoaQueRecebeu) {
+		this.pessoaQueRecebeu = pessoaQueRecebeu;
 	}
 	public Vacina getVacinaAplicada() {
 		return vacinaAplicada;
@@ -35,11 +31,18 @@ public class Aplicacao {
 	public void setVacinaAplicada(Vacina vacinaAplicada) {
 		this.vacinaAplicada = vacinaAplicada;
 	}
-	public int getAvaliacaoReacao() {
-		return avaliacaoReacao;
+	public Unidade getUnidadeOndeAplicou() {
+		return unidadeOndeAplicou;
 	}
-	public void setAvaliacaoReacao(int avaliacaoReacao) {
-		this.avaliacaoReacao = avaliacaoReacao;
+	public void setUnidadeOndeAplicou(Unidade unidadeOndeAplicou) {
+		this.unidadeOndeAplicou = unidadeOndeAplicou;
+	}
+	public LocalDate getDataAplicacao() {
+		return dataAplicacao;
+	}
+	public void setDataAplicacao(LocalDate dataAplicacao) {
+		this.dataAplicacao = dataAplicacao;
 	}
 	
 }
+

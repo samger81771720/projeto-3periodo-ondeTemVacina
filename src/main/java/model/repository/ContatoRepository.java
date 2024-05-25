@@ -1,5 +1,6 @@
 package model.repository;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -9,9 +10,26 @@ import model.entity.Contato;
 public class ContatoRepository  implements BaseRepository<Contato> {
 
 	@Override
-	public Contato salvar(Contato novaEntidade) {
-		// TODO Stub de método gerado automaticamente
-		return null;
+	public Contato salvar(Contato contato) {
+		String query = "insert into VACINAS.CONTATO (telefone, email) "
+		   		+ "values (?,?)";
+		    Connection conn = Banco.getConnection();
+		    PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
+		    try {
+		    	    preencherParametrosParaInsertOuUpdate(pstmt, contato, false);
+		            pstmt.execute();
+		            ResultSet resultado = pstmt.getGeneratedKeys();
+		            if(resultado.next()) {
+		            	contato.setId(resultado.getInt(1));
+		        }
+		    } catch(SQLException erro){
+		        System.out.println("Erro na tentativa de salvar um novo contato no banco de dados.");
+		        System.out.println("Erro: " + erro.getMessage());
+		    } finally {
+		        Banco.closeStatement(pstmt);
+		        Banco.closeConnection(conn);
+		    }
+		    return contato;
 	}
 
 	@Override
@@ -21,9 +39,22 @@ public class ContatoRepository  implements BaseRepository<Contato> {
 	}
 
 	@Override
-	public boolean alterar(Contato entidade) {
-		// TODO Stub de método gerado automaticamente
-		return false;
+	public boolean alterar(Contato contato) {
+		boolean alterou = false;
+	    String query = "update VACINAS.CONTATO set telefone = ?,	email = ? where id = ?";
+	    Connection conn = Banco.getConnection();
+	    PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+	    try {
+	    	preencherParametrosParaInsertOuUpdate(pstmt, contato, true);
+	        alterou = pstmt.executeUpdate() > 0;
+	    } catch (SQLException erro) {
+	        System.out.println("Erro ao atualizar o contato informado.");
+	        System.out.println("Erro: " + erro.getMessage());
+	    } finally {
+	        Banco.closeStatement(pstmt);
+	        Banco.closeConnection(conn);
+	    }
+	    return alterou;
 	}
 
 	
@@ -60,6 +91,12 @@ public class ContatoRepository  implements BaseRepository<Contato> {
 		return null;
 	}
 
-
+	private void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Contato contato,  boolean isUpdate) throws SQLException  {
+	    pstmt.setString(1, contato.getTelefone());
+		pstmt.setString(2, contato.getEmail());
+		 if (isUpdate) {
+	            pstmt.setInt(3, contato.getId());
+	            }
+	}
 	
 }

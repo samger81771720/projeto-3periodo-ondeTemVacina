@@ -1,5 +1,3 @@
--- REGISTROS DE ENDEREÇOS
-
 INSERT INTO VACINAS.ENDERECO (logradouro, numero, complemento, bairro, localidade, estado, cep, pais) VALUES
 ('Rua das Flores', '123', 'Apto 101', 'Jardim Primavera', 'São Paulo', 'SP', '1234-678', 'Brasil'),
 ('Avenida Paulista', '2000', 'Sala 305', 'Bela Vista', 'São Paulo', 'SP', '98765-432', 'Brasil'),
@@ -35,7 +33,7 @@ INSERT INTO VACINAS.ENDERECO (logradouro, numero, complemento, bairro, localidad
 
 -- REGISTROS DE CONTATOS DE EMPRESAS
 
-INSERT INTO VACINAS.CONTATO (tefefone, email) VALUES
+INSERT INTO VACINAS.CONTATO (telefone, email) VALUES
 ('11987654331', 'pfizer@empresa_pfizer.com'),
 ('11987654332', 'moderna@empresa_moderna.com'),
 ('11987654333', 'astrazeneca@empresa_astrazeneca.com'),
@@ -49,7 +47,7 @@ INSERT INTO VACINAS.CONTATO (tefefone, email) VALUES
 
 -- REGISTROS DE CONTATOS DE PESSOAS
 
-INSERT INTO VACINAS.CONTATO (tefefone, email) VALUES
+INSERT INTO VACINAS.CONTATO (telefone, email) VALUES
 ('11987654341', 'joao.silva@gmail.com'),
 ('11987654342', 'maria.oliveira@gmail.com'),
 ('11987654343', 'carlos.santos@gmail.com'),
@@ -63,7 +61,7 @@ INSERT INTO VACINAS.CONTATO (tefefone, email) VALUES
 
 -- REGISTROS DE CONTATOS DE UNIDADES DE SAÚDE
 
-INSERT INTO VACINAS.CONTATO (tefefone, email) VALUES
+INSERT INTO VACINAS.CONTATO (telefone, email) VALUES
 ('1123456789', 'contato@hospitalcentral.com'),
 ('1123456790', 'informacoes@clinicafamilia.com'),
 ('1123456791', 'contato@ubsanita.com'),
@@ -81,17 +79,17 @@ INSERT INTO VACINAS.CONTATO (tefefone, email) VALUES
 
 -- REGISTROS DE PESSOAS
 
-INSERT INTO VACINAS.PESSOA (idEndereco, idContato, nome, dataNascimento, sexo, cpf, tipo, doencaPreexistente) VALUES
-(1, 11, 'João Silva', '1980-01-15', 'M', '12345678901', 2, false),
-(2, 12, 'Maria Oliveira', '1975-02-20', 'F', '23456789012', 1, false), 
-(3, 13, 'Carlos Santos', '1988-03-10', 'M', '34567890123', 2, false),
-(4, 14, 'Ana Mendes', '1990-04-25', 'F', '45678901234', 1, false),
-(5, 15, 'Paulo Souza', '1985-05-30', 'M', '56789012345', 2, false),
-(6, 16, 'Lucia Costa', '1992-06-15', 'F', '67890123456', 1, false),
-(7, 17, 'Fernando Alves', '1983-07-22', 'M', '78901234567', 2, false),
-(8, 18, 'Marina Rocha', '1987-08-14', 'F', '89012345678', 1, false),
-(9, 19, 'Julio Ferreira', '1995-09-05', 'M', '90123456789', 2, false),
-(10, 20, 'Amanda Ribeiro', '1991-10-18', 'F', '01234567890', 1, false);
+INSERT INTO VACINAS.PESSOA (idEndereco, idContato, nome, dataNascimento, sexo, cpf, login, senha, tipo, doencaPreexistente) VALUES
+(1, 11, 'João Silva', '1980-01-15', 'M', '12345678901', 'joao.silva1', 'senhaPadrao123', 2, false),
+(2, 12, 'Maria Oliveira', '1975-02-20', 'F', '23456789012', 'maria.oliveira2', 'senhaPadrao123', 1, false),
+(3, 13, 'Carlos Santos', '1988-03-10', 'M', '34567890123', 'carlos.santos3', 'senhaPadrao123', 2, false),
+(4, 14, 'Ana Mendes', '1990-04-25', 'F', '45678901234', 'ana.mendes4', 'senhaPadrao123', 1, false),
+(5, 15, 'Paulo Souza', '1985-05-30', 'M', '56789012345', 'paulo.souza5', 'senhaPadrao123', 2, false),
+(6, 16, 'Lucia Costa', '1992-06-15', 'F', '67890123456', 'lucia.costa6', 'senhaPadrao123', 1, false),
+(7, 17, 'Fernando Alves', '1983-07-22', 'M', '78901234567', 'fernando.alves7', 'senhaPadrao123', 2, false),
+(8, 18, 'Marina Rocha', '1987-08-14', 'F', '89012345678', 'marina.rocha8', 'senhaPadrao123', 1, false),
+(9, 19, 'Julio Ferreira', '1995-09-05', 'M', '90123456789', 'julio.ferreira9', 'senhaPadrao123', 2, false),
+(10, 20, 'Amanda Ribeiro', '1991-10-18', 'F', '01234567890', 'amanda.ribeiro10', 'senhaPadrao123', 1, false);
 
 
 -- REGISTROS DE FABRICANTES
@@ -233,3 +231,4 @@ INSERT INTO VACINAS.ESTOQUE (idUnidade, idVacina, quantidade, dataLote, validade
 (10, 30, 4963, '2022-06-01', '2024-06-01'),
 (10, 31, 6379, '2022-07-01', '2024-07-01'),
 (10, 32, 5698, '2022-08-01', '2024-08-01');
+

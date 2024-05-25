@@ -1,74 +1,62 @@
 package model.entity;
 
-import java.time.LocalDate;
-
 public class Vacina {
 	
-	private int idVacina;
-	private String nome; 
-	private Pessoa pesquisadorResponsavel;
-	private  int estagioDaVacina;
-	private LocalDate dataInicioPesquisa;
-	private Pais pais;
-	private double mediaDaVacina;
+	private int id;
+	private String nome;
+	private Fabricante fabricanteDaVacina;
+	private String categoria;
+	private int idadeMinima;
+	private int idadeMaxima;
+	private boolean contraIndicacao;
 	
-	public Vacina() {
+	private Vacina() {
 		super();
 	}
-
-	public int getIdVacina() {
-		return idVacina;
+	
+	public int getId() {
+		return id;
 	}
-
-	public void setIdVacina(int idVacina) {
-		this.idVacina = idVacina;
+	public void setId(int id) {
+		this.id = id;
 	}
-
+	public Fabricante getFabricanteDaVacina() {
+		return fabricanteDaVacina;
+	}
+	public void setFabricanteDaVacina(Fabricante fabricanteDaVacina) {
+		this.fabricanteDaVacina = fabricanteDaVacina;
+	}
 	public String getNome() {
 		return nome;
 	}
-
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-
-	public Pessoa getPesquisadorResponsavel() {
-		return pesquisadorResponsavel;
+	public String getCategoria() {
+		return categoria;
 	}
-
-	public void setPesquisadorResponsavel(Pessoa pesquisadorResponsavel) {
-		this.pesquisadorResponsavel = pesquisadorResponsavel;
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
-
-	public int getEstagioDaVacina() {
-		return estagioDaVacina;
+	public int getIdadeMinima() {
+		return idadeMinima;
 	}
-
-	public void setEstagioDaVacina(int estagioDaVacina) {
-		this.estagioDaVacina = estagioDaVacina;
+	public void setIdadeMinima(int idadeMinima) {
+		this.idadeMinima = idadeMinima;
 	}
-
-	public LocalDate getDataInicioPesquisa() {
-		return dataInicioPesquisa;
+	public int getIdadeMaxima() {
+		return idadeMaxima;
 	}
-
-	public void setDataInicioPesquisa(LocalDate dataInicioPesquisa) {
-		this.dataInicioPesquisa = dataInicioPesquisa;
+	public void setIdadeMaxima(int idadeMaxima) {
+		this.idadeMaxima = idadeMaxima;
 	}
-
-	public Pais getPais() {
-		return pais;
+	public boolean isContraIndicacao() {
+		return contraIndicacao;
 	}
-
-	public void setPais(Pais pais) {
-		this.pais = pais;
+	public void setContraIndicacao(boolean contraIndicacao) {
+		this.contraIndicacao = contraIndicacao;
 	}
-
-	public double getMediaDaVacina() {
-		return mediaDaVacina;
-	}
-
-	public void setMediaDaVacina(double mediaDaVacina) {
-		this.mediaDaVacina = mediaDaVacina;
-	}
+	
 }
+
+

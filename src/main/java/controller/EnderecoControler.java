@@ -12,7 +12,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.Endereco;
-import model.entity.Vacina;
 import model.service.EnderecoService;
 
 @Path("/endereco")

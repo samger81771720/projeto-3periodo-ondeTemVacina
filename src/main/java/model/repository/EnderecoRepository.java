@@ -6,13 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.List;
-
 import model.entity.Endereco;
-import model.entity.Pais;
-import model.entity.Pessoa;
-import model.entity.Vacina;
-
 
 public class EnderecoRepository implements BaseRepository<Endereco>{
 
@@ -30,7 +24,7 @@ public class EnderecoRepository implements BaseRepository<Endereco>{
 	            	endereco.setId(resultado.getInt(1));
 	        }
 	    } catch(SQLException erro){
-	        System.out.println("Erro na tentativa de salvar uma novo endereço no banco de dados.");
+	        System.out.println("Erro na tentativa de salvar um novo endereço no banco de dados.");
 	        System.out.println("Erro: " + erro.getMessage());
 	    } finally {
 	        Banco.closeStatement(pstmt);
@@ -163,7 +157,7 @@ public class EnderecoRepository implements BaseRepository<Endereco>{
 		pstmt.setString(8, endereco.getPais());
 		 if (isUpdate) {
 	            pstmt.setInt(9, endereco.getId());
-	        }
+	            }
 	}
 	
 }
