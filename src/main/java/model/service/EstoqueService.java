@@ -23,4 +23,12 @@ public class EstoqueService {
 		return estoqueRepository.excluirEstoqueDaUnidade(idUnidade, idVacina);
 	}
 	
+	public Estoque salvar(Estoque novoEstoque) {
+		return estoqueRepository.salvar(novoEstoque);
+	}
+	
+	public boolean alterar(Estoque estoqueAnterior) {
+		return estoqueRepository.alterar(estoqueAnterior);
+	}
+	
 }

@@ -1,21 +1,43 @@
 package model.repository;
 
 import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
+import model.entity.Contato;
 import model.entity.Endereco;
 import model.entity.Estoque;
 import model.entity.Unidade;
 
 public class EstoqueRepository implements BaseRepository<Estoque>{
 
+	
 	@Override
-	public Estoque salvar(Estoque novaEntidade) {
-		return null;
+	public Estoque salvar(Estoque novoEstoque) {
+	    String query = "insert into VACINAS.ESTOQUE (idUnidade, idVacina, quantidade, dataLote, validade) values (?, ?, ?, ?, ?)";
+	    Connection conn = Banco.getConnection();
+	    PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
+	    try {
+	        this.preencherParametrosParaInsertOuUpdate(pstmt, novoEstoque, false);
+	        int linhasAfetadas = pstmt.executeUpdate();
+	        if (linhasAfetadas == 1) {
+	            return novoEstoque;
+	        } else {
+	            throw new SQLException("A tentaiva de inserção não afetou nenhuma linha.");
+	        }
+	    } catch (SQLException erro) {
+	        System.out.println("Erro na tentativa de salvar um novo estoque da unidade "
+	                             + novoEstoque.getUnidade().getNome() + " no banco de dados.");
+	        System.out.println("Erro: " + erro.getMessage());
+	        return null;
+	    } finally {
+	        Banco.closeStatement(pstmt);
+	        Banco.closeConnection(conn);
+	    }
 	}
 
 	public boolean excluirEstoqueDaUnidade(int idUnidade, int idVacina) {
@@ -39,8 +61,23 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	}
 
 	@Override
-	public boolean alterar(Estoque entidade) {
-		return false;
+	public boolean alterar(Estoque estoqueAnterior) {
+		boolean alterou = false;
+	    String query = "update VACINAS.ESTOQUE set idUnidade = ?, idVacina = ?, quantidade = ?, "
+	    						  + "dataLote = ?, validade = ? where idUnidade = ? and idVacina = ? ";
+	    Connection conn = Banco.getConnection();
+	    PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+	    try {
+	    	this.preencherParametrosParaInsertOuUpdate(pstmt, estoqueAnterior, true);
+	        alterou = pstmt.executeUpdate() > 0;
+	    } catch (SQLException erro) {
+	        System.out.println("Erro ao tentar atualizar o estoque da unidade " + estoqueAnterior.getUnidade().getNome());
+	        System.out.println("Erro: " + erro.getMessage());
+	    } finally {
+	        Banco.closeStatement(pstmt);
+	        Banco.closeConnection(conn);
+	    }
+	    return alterou;
 	}
 
 	public List<Estoque> consultarEstoquesDaUnidade(int idUnidade) {
@@ -97,6 +134,11 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return null;
 	}
 	
+	@Override
+	public boolean excluir(int id) {
+		return false;
+	}
+	
 	private Estoque converterParaObjeto(ResultSet resultado) throws SQLException{
 		Estoque estoque = new Estoque();
 		UnidadeRepository unidadeRepository = new UnidadeRepository();
@@ -113,11 +155,20 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return estoque;
 	}
 
-
-	@Override
-	public boolean excluir(int id) {
-		// TODO Stub de método gerado automaticamente
-		return false;
+	private void preencherParametrosParaInsertOuUpdate	(PreparedStatement pstmt, Estoque novoEstoque,  boolean isUpdate) 
+	throws SQLException  {
+	    pstmt.setInt(1, novoEstoque.getUnidade().getId());
+		pstmt.setInt(2, novoEstoque.getVacina().getId());
+		pstmt.setInt(3, novoEstoque.getQuantidade());
+		if(novoEstoque.getDataLote() != null) {
+			pstmt.setDate(4, Date.valueOf(novoEstoque.getDataLote()));
+		}
+		if(novoEstoque.getValidade() != null) {
+			pstmt.setDate(5, Date.valueOf(novoEstoque.getValidade()));
+		}
+		 if (isUpdate) {
+	         pstmt.setInt(6, novoEstoque.getUnidade().getId());
+	         pstmt.setInt(7, novoEstoque.getVacina().getId());
+	      }
 	}
-
 }
