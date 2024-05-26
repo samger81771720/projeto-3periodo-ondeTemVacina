@@ -98,10 +98,10 @@ public class PessoaService {
 			) {
 			mensagemValidacao += " - O campo login precisa ser preenchido. ";
 		}
-		if (novaPessoa.getLogin().contains(" ") || novaPessoa.getLogin().length() < 8 || novaPessoa.getLogin().length() > 12) {
+		if (novaPessoa.getLogin().contains(" ") || novaPessoa.getLogin().length() < 8 || novaPessoa.getLogin().length() > 20) {
 		    mensagemValidacao += " - O campo login precisa ser preenchido com no mínimo oito e no máximo doze caracteres, sem espaços.";
 		}
-		if ( novaPessoa.getSenha().contains(" ") ||  novaPessoa.getSenha().length() < 8 ||  novaPessoa.getSenha().length() > 12) {
+		if ( novaPessoa.getSenha().contains(" ") ||  novaPessoa.getSenha().length() < 8 ||  novaPessoa.getSenha().length() > 20) {
 		    mensagemValidacao += " - O campo senha precisa ser preenchido com no mínimo oito e no máximo doze caracteres, sem espaços.";
 		}
 		if(novaPessoa.getTipo() != Pessoa.ADMINISTRADOR  && novaPessoa.getTipo() != Pessoa.USUARIO) {
@@ -130,11 +130,11 @@ public class PessoaService {
 	    		) {
 	        mensagemValidacao += " - O campo login e/ou o campo senha precisam ser preenchidos e não podem haver espaços em branco no preenchimento dos campos. ";
 	    }
-	    if(novaPessoa.getLogin().length()<8) {
-	    	mensagemValidacao += " - O campo login precisa ter ao menos oito caracteres e sem espaços. ";
+	    if(novaPessoa.getLogin().contains(" ") || novaPessoa.getLogin().length()<8 || novaPessoa.getLogin().length() > 20) {
+	    	mensagemValidacao += " - O campo login precisa ter no mínimo oito e no máximo 12 caracteres e sem espaços. ";
 	    }
-	    if(novaPessoa.getSenha().length()<8) {
-	    	mensagemValidacao += " - O campo senha precisa ter ao menos oito caracteres e sem espaços. ";
+	    if(novaPessoa.getSenha().contains(" ") || novaPessoa.getSenha().length()<8 || novaPessoa.getSenha().length() > 20) {
+	    	mensagemValidacao += " - O campo senha precisa ter no mínimo oito e no máximo 12 caracteres e sem espaços. ";
 	    }
 	    if(!mensagemValidacao.isEmpty()) {
 			throw new ControleVacinasException("As observações a seguir precisam ser atendidas para efetuar o login com sucesso: " + mensagemValidacao);

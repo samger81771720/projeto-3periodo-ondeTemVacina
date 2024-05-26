@@ -10,7 +10,7 @@ public class Vacina {
 	private int idadeMaxima;
 	private boolean contraIndicacao;
 	
-	private Vacina() {
+	public Vacina() {
 		super();
 	}
 	

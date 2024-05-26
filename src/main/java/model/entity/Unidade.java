@@ -2,11 +2,12 @@ package model.entity;
 
 public class Unidade {
 	
+	private int id;
 	private String nome;
 	private Endereco enderecoDaUnidade;
 	private Contato contatoDaUnidade;
 	
-	private Unidade() {
+	public Unidade() {
 		super();
 	}
 
@@ -32,6 +33,14 @@ public class Unidade {
 
 	public void setContatoDaUnidade(Contato contatoDaUnidade) {
 		this.contatoDaUnidade = contatoDaUnidade;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }

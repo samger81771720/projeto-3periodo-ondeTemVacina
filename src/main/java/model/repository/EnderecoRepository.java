@@ -17,7 +17,7 @@ public class EnderecoRepository implements BaseRepository<Endereco>{
 	    Connection conn = Banco.getConnection();
 	    PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 	    try {
-	    	    preencherParametrosParaInsertOuUpdate(pstmt, endereco, false);
+	    	    this.preencherParametrosParaInsertOuUpdate(pstmt, endereco, false);
 	            pstmt.execute();
 	            ResultSet resultado = pstmt.getGeneratedKeys();
 	            if(resultado.next()) {
@@ -71,7 +71,7 @@ public class EnderecoRepository implements BaseRepository<Endereco>{
 	    Connection conn = Banco.getConnection();
 	    PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
 	    try {
-	    	preencherParametrosParaInsertOuUpdate(pstmt, endereco, true);
+	    	this.preencherParametrosParaInsertOuUpdate(pstmt, endereco, true);
 	        alterou = pstmt.executeUpdate() > 0;
 	    } catch (SQLException erro) {
 	        System.out.println("Erro ao atualizar o endereço informado.");
@@ -94,10 +94,10 @@ public class EnderecoRepository implements BaseRepository<Endereco>{
 		try {
 			resultado = stmt.executeQuery(query);
 			if(resultado.next()) {
-				endereco = converterParaObjeto(resultado);
+				endereco = this.converterParaObjeto(resultado);
 			}
 		} catch (SQLException erro) {
-			System.out.println("Erro ao tentar consultar a lista de endereço de id "+id);
+			System.out.println("Erro ao tentar consultar o endereço de id "+id);
 			System.out.println("Erro: "+erro.getMessage());
 		} finally {
 			Banco.closeResultSet(resultado);

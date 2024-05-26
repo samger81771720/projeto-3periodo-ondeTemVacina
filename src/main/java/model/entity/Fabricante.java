@@ -7,7 +7,7 @@ public class Fabricante {
 	private Endereco enderecoDoFabricante;
 	private Contato contatoDoFabricante;
 	
-	private Fabricante() {
+	public Fabricante() {
 		super();
 	}
 

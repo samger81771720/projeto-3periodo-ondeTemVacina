@@ -16,7 +16,7 @@ public class ContatoRepository  implements BaseRepository<Contato> {
 		    Connection conn = Banco.getConnection();
 		    PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		    try {
-		    	    preencherParametrosParaInsertOuUpdate(pstmt, contato, false);
+		    	    this.preencherParametrosParaInsertOuUpdate(pstmt, contato, false);
 		            pstmt.execute();
 		            ResultSet resultado = pstmt.getGeneratedKeys();
 		            if(resultado.next()) {
@@ -45,7 +45,7 @@ public class ContatoRepository  implements BaseRepository<Contato> {
 	    Connection conn = Banco.getConnection();
 	    PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
 	    try {
-	    	preencherParametrosParaInsertOuUpdate(pstmt, contato, true);
+	    	this.preencherParametrosParaInsertOuUpdate(pstmt, contato, true);
 	        alterou = pstmt.executeUpdate() > 0;
 	    } catch (SQLException erro) {
 	        System.out.println("Erro ao atualizar o contato informado.");

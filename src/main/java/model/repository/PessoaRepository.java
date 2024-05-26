@@ -21,7 +21,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		    Connection conn = Banco.getConnection();
 		    PreparedStatement pstmt = Banco.getPreparedStatementWithPk(conn, query);
 		    try {
-		    		preencherParametrosParaInsertOuUpdate(pstmt, novaPessoa, false);
+		    		this.preencherParametrosParaInsertOuUpdate(pstmt, novaPessoa, false);
 		            pstmt.execute();
 		            ResultSet resultado = pstmt.getGeneratedKeys();
 		            if(resultado.next()) {
@@ -51,7 +51,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 	    Connection conn = Banco.getConnection();
 	    PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
 	    try {
-	    	preencherParametrosParaInsertOuUpdate(pstmt, pessoaAtualizada, true);
+	    	this.preencherParametrosParaInsertOuUpdate(pstmt, pessoaAtualizada, true);
 	        alterou = pstmt.executeUpdate() > 0;
 	    } catch (SQLException erro) {
 	        System.out.println("Erro ao atualizar a pessoa informada.");
@@ -79,7 +79,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		try {
 			resultado = stmt.executeQuery(query);
 		if(resultado.next()) {
-			pessoa = converterParaObjeto(resultado);
+			pessoa = this.converterParaObjeto(resultado);
 		}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao tentar confirmar o login e senha do usuário de nome  "+pessoaLogin.getNome());
