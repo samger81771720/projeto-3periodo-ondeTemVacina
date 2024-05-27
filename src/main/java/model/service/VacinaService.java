@@ -10,5 +10,9 @@ public class VacinaService {
 	public Vacina consultarPorId(int id) {
 		return vacinaRepository.consultarPorId(id);
 	}
+	
+	public boolean excluir(int id) {
+		return vacinaRepository.excluir(id);
+	}
 
 }

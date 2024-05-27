@@ -8,10 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import model.entity.Contato;
-import model.entity.Endereco;
 import model.entity.Estoque;
-import model.entity.Unidade;
 
 public class EstoqueRepository implements BaseRepository<Estoque>{
 
@@ -110,7 +107,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		Statement stmt = Banco.getStatement(conn);
 		ArrayList<Estoque> listaDeTodosEstoques = new ArrayList<>();
 		ResultSet resultado = null;
-		String query = "select idUnidade, idVacina, quantidade, dataLote, validade from VACINAS.ESTOQUE";
+		String query = "select U.id as idUnidade, E.idVacina, "
+							      + "E.quantidade, E.dataLote, E.validade from VACINAS.ESTOQUE E "
+							      + "inner join VACINAS.UNIDADE U on E.idUnidade = U.id order by U.nome asc";
 		try{
 			resultado = stmt.executeQuery(query);
 			while(resultado.next()){
@@ -126,10 +125,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 			Banco.closeConnection(conn);
 		}
 		return listaDeTodosEstoques;
-		
 	}
 
-	@Override
+		@Override
 	public Estoque consultarPorId(int id) {
 		return null;
 	}
@@ -154,9 +152,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		}
 		return estoque;
 	}
-
+	
 	private void preencherParametrosParaInsertOuUpdate	(PreparedStatement pstmt, Estoque novoEstoque,  boolean isUpdate) 
-	throws SQLException  {
+			throws SQLException  {
 	    pstmt.setInt(1, novoEstoque.getUnidade().getId());
 		pstmt.setInt(2, novoEstoque.getVacina().getId());
 		pstmt.setInt(3, novoEstoque.getQuantidade());
