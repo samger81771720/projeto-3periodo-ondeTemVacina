@@ -11,7 +11,7 @@ create table if not exists VACINAS.ENDERECO(
     cep VARCHAR(9) NOT NULL,
     pais VARCHAR(10) NOT NULL,
     CONSTRAINT ENDERECO_pk PRIMARY KEY (id)
-); -- OK
+); 
 
 	
 create table if not exists VACINAS.CONTATO(
@@ -19,7 +19,7 @@ create table if not exists VACINAS.CONTATO(
 	telefone varchar(15) not null,
 	email varchar(100),
 	constraint CONTATO_pk primary key(id)
-); -- OK
+); 
 
 
 create table if not exists VACINAS.PESSOA(
@@ -37,7 +37,7 @@ create table if not exists VACINAS.PESSOA(
 	constraint PESSOA_pk primary key(id),
 	constraint CONTATO_PESSOA_fk foreign key(idContato) references VACINAS.CONTATO(id),
 	constraint ENDERECO_PESSOA_fk foreign key (idEndereco) references VACINAS.ENDERECO(id)
-); -- OK
+); 
 
 
 create table if not exists VACINAS.UNIDADE(
@@ -48,7 +48,7 @@ create table if not exists VACINAS.UNIDADE(
 	constraint UNIDADE_pk primary key(id),
 	constraint ENDERECO_UNIDADE_fk foreign key(idEndereco) references VACINAS.ENDERECO(id),
 	constraint CONTATO_UNIDADE_fk foreign key(idContato) references VACINAS.CONTATO(id)
-); -- OK
+); 
 
 create table if not exists VACINAS.FABRICANTE(
 	id integer auto_increment not null,
@@ -58,7 +58,7 @@ create table if not exists VACINAS.FABRICANTE(
 	constraint FABRICANTE_pk primary key(id),
 	constraint ENDERECO_FABRICANTE_fk foreign key(idEndereco) references VACINAS.ENDERECO(id),
 	constraint CONTATO_FABRICANTE_fk foreign key(idContato) references VACINAS.CONTATO(id)
-); -- OK
+); 
 
 create table if not exists VACINAS.VACINA(
 	id integer auto_increment not null,
@@ -85,6 +85,7 @@ create table if not exists VACINAS.APLICACAO(
 ); -- OK
 
 
+-- "NÃO É POSSÍVEL INSERIR OU ATUALIZAR REGISTROS NA TABELA ESTOQUE COM VALORES DUPLICADOS DE idUnidade e idVacina"
 create table if not exists VACINAS.ESTOQUE(
 	idUnidade INTEGER not null,
 	idVacina INTEGER not null,

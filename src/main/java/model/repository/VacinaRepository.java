@@ -89,8 +89,19 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
-		String sql = 	"select v.id, v.idFabricante, v.nome, v.categoria, v.idadeMinima, "
-							    + "v.idadeMaxima, v.contraIndicacao from VACINAS.VACINA v";
+		String sql = "select"
+									+ " VACINA.nome,"
+									+ " VACINA.categoria,"
+									+ " VACINA.idadeMinima,"
+									+ " VACINA.idadeMaxima,"
+									+ " VACINA.contraIndicacao,"
+									+ " FABRICANTE.nome,"
+									+ " UNIDADE.id,"
+									+ " UNIDADE.nome,"
+									+ " ENDERECO.bairro,"
+									+ " ENDERECO.cep"
+									+ " FROM"
+									+ " VACINAS.VACINA ";
 		if(seletor.temFiltro()) {
 			sql = preencherFiltros(seletor,sql);
 		}
@@ -126,41 +137,26 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	
 	private String preencherFiltros(VacinaSeletor seletor, String sql) {
 
-		final String AND = " AND ";
+		final String AND = " and ";
 
-	    sql += "SELECT"
-	    		+ " VACINA.nome,"
-	    		+ " VACINA.categoria,"
-	    		+ " VACINA.idadeMinima,"
-	    		+ " VACINA.idadeMaxima,"
-	    		+ " VACINA.contraIndicacao,"
-	    		+ " FABRICANTE.nome,"
-	    		+ " UNIDADE.nome,"
-	    		+ " ENDERECO.logradouro,"
-	    		+ " ENDERECO.numero,"
-	    		+ " ENDERECO.bairro,"
-	    		+ " ENDERECO.localidade,"
-	    		+ " ENDERECO.estado,"
-	    		+ " ENDERECO.cep,"
-	    		+ " CONTATO.telefone,"
-	    		+ " CONTATO.email"
-	    		+ " FROM"
-	    		+ " VACINAS.VACINA"
-	    		+ " JOIN"
+	    sql += " JOIN"
 	    		+ " VACINAS.FABRICANTE ON VACINAS.VACINA.idFabricante = VACINAS.FABRICANTE.id"
 	    		+ " JOIN"
 	    		+ " VACINAS.ESTOQUE ON VACINAS.VACINA.id = VACINAS.ESTOQUE.idVacina"
 	    		+ " JOIN"
 	    		+ " VACINAS.UNIDADE ON VACINAS.ESTOQUE.idUnidade = VACINAS.UNIDADE.id"
 	    		+ " JOIN"
-	    		+ " VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id"
-	    		+ " JOIN"
-	    		+ " VACINAS.CONTATO ON VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where ";
+	    		+ "VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id where VACINAS.ESTOQUE.quantidade > 0";
 
 	    boolean primeiro = true;
 
-	    if (seletor.getNomeVacina() != null && seletor.getNomeVacina().trim().length() > 0) {
-	        sql += " UPPER(v.nome) LIKE UPPER ('%" + seletor.getNomeVacina() + "%')";
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getNome() != null  
+		        && !seletor.getVacina().getNome().isBlank() 
+		        && !seletor.getVacina().getNome().isEmpty()
+	    	) {
+	        sql += " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getVacina().getNome() + "%')";
 	        primeiro = false;
 	    }
 	    if (seletor.getNomePesquisador() != null && seletor.getNomePesquisador().trim().length() > 0) {

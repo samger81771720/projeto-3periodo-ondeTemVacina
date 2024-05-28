@@ -1,18 +1,15 @@
 package model.seletor;
 
-import model.entity.Contato;
-import model.entity.Endereco;
-import model.entity.Fabricante;
 import model.entity.Unidade;
 import model.entity.Vacina;
 
 public class VacinaSeletor extends BaseSeletor{
 	
 	private Vacina vacina;
-	private Fabricante fabricante;
+	private String fabricante;
 	private Unidade unidade;
-	private Endereco endereco;
-	private Contato contato;
+	private String bairro;
+	private String cep;
 	
 	private VacinaSeletor() {
 		super();
@@ -26,11 +23,11 @@ public class VacinaSeletor extends BaseSeletor{
 		this.vacina = vacina;
 	}
 
-	public Fabricante getFabricante() {
+	public String getFabricante() {
 		return fabricante;
 	}
 
-	public void setFabricante(Fabricante fabricante) {
+	public void setFabricante(String fabricante) {
 		this.fabricante = fabricante;
 	}
 
@@ -42,32 +39,57 @@ public class VacinaSeletor extends BaseSeletor{
 		this.unidade = unidade;
 	}
 
-	public Endereco getEndereco() {
-		return endereco;
+	public String getBairro() {
+		return bairro;
 	}
 
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
 	}
 
-	public Contato getContato() {
-		return contato;
+	public String getCep() {
+		return cep;
 	}
 
-	public void setContato(Contato contato) {
-		this.contato = contato;
+	public void setCep(String cep) {
+		this.cep = cep;
 	}
 	
-	/*
 	public boolean temFiltro() {
-		return (this.nomeVacina != null && this.nomeVacina.trim().length() > 0)
-					|| (this.nomeUnidade != null && this.nomeUnidade.trim().length()>0)
-					|| (this.endereco != null && this.endereco.trim().length()>0)
-					|| (this.nomeFabricante != null && this.nomeFabricante.trim().length()>0)
-					|| (this.categoriaVacina != null && this.categoriaVacina.trim().length()>0)
-					|| (this.idadeMinimaVacina != 0)
-					|| (this.idadeMaximaVacina != 0)
-					||  (this.contraIndicacao);
+		return (
+						this.vacina != null 
+						&& this.vacina.getNome() != null  
+				        && !this.vacina.getNome().isBlank() 
+				        && !this.vacina.getNome().isEmpty()
+				        && this.vacina.getCategoria() != null  
+				        && !this.vacina.getCategoria().isBlank() 
+				        && !this.vacina.getCategoria().isEmpty()
+				        && this.vacina.getIdadeMinima() != 0  
+				        && this.vacina.getIdadeMaxima() != 0
+				        && !this.vacina.isContraIndicacao()
+				        && this.vacina.isContraIndicacao()
+				       )
+					||(
+						this.fabricante != null 
+						&& this.fabricante.isBlank() 
+						&& this.fabricante.isEmpty()
+						)
+					||(
+						this.unidade != null
+						&& this.unidade.getNome() != null
+						&& this.unidade.getNome().isBlank()
+						&& this.unidade.getNome().isEmpty()
+						)
+					||(
+						this.bairro != null
+						&& this.bairro.isEmpty()
+						&& this.bairro.isBlank()
+						)
+					||(
+						this.cep != null
+						&& this.cep.isEmpty()
+						&& this.cep.isBlank()
+						);
 	}
-*/
+
 }
