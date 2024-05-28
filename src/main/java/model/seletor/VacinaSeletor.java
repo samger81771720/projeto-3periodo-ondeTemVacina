@@ -11,7 +11,7 @@ public class VacinaSeletor extends BaseSeletor{
 	private String bairro;
 	private String cep;
 	
-	private VacinaSeletor() {
+	public VacinaSeletor() {
 		super();
 	}
 

@@ -1,16 +1,11 @@
 package model.repository;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import model.entity.Contato;
-import model.entity.Endereco;
-import model.entity.Unidade;
 import model.entity.Vacina;
 import model.seletor.VacinaSeletor;
 
@@ -18,7 +13,6 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 
 	@Override
 	public Vacina salvar(Vacina novaEntidade) {
-		// TODO Stub de método gerado automaticamente
 		return null;
 	}
 
@@ -44,7 +38,6 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 
 	@Override
 	public boolean alterar(Vacina entidade) {
-		// TODO Stub de método gerado automaticamente
 		return false;
 	}
 	
@@ -84,47 +77,48 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 		return null;
 	}
 	
-	public List<Vacina> consultarComFiltros(VacinaSeletor seletor){
-		ArrayList<Vacina> vacinas = new ArrayList<>();
+	public List<VacinaSeletor> consultarComFiltros(VacinaSeletor seletor){
+		
+		ArrayList<VacinaSeletor> listagemUnidadesComVacinas = new ArrayList<>();
+		
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
+		
 		String sql = "select"
-									+ " VACINA.nome,"
-									+ " VACINA.categoria,"
-									+ " VACINA.idadeMinima,"
-									+ " VACINA.idadeMaxima,"
-									+ " VACINA.contraIndicacao,"
-									+ " FABRICANTE.nome,"
-									+ " UNIDADE.id,"
-									+ " UNIDADE.nome,"
-									+ " ENDERECO.bairro,"
-									+ " ENDERECO.cep"
+									+ " VACINA.id as id_Vacina,"
+									+ " VACINA.nome as nome_Vacina,"
+									+ " VACINA.categoria as categoria_Vacina,"
+									+ " VACINA.idadeMinima as idadeMinima_Vacina,"
+									+ " VACINA.idadeMaxima as idadeMaxima_Vacina,"
+									+ " VACINA.contraIndicacao as contraIndicacao_Vacina,"
+									+ " FABRICANTE.nome as nome_Fabricante,"
+									+ " UNIDADE.id as id_Unidade,"
+									+ " UNIDADE.nome as nome_Unidade,"
+									+ " ENDERECO.bairro as bairro_Unidade,"
+									+ " ENDERECO.cep as cep_Unidade"
 									+ " FROM"
 									+ " VACINAS.VACINA ";
+		
 		if(seletor.temFiltro()) {
 			sql = preencherFiltros(seletor,sql);
 		}
-		/*
-		  - Em SQL, a cláusula "LIMIT" é usada para restringir o número de linhas(registros) retornadas por uma consulta.
-		  
-		  - A cláusula OFFSET em SQL é usada em conjunto com a cláusula LIMIT para especificar a quantidade 
-		  de linhas(registros) a serem "ignoradas" no início do conjunto de resultados. Isso é útil quando você deseja pular 
-		  um número específico de linhas antes de começar a retornar os resultados da consulta.
-		  */
+		
 		if(seletor.temPaginacao()) {
 			sql += " LIMIT " + seletor.getLimite(); 
 			sql += " OFFSET " + seletor.getOffSet();
 		}
+		
 		try {
 			resultado = stmt.executeQuery(sql);
 			while(resultado.next()) {
-				Vacina vacina = construirDoResultSet(resultado);
-				vacinas.add(vacina);
+			    seletor = construirDoResultSet(resultado);
+			    listagemUnidadesComVacinas.add(seletor);
 			}
 		} catch(SQLException erro){
 			System.out.println(
-					"Erro durante a execução do método \"consultarComFiltros\" ao consultar as vacinas do filtro selecionado."
+					"Erro durante a execução do método \"consultarComFiltros\" ao consultar "
+				 + "as unidades com seus respectivos estoques de vacinas de acordo com o  filtro selecionado."
 					);
 			System.out.println("Erro: "+erro.getMessage());
 		} finally{
@@ -132,23 +126,22 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 			Banco.closeStatement(stmt);
 			Banco.closeConnection(conn);
 		}
-		return vacinas;
+		return listagemUnidadesComVacinas;
 	}
 	
 	private String preencherFiltros(VacinaSeletor seletor, String sql) {
 
 		final String AND = " and ";
+		final String JOIN = " join ";
 
-	    sql += " JOIN"
+	    sql += JOIN
 	    		+ " VACINAS.FABRICANTE ON VACINAS.VACINA.idFabricante = VACINAS.FABRICANTE.id"
-	    		+ " JOIN"
+	    		+   JOIN
 	    		+ " VACINAS.ESTOQUE ON VACINAS.VACINA.id = VACINAS.ESTOQUE.idVacina"
-	    		+ " JOIN"
+	    		+   JOIN
 	    		+ " VACINAS.UNIDADE ON VACINAS.ESTOQUE.idUnidade = VACINAS.UNIDADE.id"
-	    		+ " JOIN"
+	    		+   JOIN
 	    		+ "VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id where VACINAS.ESTOQUE.quantidade > 0";
-
-	    boolean primeiro = true;
 
 	    if (
 	    		seletor.getVacina() != null 
@@ -156,42 +149,74 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 		        && !seletor.getVacina().getNome().isBlank() 
 		        && !seletor.getVacina().getNome().isEmpty()
 	    	) {
-	        sql += " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getVacina().getNome() + "%')";
-	        primeiro = false;
+	        sql += AND + " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getVacina().getNome() + "%')";
 	    }
-	    if (seletor.getNomePesquisador() != null && seletor.getNomePesquisador().trim().length() > 0) {
-	        if (!primeiro) {
-	            sql += AND;
-	        }
-	        sql += " UPPER(pe.nome) LIKE UPPER('%" + seletor.getNomePesquisador() + "%')";
-	        primeiro = false;
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getCategoria() != null  
+		        && !seletor.getVacina().getCategoria().isBlank() 
+		        && !seletor.getVacina().getCategoria().isEmpty()
+	    	) {
+	        sql += AND + " UPPER(VACINA.categoria) LIKE UPPER ('%" + seletor.getVacina().getCategoria() + "%')";
 	    }
-	    if (seletor.getNomePais() != null && seletor.getNomePais().trim().length() > 0) {
-	        if (!primeiro) {
-	            sql += AND;
-	        }
-	        sql += " UPPER(p.nome) LIKE UPPER('%" + seletor.getNomePais() + "%')";
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getIdadeMinima() != 0  
+		 	) {
+	        sql += AND + " VACINA.idadeMinima =  " + seletor.getVacina().getIdadeMinima();
 	    }
-	    if (seletor.getDataInicioPesquisaSeletor() != null && seletor.getDataFinalPesquisaSeletor() != null) {
-	        if (!primeiro) {
-	            sql += AND;
-	        }
-	        sql += " v.dataInicioDaPesquisa BETWEEN '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor())
-	                + "' AND '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
-	    } else if (seletor.getDataInicioPesquisaSeletor() != null) {
-	        if (!primeiro) {
-	            sql += AND;
-	        }
-	        sql += " v.dataInicioDaPesquisa >= '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor()) + "'";
-	    } else if (seletor.getDataFinalPesquisaSeletor() != null) {
-	        if (!primeiro) {
-	            sql += AND;
-	        }
-	        sql += " v.dataInicioDaPesquisa <= '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getIdadeMaxima() != 0  
+		 	) {
+	        sql += AND + " VACINA.idadeMaxima =  " + seletor.getVacina().getIdadeMaxima();
+	    }
+	    if(
+	    	seletor.getVacina() != null
+	    	&& !seletor.getVacina().isContraIndicacao()
+	    	) {
+	    	sql += AND + " VACINA.contraIndicacao = false ";
+	    }
+	    if(
+	    	seletor.getVacina() != null
+	    	&& seletor.getVacina().isContraIndicacao()
+	    	) {
+	    	sql += AND + " VACINA.contraIndicacao = true ";
+		    }
+	    if(
+    		seletor.getFabricante() != null  
+	        && !seletor.getFabricante().isBlank() 
+	        && !seletor.getFabricante().isEmpty()	
+	    	) {
+	    	sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" + seletor.getFabricante() + "%')";
+	    }
+	    if (
+	    	  seletor.getUnidade() != null
+			  && seletor.getUnidade().getNome() != null
+			  && !seletor.getUnidade().getNome().isBlank() 
+			  && !seletor.getUnidade().getNome().isEmpty()
+	    	) {
+	        sql += AND + " UPPER(UNIDADE.nome) LIKE UPPER ('%" + seletor.getUnidade().getNome() + "%')";
+	    }
+	    if (
+    		seletor.getBairro() != null
+    		&& !seletor.getBairro().isBlank() 
+	        && !seletor.getBairro().isEmpty()
+	    	) {
+	        sql += AND + " UPPER(ENDERECO.bairro) LIKE UPPER ('%" 
+	        	   + seletor.getBairro() + "%')";
+	    }
+	    if (
+	    		seletor.getCep() != null
+	    		&& !seletor.getCep().isBlank() 
+		        && !seletor.getCep().isEmpty()
+	    	) {
+	        sql += AND + " UPPER(ENDERECO.cep) LIKE UPPER ('%" 
+	        	   + seletor.getCep() + "%')";
 	    }
 	    return sql;
 	}
-
+	
 	private Vacina converterParaObjeto(ResultSet resultado) throws SQLException{
 		Vacina vacina = new Vacina();
 		vacina.setId(resultado.getInt("id"));
@@ -204,5 +229,12 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 		vacina.setContraIndicacao(resultado.getBoolean("contraIndicacao"));
 		return vacina;
 	}
-	
+	private VacinaSeletor construirDoResultSet(ResultSet resultado) throws SQLException{
+		VacinaSeletor seletor = new VacinaSeletor();
+		seletor.setVacina(consultarPorId(resultado.getInt("id_Vacina")));
+		seletor.setFabricante(resultado.getString("nome_Fabricante"));
+		UnidadeRepository unidadeRepository = new UnidadeRepository();
+		seletor.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("id_Unidade")));
+		return seletor;
+	}
 }

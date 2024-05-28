@@ -31,7 +31,9 @@ public abstract class BaseSeletor {
 		return this.limite > 0 && this.pagina > 0;
 	}
 	
-	//"Método para localizar o  início do primeiro registro"
+	/*Método para pular o número de registros que forem necessários 
+	para chegar ao início da página desejada, a qual conterá a qtde dos 
+	registros 	estipulados pela variável "limite".*/
 	public int getOffSet() {
 		return this.limite * (this.pagina - 1);
 	} 
