@@ -93,6 +93,7 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 									+ " VACINA.idadeMaxima as idadeMaxima_Vacina,"
 									+ " VACINA.contraIndicacao as contraIndicacao_Vacina,"
 									+ " FABRICANTE.nome as nome_Fabricante,"
+									+ " FABRICANTE.id as id_Fabricante,"
 									+ " UNIDADE.id as id_Unidade,"
 									+ " UNIDADE.nome as nome_Unidade,"
 									+ " ENDERECO.bairro as bairro_Unidade,"
@@ -100,9 +101,7 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 									+ " FROM"
 									+ " VACINAS.VACINA ";
 		
-		if(seletor.temFiltro()) {
-			sql = preencherFiltros(seletor,sql);
-		}
+		sql = preencherFiltros(seletor,sql);
 		
 		if(seletor.temPaginacao()) {
 			sql += " LIMIT " + seletor.getLimite(); 
@@ -141,8 +140,9 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	    		+   JOIN
 	    		+ " VACINAS.UNIDADE ON VACINAS.ESTOQUE.idUnidade = VACINAS.UNIDADE.id"
 	    		+   JOIN
-	    		+ "VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id where VACINAS.ESTOQUE.quantidade > 0";
-
+	    		+ " VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id"
+	    		+   JOIN
+	    		+ " VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where VACINAS.ESTOQUE.quantidade > 0";
 	    if (
 	    		seletor.getVacina() != null 
 				&& seletor.getVacina().getNome() != null  
@@ -173,22 +173,17 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	    }
 	    if(
 	    	seletor.getVacina() != null
-	    	&& !seletor.getVacina().isContraIndicacao()
-	    	) {
-	    	sql += AND + " VACINA.contraIndicacao = false ";
-	    }
-	    if(
-	    	seletor.getVacina() != null
 	    	&& seletor.getVacina().isContraIndicacao()
 	    	) {
 	    	sql += AND + " VACINA.contraIndicacao = true ";
 		    }
 	    if(
-    		seletor.getFabricante() != null  
-	        && !seletor.getFabricante().isBlank() 
-	        && !seletor.getFabricante().isEmpty()	
+	    		(seletor.getFabricanteDaVacina() != null 
+	    		&& !seletor.getFabricanteDaVacina().getNome().isBlank() 
+	    		&& !seletor.getFabricanteDaVacina().getNome().isEmpty())	
 	    	) {
-	    	sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" + seletor.getFabricante() + "%')";
+	    	sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" 
+	    		   + seletor.getVacina().getFabricanteDaVacina().getNome() + "%')";
 	    }
 	    if (
 	    	  seletor.getUnidade() != null
@@ -199,20 +194,22 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	        sql += AND + " UPPER(UNIDADE.nome) LIKE UPPER ('%" + seletor.getUnidade().getNome() + "%')";
 	    }
 	    if (
-    		seletor.getBairro() != null
-    		&& !seletor.getBairro().isBlank() 
-	        && !seletor.getBairro().isEmpty()
+	    	 seletor.getEndereco() != null
+	    	 && seletor.getEndereco().getBairro() != null
+	    	 && !seletor.getEndereco().getBairro().isBlank()
+	    	 && !seletor.getEndereco().getBairro().isEmpty()
 	    	) {
 	        sql += AND + " UPPER(ENDERECO.bairro) LIKE UPPER ('%" 
-	        	   + seletor.getBairro() + "%')";
+	        	   + seletor.getEndereco().getBairro() + "%')";
 	    }
 	    if (
-	    		seletor.getCep() != null
-	    		&& !seletor.getCep().isBlank() 
-		        && !seletor.getCep().isEmpty()
+	    	 seletor.getEndereco() != null
+		     && seletor.getEndereco().getCep() != null
+		     && !seletor.getEndereco().getCep().isBlank()
+		     && !seletor.getEndereco().getCep().isEmpty()
 	    	) {
 	        sql += AND + " UPPER(ENDERECO.cep) LIKE UPPER ('%" 
-	        	   + seletor.getCep() + "%')";
+	        	   + seletor.getEndereco().getCep() + "%')";
 	    }
 	    return sql;
 	}
@@ -229,12 +226,15 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 		vacina.setContraIndicacao(resultado.getBoolean("contraIndicacao"));
 		return vacina;
 	}
+	
 	private VacinaSeletor construirDoResultSet(ResultSet resultado) throws SQLException{
 		VacinaSeletor seletor = new VacinaSeletor();
 		seletor.setVacina(consultarPorId(resultado.getInt("id_Vacina")));
-		seletor.setFabricante(resultado.getString("nome_Fabricante"));
 		UnidadeRepository unidadeRepository = new UnidadeRepository();
 		seletor.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("id_Unidade")));
+		FabricanteRepository fabricanteRepository = new FabricanteRepository();
+		seletor.setFabricanteDaVacina(fabricanteRepository.consultarPorId(resultado.getInt("id_Fabricante")));
 		return seletor;
 	}
+
 }

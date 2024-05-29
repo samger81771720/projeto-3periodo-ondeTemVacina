@@ -72,7 +72,7 @@ public class ContatoRepository  implements BaseRepository<Contato> {
 			contato = new Contato();
 			contato.setId(resultado.getInt("id"));
 			contato.setTelefone(resultado.getString("telefone"));
-			contato.setEmail("email");
+			contato.setEmail(resultado.getString("email"));
 		}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao tentar consultar o contato de id "+id);
