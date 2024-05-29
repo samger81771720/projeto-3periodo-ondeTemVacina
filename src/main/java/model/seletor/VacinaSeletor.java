@@ -5,18 +5,18 @@ import model.entity.Fabricante;
 import model.entity.Unidade;
 import model.entity.Vacina;
 
+/* 
+ Foi necessário utilizar atributos de outras classes, 
+ pois alguns registros(quando voltavam da consulta
+  do objeto seletor do banco  de dados) não vinham.  
+   */
 public class VacinaSeletor extends BaseSeletor{
 	
 	private Vacina vacina;
 	private Unidade unidade;
 	private Fabricante fabricanteDaVacina;
-	
 	private Endereco endereco;
 	
-	/*
-	private String bairro;
-	private String cep;
-	*/
 	public VacinaSeletor() {
 		super();
 	}
@@ -45,23 +45,6 @@ public class VacinaSeletor extends BaseSeletor{
 		this.endereco = endereco;
 	}
 
-	/*
-	public String getBairro() {
-		return bairro;
-	}
-
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
-
-	public String getCep() {
-		return cep;
-	}
-
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
-	*/
 	public Fabricante getFabricanteDaVacina() {
 		return fabricanteDaVacina;
 	}
@@ -73,23 +56,36 @@ public class VacinaSeletor extends BaseSeletor{
 	public boolean temFiltro() {
 		
 		return 
-						(this.vacina != null && this.vacina.getNome() != null && !this.vacina.getNome().isBlank() && !this.vacina.getNome().isEmpty())    
+						(this.vacina != null && this.vacina.getNome() != null 
+						&& !this.vacina.getNome().isBlank() 
+						&& !this.vacina.getNome().isEmpty())    
 									
-						|| (this.vacina.getCategoria() != null 	&& !this.vacina.getCategoria().isBlank()	&& !this.vacina.getCategoria().isEmpty())
+						|| (this.vacina.getCategoria() != null 	
+						&& !this.vacina.getCategoria().isBlank()	
+						&& !this.vacina.getCategoria().isEmpty())
 						
 						|| (this.vacina.getIdadeMinima() != 0)  
-						        
-			         	|| (this.vacina.getIdadeMaxima() != 0)
-						        
-					  	|| (this.vacina.isContraIndicacao())
+						|| (this.vacina.getIdadeMaxima() != 0)
+						|| (this.vacina.isContraIndicacao())
 						
-						|| (this.fabricanteDaVacina != null && !this.fabricanteDaVacina.getNome().isBlank() && !this.fabricanteDaVacina.getNome().isEmpty())
+						|| (this.fabricanteDaVacina != null 
+						&& !this.fabricanteDaVacina.getNome().isBlank() 
+						&& !this.fabricanteDaVacina.getNome().isEmpty())
 							
-						|| (this.unidade != null && this.unidade.getNome() != null && !this.unidade.getNome().isBlank() && !this.unidade.getNome().isEmpty())
+						|| (this.unidade != null 
+						&& this.unidade.getNome() != null 
+						&& !this.unidade.getNome().isBlank() 
+						&& !this.unidade.getNome().isEmpty())
 							
-						|| (this.endereco != null && this.endereco.getBairro() != null && !this.endereco.getBairro().isEmpty() && !this.endereco.getBairro().isBlank())
+						|| (this.endereco != null 
+						&& this.endereco.getBairro() != null 
+						&& !this.endereco.getBairro().isEmpty() 
+						&& !this.endereco.getBairro().isBlank())
 						
-						|| (this.endereco != null && this.endereco.getCep() != null && !this.endereco.getCep().isEmpty() && !this.endereco.getCep().isBlank());
+						|| (this.endereco != null 
+						&& this.endereco.getCep() != null 
+						&& !this.endereco.getCep().isEmpty() 
+						&& !this.endereco.getCep().isBlank());
 	}
 
 }

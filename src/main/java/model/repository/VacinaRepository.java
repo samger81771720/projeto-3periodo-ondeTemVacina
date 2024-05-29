@@ -142,7 +142,8 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	    		+   JOIN
 	    		+ " VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id"
 	    		+   JOIN
-	    		+ " VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where VACINAS.ESTOQUE.quantidade > 0";
+	    		+ " VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where "
+	    		+ " VACINAS.ESTOQUE.quantidade > 0";
 	    if (
 	    		seletor.getVacina() != null 
 				&& seletor.getVacina().getNome() != null  
@@ -159,18 +160,38 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	    	) {
 	        sql += AND + " UPPER(VACINA.categoria) LIKE UPPER ('%" + seletor.getVacina().getCategoria() + "%')";
 	    }
+	    
+	    
+	    
+	    // ok between ok
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getIdadeMinima() != 0
+				&& seletor.getVacina().getIdadeMaxima() != 0
+		 	) {
+	        sql += AND + " VACINA.idadeMinima between " + seletor.getVacina().getIdadeMinima() + AND + seletor.getVacina().getIdadeMaxima() + AND + "VACINA.idadeMaxima between " + seletor.getVacina().getIdadeMinima() + AND + seletor.getVacina().getIdadeMaxima();
+	    }
+	    
+	    
+	    // ok ok
 	    if (
 	    		seletor.getVacina() != null 
 				&& seletor.getVacina().getIdadeMinima() != 0  
 		 	) {
-	        sql += AND + " VACINA.idadeMinima =  " + seletor.getVacina().getIdadeMinima();
+	        sql += AND + " VACINA.idadeMinima >=  " + seletor.getVacina().getIdadeMinima() +  AND + " VACINA.idadeMaxima >= " + seletor.getVacina().getIdadeMinima();
 	    }
-	    if (
+	    
+	    
+	    
+	    if ( // OK ok
 	    		seletor.getVacina() != null 
 				&& seletor.getVacina().getIdadeMaxima() != 0  
 		 	) {
-	        sql += AND + " VACINA.idadeMaxima =  " + seletor.getVacina().getIdadeMaxima();
+	    	sql += AND + " VACINA.idadeMaxima <=  " + seletor.getVacina().getIdadeMaxima() +  AND + " VACINA.idadeMinima <= " + seletor.getVacina().getIdadeMaxima();
 	    }
+	    
+	    
+	    
 	    if(
 	    	seletor.getVacina() != null
 	    	&& seletor.getVacina().isContraIndicacao()
@@ -203,13 +224,8 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 	        	   + seletor.getEndereco().getBairro() + "%')";
 	    }
 	    if (
-	    	 seletor.getEndereco() != null
-		     && seletor.getEndereco().getCep() != null
-		     && !seletor.getEndereco().getCep().isBlank()
-		     && !seletor.getEndereco().getCep().isEmpty()
-	    	) {
-	        sql += AND + " UPPER(ENDERECO.cep) LIKE UPPER ('%" 
-	        	   + seletor.getEndereco().getCep() + "%')";
+	    	 seletor.getEndereco() != null && seletor.getEndereco().getCep() != null && !seletor.getEndereco().getCep().isBlank() && !seletor.getEndereco().getCep().isEmpty()) {
+	        sql += AND + " UPPER(ENDERECO.cep) LIKE UPPER ('%"  + seletor.getEndereco().getCep() + "%')";
 	    }
 	    return sql;
 	}
