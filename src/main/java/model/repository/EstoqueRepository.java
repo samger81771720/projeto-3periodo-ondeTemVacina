@@ -24,7 +24,8 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	        if (linhasAfetadas == 1) {
 	            return novoEstoque;
 	        } else {
-	            throw new SQLException("A tentaiva de inserção não afetou nenhuma linha.");
+	            throw new SQLException("A tentaiva de inserção de um registro no "
+	            													+ "estoque da unidade não afetou nenhuma linha.");
 	        }
 	    } catch (SQLException erro) {
 	        System.out.println("Erro na tentativa de salvar um novo estoque da unidade "
