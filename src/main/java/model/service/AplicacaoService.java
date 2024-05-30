@@ -37,7 +37,7 @@ public class AplicacaoService {
 		}
 		if(!mensagem.isEmpty()) {
 			throw new ControleVacinasException("A(s) observaçõe(s) listada(s) precisa(m) ser atendida)s) "
-					+ "para que o cadastro do registro da aplicação da vacina seja efetuado com sucesso. Segue: "+mensagem);
+					+ "para que o cadastro do registro da aplicação da vacina seja efetuado com sucesso. Seguem as observações: "+mensagem);
 		}
 	}
 	

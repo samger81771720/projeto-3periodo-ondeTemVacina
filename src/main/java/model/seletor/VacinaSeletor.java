@@ -15,7 +15,7 @@ public class VacinaSeletor extends BaseSeletor{
 	private Vacina vacina;
 	private Unidade unidade;
 	private Fabricante fabricanteDaVacina;
-	private Endereco endereco;
+	private Endereco endereco;// REMOVER ESSE OBJETO, POIS QUEM TEM ENDEREÇO É A UNIDADE
 	
 	public VacinaSeletor() {
 		super();
