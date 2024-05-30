@@ -28,16 +28,24 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 			ResultSet resultado = stmt.getGeneratedKeys();
 			if(resultado.next()) {
 				aplicacao.setId(resultado.getInt(1));
+				UnidadeRepository unidadeRepository = new UnidadeRepository(); 
+				boolean deuBaixa = unidadeRepository.darBaixaEstoqueUnidade(aplicacao); 
+				if(deuBaixa) {
+					return aplicacao;
+				} else {
+					 throw new SQLException("O registro de aplicação da vacina foi salvo com sucesso, "
+					 		                                            + "porém não foi possível dar baixa no estoque dessa unidade.");
+				}
 			}
 		} catch (SQLException e) {
-			System.out.println("Erro ao salvar nova aplicacao do usuário " 
+			System.out.println("Erro ao salvar o registro de aplicação do usuário." 
 											      + aplicacao.getPessoaQueRecebeu().getNome());
 			System.out.println("Erro: " + e.getMessage());
 		}
 		return aplicacao;
 	}
 
-	@Override
+		@Override
 	public boolean excluir(int id) {
 		return false;
 	}

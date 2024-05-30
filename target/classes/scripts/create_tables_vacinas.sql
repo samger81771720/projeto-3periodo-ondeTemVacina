@@ -89,7 +89,7 @@ create table if not exists VACINAS.APLICACAO(
 create table if not exists VACINAS.ESTOQUE(
 	idUnidade INTEGER not null,
 	idVacina INTEGER not null,
-	quantidade INTEGER not null,
+	quantidade INTEGER NOT NULL CHECK (quantidade >= 0),
 	dataLote date not null,
 	validade date not null,
 	constraint ESTOQUE_pk primary key(idUnidade,idVacina),
