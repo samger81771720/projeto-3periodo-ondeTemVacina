@@ -10,6 +10,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import model.entity.Aplicacao;
+import model.entity.Fabricante;
+import model.entity.Pessoa;
+import model.entity.Unidade;
+import model.entity.Vacina;
 import model.seletor.AplicacaoSeletor;
 
 public class AplicacaoRepository implements BaseRepository<Aplicacao>{
@@ -52,21 +56,20 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
-		String sql =	 "select "
-										+ "	VACINAS.APLICACAO.id, "
-										+ "	VACINAS.APLICACAO.idPessoa, "
-										+ "	VACINAS.VACINA.nome, "
-										+ "	VACINAS.APLICACAO.idVacina, "
-										+ "	VACINAS.APLICACAO.idUnidade, "
-										+ "	VACINAS.UNIDADE.nome, \r\n"
-										+ "	VACINAS.APLICACAO.dataAplicacao "
-										+ "  from "
-										+ "	VACINAS.APLICACAO "
-										+ "  join VACINAS.VACINA on VACINAS.VACINA.id = VACINAS.APLICACAO.idVacina "
-										+ "  join VACINAS.UNIDADE on VACINAS.UNIDADE.id = VACINAS.APLICACAO.idUnidade "
-										+ "  where idpessoa = " + seletor.getAplicacao().getPessoaQueRecebeu().getId();
+		String sql =	 "select\r\n"
+				+ "	VACINAS.APLICACAO.id as idAplicacao, \r\n"
+				+ "	VACINAS.VACINA.nome as nomeVacina,\r\n"
+				+ "	VACINAS.FABRICANTE.nome as nomeFabricanteVacina,\r\n"
+				+ "	VACINAS.UNIDADE.nome as nomeUnidade, \r\n"
+				+ "	VACINAS.APLICACAO.dataAplicacao as dataAplicacaoVacina\r\n"
+				+ "from \r\n"
+				+ "	VACINAS.APLICACAO \r\n"
+				+ "join VACINAS.VACINA on VACINAS.VACINA.id = VACINAS.APLICACAO.idVacina \r\n"
+				+ "join VACINAS.UNIDADE on VACINAS.UNIDADE.id = VACINAS.APLICACAO.idUnidade\r\n"
+				+ "join VACINAS.FABRICANTE on VACINAS.FABRICANTE.id = VACINAS.VACINA.idFabricante  \r\n"
+				+ "where idpessoa = " + seletor.getIdPessoaRecebeuAplicacao();
 		if(seletor.temFiltro()) {
-			sql = preencherFiltros(seletor,sql);
+			// sql = preencherFiltros(seletor,sql);
 		} else {
 			sql += " order by dataAplicacao ";
 		}
@@ -83,7 +86,7 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		} catch(SQLException erro){
 			System.out.println(
 					"Erro durante a execução do método \"consultarComFiltros\" ao consultar "
-					+ "as aplicações recebidas da pessoa com o filtro selecionado."
+					+ "as aplicações recebidas do usuário de acordo com o filtro selecionado."
 					);
 			System.out.println("Erro: "+erro.getMessage());
 		} finally{
@@ -106,37 +109,37 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 
 	@Override
 	public Aplicacao consultarPorId(int id) {
-		return null;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		Aplicacao aplicacao = null;
+		String query = " select * from VACINAS.APLICACAO where id = " + id;
+		try {
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()) {
+				aplicacao = this.converterParaObjeto(resultado);
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao tentar consultar a aplicacao de id " + id);
+			System.out.println("Erro: "+erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return aplicacao;
 	}
 
-	@Override
+		@Override
 	public ArrayList<Aplicacao> consultarTodos() {
 		return null;
 	}
 	
 	private String preencherFiltros(AplicacaoSeletor seletor, String sql) {
 	    
-		final String AND = " AND ";
+		 final String AND = " AND ";
 		
-		//1º OK
-	    if (seletor.getAplicacao().getVacinaAplicada() != null 
-			 && seletor.getAplicacao().getVacinaAplicada().getNome() != null 
-			 && seletor.getAplicacao().getVacinaAplicada().getNome().isBlank() 
-			 && seletor.getAplicacao().getVacinaAplicada().getNome().isEmpty()) {
-	    	sql += AND;
-	        sql += " UPPER(VACINAS.VACINA.nome) LIKE UPPER ('%" + seletor.getAplicacao().getVacinaAplicada().getNome() + "%')";
-	    }
-		
-	    // 1º OK 
-	    if (seletor.getAplicacao().getUnidadeOndeAplicou() != null 
-			 && seletor.getAplicacao().getUnidadeOndeAplicou().getNome() != null 
-			 && seletor.getAplicacao().getUnidadeOndeAplicou().getNome().isEmpty()
-			 && seletor.getAplicacao().getUnidadeOndeAplicou().getNome().isBlank()) {
-	    	sql += AND;
-	        sql += " UPPER(VACINAS.UNIDADE.nome) LIKE UPPER('%" + seletor.getAplicacao().getUnidadeOndeAplicou().getNome() + "%')";
-	    }
-	    
-	    //1º OK
+		  //1º OK
 	    if (seletor.getDataInicioPesquisaSeletor() != null && seletor.getDataFinalPesquisaSeletor() != null) {
 	    	sql += AND;
 	        sql += " VACINAS.APLICACAO.dataAplicacao BETWEEN '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor())
@@ -147,6 +150,30 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 	    	sql += AND;
 	        sql += " VACINAS.APLICACAO.dataAplicacao <= '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
 	    }
+		
+	    
+	    // 1º OK 
+	    if (seletor.getNomeUnidadeAplicacao() != null 
+			 && seletor.getNomeUnidadeAplicacao().trim().length() > 0) {
+	    	sql += AND;
+	        sql += " UPPER(VACINAS.UNIDADE.nome) LIKE UPPER('%" + seletor.getNomeUnidadeAplicacao() + "%')";
+	    }
+	    
+	    
+	    
+		//1º OK
+	    if (seletor.getNomeVacinaAplicada() != null 
+			 && seletor.getNomeVacinaAplicada().trim().length() > 0) {
+	    	sql += AND;
+	        sql += " UPPER(VACINAS.VACINA.nome) LIKE UPPER ('%" + seletor.getNomeVacinaAplicada() + "%')";
+	    }
+		
+	 
+	    
+	  
+	    
+	    
+	    sql += " order by dataAplicacao ";
 	    return sql;
 	}
 	
@@ -154,27 +181,27 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		
 		AplicacaoSeletor seletor = new AplicacaoSeletor();
 		
-	// implementar o método "consultarPorId" da classe "AplicacaoRepository" 
-		seletor.setAplicacao(consultarPorId(resultado.getInt("id")));
+		seletor.setAplicacao(consultarPorId(resultado.getInt("idAplicacao")));
 		
-		
-		/*
-		vacina.setIdVacina(resultado.getInt("id_Vacina"));
-		vacina.setNome(resultado.getString("nome"));
-		if(resultado.getDate("dataInicioDaPesquisa") != null) {
-			vacina.setDataInicioPesquisa(resultado.getDate("dataInicioDaPesquisa").toLocalDate());	
-		}
-		vacina.setEstagioDaVacina(resultado.getInt("estagio_Da_Pesquisa"));
-		vacina.setMediaDaVacina(resultado.getDouble("mediaVacina"));
-		PaisRepository paisRepository = new PaisRepository();
-		Pais paisDaVacina = paisRepository.consultarPorId(resultado.getInt("id_Pais"));
-		vacina.setPais(paisDaVacina);
-		PessoaRepository pessoaRepository = new PessoaRepository();
-		Pessoa pesquisadorResponsavel = pessoaRepository.consultarPorId(resultado.getInt("id_Pesquisador"));
-		vacina.setPesquisadorResponsavel(pesquisadorResponsavel);*/
+		seletor.setFabricanteDaVacinaAplicada(resultado.getString("nomeFabricanteVacina"));
 		
 		return seletor;
+	}
 	
+	private Aplicacao converterParaObjeto(ResultSet resultado) throws SQLException{
+		Aplicacao aplicacao = new Aplicacao();
+		aplicacao.setId(resultado.getInt("id"));
+		PessoaRepository pessoaRepository = new PessoaRepository();
+		Pessoa pessoaQueRecebeu = pessoaRepository.consultarPorId(resultado.getInt("idPessoa"));
+		aplicacao.setPessoaQueRecebeu(pessoaQueRecebeu);
+		VacinaRepository vacinaRepository = new VacinaRepository();
+		Vacina vacinaAplicada = vacinaRepository.consultarPorId(resultado.getInt("idVacina"));
+		aplicacao.setVacinaAplicada(vacinaAplicada);
+		UnidadeRepository unidadeRepository = new UnidadeRepository();
+		Unidade unidadeOndeAplicouDose = unidadeRepository.consultarPorId(resultado.getInt("idUnidade"));
+		aplicacao.setUnidadeOndeAplicou(unidadeOndeAplicouDose);
+		aplicacao.setDataAplicacao(resultado.getDate("dataAplicacao").toLocalDate());
+		return aplicacao;
 	}
 
 }

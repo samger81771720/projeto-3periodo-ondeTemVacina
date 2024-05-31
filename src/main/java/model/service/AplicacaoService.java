@@ -1,11 +1,13 @@
 package model.service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import exception.ControleVacinasException;
 import model.entity.Aplicacao;
 import model.repository.AplicacaoRepository;
 import model.repository.UnidadeRepository;
+import model.seletor.AplicacaoSeletor;
 
 public class AplicacaoService {
 	
@@ -17,6 +19,14 @@ public class AplicacaoService {
 		consultarEstoqueUnidade(aplicacao);
 		return aplicacaoRepository.salvar(aplicacao);
 		}
+	
+	public Aplicacao consultarPorId(int id) {
+		return aplicacaoRepository.consultarPorId(id);
+	}
+	
+	public List<AplicacaoSeletor> consultarComFiltros(AplicacaoSeletor seletor){
+		return aplicacaoRepository.consultarComFiltros(seletor);
+	}
 	
 	private void validarPreenchimentoCampos(Aplicacao aplicacao) throws ControleVacinasException{
 		String mensagem = "";

@@ -10,7 +10,7 @@ public class Aplicacao {
 	private Unidade unidadeOndeAplicou;
 	private LocalDate dataAplicacao;
 	
-	private Aplicacao() {
+	public Aplicacao() {
 		super();
 	}
 	public int getId() {
