@@ -156,6 +156,7 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		        sql += AND;
 		        sql += " dataAplicacao <= '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
 		    }
+		    sql += " order by dataAplicacao ";
 		    return sql;
 		}
 		
