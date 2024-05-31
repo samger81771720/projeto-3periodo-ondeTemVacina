@@ -43,16 +43,14 @@ public class PessoaService {
 		String mensagemValidacao = "";
 		   
 	    if (novaPessoa.getEnderecoDaPessoa().getCep() == null ||
-	    	 novaPessoa.getEnderecoDaPessoa().getCep().isBlank() || 
-	    	 novaPessoa.getEnderecoDaPessoa().getCep().isEmpty()) {
+	    	 novaPessoa.getEnderecoDaPessoa().getCep().trim().length() > 0) {
 	         mensagemValidacao += " - O campo CEP, referente ao endereço da pessoa, precisa ser preenchido. ";
 	    }
 	    if (novaPessoa.getContatoDaPessoa().getTelefone() == null ||
-	    	 novaPessoa.getContatoDaPessoa().getTelefone().isBlank() || 
-	    	 novaPessoa.getContatoDaPessoa().getTelefone().isEmpty()) {
+	    	 novaPessoa.getContatoDaPessoa().getTelefone().trim().length() > 0) {
 	         mensagemValidacao += " - O campo telefone referente ao contato da pessoa precisa ser preenchido. ";
 	    }
-		if (novaPessoa.getNome() == null || novaPessoa.getNome().isEmpty() || novaPessoa.getNome().isBlank()) {
+		if (novaPessoa.getNome() == null || novaPessoa.getNome().trim().length() > 0) {
 		    mensagemValidacao += " - O campo nome precisa ser preenchido. ";
 		}
 		if(novaPessoa.getNome().trim().length()<8) {
@@ -72,15 +70,13 @@ public class PessoaService {
 		}
 		if (
 				novaPessoa.getSexo().toUpperCase() == null ||
-			    novaPessoa.getSexo().toUpperCase().isBlank() ||
-			    novaPessoa.getSexo().toUpperCase().isEmpty()
+			    novaPessoa.getSexo().toUpperCase().trim().length() > 0
 			) {
 		    mensagemValidacao += " - O campo sexo precisa ser informado.";
 		}
 	   if(
 		   novaPessoa.getCpf() == null ||
-		   novaPessoa.getCpf().isEmpty() ||
-		   novaPessoa.getCpf().isBlank()
+		   novaPessoa.getCpf().trim().length() > 0
 		   ) {
 			mensagemValidacao += " - O campo cpf precisa ser preenchido. ";
 		}
@@ -93,8 +89,7 @@ public class PessoaService {
 		}
 		if(
 			novaPessoa.getLogin() == null ||
-			novaPessoa.getLogin().isEmpty() ||
-			novaPessoa.getLogin().isBlank()
+			novaPessoa.getLogin().trim().length() > 0
 			) {
 			mensagemValidacao += " - O campo login precisa ser preenchido. ";
 		}
@@ -124,10 +119,11 @@ public class PessoaService {
 		String mensagemValidacao = "";
 			
 	    if (
-	    		novaPessoa.getLogin() == null || novaPessoa.getSenha() == null
-	    		|| novaPessoa.getLogin().isEmpty() || novaPessoa.getSenha().isEmpty()
-	    		|| novaPessoa.getLogin().isBlank() || novaPessoa.getSenha().isBlank()
-	    		) {
+	    		novaPessoa.getLogin() == null 
+	    		|| novaPessoa.getSenha() == null
+	    		|| novaPessoa.getLogin().trim().length() > 0 
+	    		|| novaPessoa.getSenha().trim().length() > 0
+	    	) {
 	        mensagemValidacao += " - O campo login e/ou o campo senha precisam ser preenchidos e não podem haver espaços em branco no preenchimento dos campos. ";
 	    }
 	    if(novaPessoa.getLogin().contains(" ") || novaPessoa.getLogin().length()<8 || novaPessoa.getLogin().length() > 20) {
