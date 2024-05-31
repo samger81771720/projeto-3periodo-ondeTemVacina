@@ -15,6 +15,7 @@ import model.entity.Pessoa;
 import model.entity.Unidade;
 import model.entity.Vacina;
 import model.seletor.AplicacaoSeletor;
+import model.seletor.VacinaSeletor;
 
 public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 
@@ -56,20 +57,20 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
-		String sql =	 "select\r\n"
-				+ "	VACINAS.APLICACAO.id as idAplicacao, \r\n"
-				+ "	VACINAS.VACINA.nome as nomeVacina,\r\n"
-				+ "	VACINAS.FABRICANTE.nome as nomeFabricanteVacina,\r\n"
-				+ "	VACINAS.UNIDADE.nome as nomeUnidade, \r\n"
-				+ "	VACINAS.APLICACAO.dataAplicacao as dataAplicacaoVacina\r\n"
-				+ "from \r\n"
-				+ "	VACINAS.APLICACAO \r\n"
-				+ "join VACINAS.VACINA on VACINAS.VACINA.id = VACINAS.APLICACAO.idVacina \r\n"
-				+ "join VACINAS.UNIDADE on VACINAS.UNIDADE.id = VACINAS.APLICACAO.idUnidade\r\n"
-				+ "join VACINAS.FABRICANTE on VACINAS.FABRICANTE.id = VACINAS.VACINA.idFabricante  \r\n"
-				+ "where idpessoa = " + seletor.getIdPessoaRecebeuAplicacao();
+		String sql =	 "select "
+				+ "	VACINAS.APLICACAO.id, "
+				+ "	VACINAS.VACINA.nome, "
+				+ "	VACINAS.FABRICANTE.nome as nomeFabricante, "
+				+ "	VACINAS.UNIDADE.nome, "
+				+ "	VACINAS.APLICACAO.dataAplicacao "
+				+ "  from "
+				+ "	VACINAS.APLICACAO "
+				+ "  join VACINAS.VACINA on VACINAS.VACINA.id = VACINAS.APLICACAO.idVacina "
+				+ "  join VACINAS.UNIDADE on VACINAS.UNIDADE.id = VACINAS.APLICACAO.idUnidade "
+				+ "  join VACINAS.FABRICANTE on VACINAS.FABRICANTE.id = VACINAS.VACINA.idFabricante "
+				+ "  where idpessoa = " + seletor.getIdPessoaRecebeuAplicacao();
 		if(seletor.temFiltro()) {
-			// sql = preencherFiltros(seletor,sql);
+			 sql = preencherFiltros(seletor,sql);
 		} else {
 			sql += " order by dataAplicacao ";
 		}
@@ -82,8 +83,7 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 			while(resultado.next()) {
 				seletor = construirDoResultSet(resultado);
 				listaDasAplicacoes.add(seletor);
-			}
-		} catch(SQLException erro){
+			}		} catch(SQLException erro){
 			System.out.println(
 					"Erro durante a execução do método \"consultarComFiltros\" ao consultar "
 					+ "as aplicações recebidas do usuário de acordo com o filtro selecionado."
@@ -97,7 +97,7 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		return listaDasAplicacoes;
 	}
 
-		@Override
+	@Override
 	public boolean excluir(int id) {
 		return false;
 	}
@@ -135,55 +135,37 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		return null;
 	}
 	
-	private String preencherFiltros(AplicacaoSeletor seletor, String sql) {
-	    
-		 final String AND = " AND ";
+		private String preencherFiltros(AplicacaoSeletor seletor, String sql) {
+		    final String AND = " AND ";
+		    if (seletor.getNomeUnidadeAplicacao() != null && seletor.getNomeUnidadeAplicacao().trim().length() > 0) {
+		    	sql += AND;
+		    	sql += " UPPER(VACINAS.UNIDADE.nome) LIKE UPPER ('%" + seletor.getNomeUnidadeAplicacao() + "%')";
+		    }
+		    if (seletor.getNomeVacinaAplicada() != null && seletor.getNomeVacinaAplicada().trim().length() > 0) {
+		    	sql += AND;
+		    	sql += " UPPER(VACINAS.VACINA.nome) LIKE UPPER ('%" + seletor.getNomeVacinaAplicada() + "%')";
+		    }
+		    if (seletor.getDataInicioPesquisaSeletor() != null && seletor.getDataFinalPesquisaSeletor() != null) {
+		        sql += AND;
+		        sql += " dataAplicacao BETWEEN '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor())
+		                + "' AND '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
+		    } else if (seletor.getDataInicioPesquisaSeletor() != null) {
+		        sql += AND;
+		        sql += " dataAplicacao >= '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor()) + "'";
+		    } else if (seletor.getDataFinalPesquisaSeletor() != null) {
+		        sql += AND;
+		        sql += " dataAplicacao <= '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
+		    }
+		    return sql;
+		}
 		
-		  //1º OK
-	    if (seletor.getDataInicioPesquisaSeletor() != null && seletor.getDataFinalPesquisaSeletor() != null) {
-	    	sql += AND;
-	        sql += " VACINAS.APLICACAO.dataAplicacao BETWEEN '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor())
-	                + "' AND '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
-	    } else if (seletor.getDataInicioPesquisaSeletor() != null) {
-	        sql += " VACINAS.APLICACAO.dataAplicacao >= '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor()) + "'";
-	    } else if (seletor.getDataFinalPesquisaSeletor() != null) {
-	    	sql += AND;
-	        sql += " VACINAS.APLICACAO.dataAplicacao <= '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
-	    }
-		
-	    
-	    // 1º OK 
-	    if (seletor.getNomeUnidadeAplicacao() != null 
-			 && seletor.getNomeUnidadeAplicacao().trim().length() > 0) {
-	    	sql += AND;
-	        sql += " UPPER(VACINAS.UNIDADE.nome) LIKE UPPER('%" + seletor.getNomeUnidadeAplicacao() + "%')";
-	    }
-	    
-	    
-	    
-		//1º OK
-	    if (seletor.getNomeVacinaAplicada() != null 
-			 && seletor.getNomeVacinaAplicada().trim().length() > 0) {
-	    	sql += AND;
-	        sql += " UPPER(VACINAS.VACINA.nome) LIKE UPPER ('%" + seletor.getNomeVacinaAplicada() + "%')";
-	    }
-		
-	 
-	    
-	  
-	    
-	    
-	    sql += " order by dataAplicacao ";
-	    return sql;
-	}
-	
 	private AplicacaoSeletor  construirDoResultSet(ResultSet resultado) throws SQLException{
 		
 		AplicacaoSeletor seletor = new AplicacaoSeletor();
 		
-		seletor.setAplicacao(consultarPorId(resultado.getInt("idAplicacao")));
+		seletor.setAplicacao(consultarPorId(resultado.getInt("id")));
 		
-		seletor.setFabricanteDaVacinaAplicada(resultado.getString("nomeFabricanteVacina"));
+		seletor.setFabricanteDaVacinaAplicada(resultado.getString("nomeFabricante"));
 		
 		return seletor;
 	}
