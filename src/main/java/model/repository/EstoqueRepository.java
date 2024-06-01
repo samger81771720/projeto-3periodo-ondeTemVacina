@@ -176,7 +176,7 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 				+ "    VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where VACINAS.ESTOQUE.quantidade > 0 ";
 		
 		if(seletor.temFiltro()) {
-			sql = preencherFiltros(seletor,sql);
+			 sql = preencherFiltros(seletor,sql);
 		}
 		
 		if(seletor.temPaginacao()) {
@@ -241,25 +241,12 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 
 		final String AND = " and ";
 		
-		/*
-		
-		|| (this.idadeMinima != 0)
-		|| (this.idadeMaxima != 0)
-		|| (this.isContraIndicacao())
-		
-	
-		|| (this.nomeBairro != null && this.nomeBairro.trim().length() > 0)
-		
-		|| (this.numeroCep != null && this.numeroCep.trim().length() > 0);
-		*/
-	    
 		if (
 	    		seletor.getNomeVacina() != null && seletor.getNomeVacina().trim().length() > 0
 	    	) {
 	        sql += AND + " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getNomeVacina() + "%')";
 	    }
 	    
-		
 		if (
 	    		seletor.getCategoria() != null && seletor.getCategoria().trim().length() > 0
 	    	) {
@@ -278,90 +265,39 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	        sql += AND + " UPPER(UNIDADE.nome) LIKE UPPER ('%" + seletor.getNomeUnidade() + "%')";
 	    }
 		
-		// ainda faltam fazer testes do nome do bairro
 		if (
 	    		seletor.getNomeBairro() != null && seletor.getNomeBairro().trim().length() > 0
 	    	) {
 	        sql += AND + " UPPER(ENDERECO.bairro) LIKE UPPER ('%" + seletor.getNomeBairro() + "%')";
 	    }
 		
-		/*
 		if (
-	    		seletor.getVacina() != null 
-				&& seletor.getVacina().getCategoria() != null  
-		        && !seletor.getVacina().getCategoria().isBlank() 
-		        && !seletor.getVacina().getCategoria().isEmpty()
+	    		seletor.getNumeroCep() != null && seletor.getNumeroCep().trim().length() > 0
 	    	) {
-	        sql += AND + " UPPER(VACINA.categoria) LIKE UPPER ('%" + seletor.getVacina().getCategoria() + "%')";
+	        sql += AND + " UPPER(ENDERECO.cep) LIKE UPPER ('%" + seletor.getNumeroCep() + "%')";
+	    }
+		
+		if (seletor.getIdadeMinima() != 0 && seletor.getIdadeMaxima() != 0) {
+	        sql += AND + "((VACINA.idadeMinima BETWEEN " 
+	        		+ seletor.getIdadeMinima()	+ AND + seletor.getIdadeMaxima() 
+	        		+ ") " + AND + " (VACINA.idadeMaxima BETWEEN " + seletor.getIdadeMinima() 
+	        		+ AND + seletor.getIdadeMaxima() + "))";
+	    }
+		
+		if (seletor.getIdadeMinima() != 0) {
+	        sql += AND + "(VACINA.idadeMinima >= " + seletor.getIdadeMinima() 
+	        	   +    AND + " VACINA.idadeMaxima >= " + seletor.getIdadeMinima()  + ")";
 	    }
 	    
-	    
-	    
-	    // ok between ok
-	    if (
-	    		seletor.getVacina() != null 
-				&& seletor.getVacina().getIdadeMinima() != 0
-				&& seletor.getVacina().getIdadeMaxima() != 0
-		 	) {
-	        sql += AND + " VACINA.idadeMinima between " + seletor.getVacina().getIdadeMinima() + AND + seletor.getVacina().getIdadeMaxima() + AND + "VACINA.idadeMaxima between " + seletor.getVacina().getIdadeMinima() + AND + seletor.getVacina().getIdadeMaxima();
+		if (seletor.getIdadeMaxima() != 0) {
+	        sql += AND + "(VACINA.idadeMinima <= " + seletor.getIdadeMaxima() 
+	        	   +    AND + " VACINA.idadeMaxima <= " + seletor.getIdadeMaxima()  + ")";
 	    }
-	    
-	    
-	    // ok ok
-	    if (
-	    		seletor.getVacina() != null 
-				&& seletor.getVacina().getIdadeMinima() != 0  
-		 	) {
-	        sql += AND + " VACINA.idadeMinima >=  " + seletor.getVacina().getIdadeMinima() +  AND + " VACINA.idadeMaxima >= " + seletor.getVacina().getIdadeMinima();
-	    }
-	    
-	    
-	    
-	    if ( // OK ok
-	    		seletor.getVacina() != null 
-				&& seletor.getVacina().getIdadeMaxima() != 0  
-		 	) {
-	    	sql += AND + " VACINA.idadeMaxima <=  " + seletor.getVacina().getIdadeMaxima() +  AND + " VACINA.idadeMinima <= " + seletor.getVacina().getIdadeMaxima();
-	    }
-	    
-	    
-	    
-	    if(
-	    	seletor.getVacina() != null
-	    	&& seletor.getVacina().isContraIndicacao()
-	    	) {
-	    	sql += AND + " VACINA.contraIndicacao = true ";
-		    }
-	    if(
-	    		(seletor.getFabricanteDaVacina() != null 
-	    		&& !seletor.getFabricanteDaVacina().getNome().isBlank() 
-	    		&& !seletor.getFabricanteDaVacina().getNome().isEmpty())	
-	    	) {
-	    	sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" 
-	    		   + seletor.getVacina().getFabricanteDaVacina().getNome() + "%')";
-	    }
-	    if (
-	    	  seletor.getUnidade() != null
-			  && seletor.getUnidade().getNome() != null
-			  && !seletor.getUnidade().getNome().isBlank() 
-			  && !seletor.getUnidade().getNome().isEmpty()
-	    	) {
-	        sql += AND + " UPPER(UNIDADE.nome) LIKE UPPER ('%" + seletor.getUnidade().getNome() + "%')";
-	    }
-	    if (
-	    	 seletor.getEndereco() != null
-	    	 && seletor.getEndereco().getBairro() != null
-	    	 && !seletor.getEndereco().getBairro().isBlank()
-	    	 && !seletor.getEndereco().getBairro().isEmpty()
-	    	) {
-	        sql += AND + " UPPER(ENDERECO.bairro) LIKE UPPER ('%" 
-	        	   + seletor.getEndereco().getBairro() + "%')";
-	    }
-	    if (
-	    	 seletor.getEndereco() != null && seletor.getEndereco().getCep() != null && !seletor.getEndereco().getCep().isBlank() && !seletor.getEndereco().getCep().isEmpty()) {
-	        sql += AND + " UPPER(ENDERECO.cep) LIKE UPPER ('%"  + seletor.getEndereco().getCep() + "%')";
-	    }
-	    */
+		
+		if(seletor.isContraIndicacao()) {
+			sql += AND + " VACINA.contraIndicacao = true";
+		}
+		
 	    return sql;
 	}
 	
