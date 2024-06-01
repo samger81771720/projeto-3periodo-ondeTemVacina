@@ -11,11 +11,11 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import model.dto.VacinaFiltro;
 import model.entity.Contato;
 import model.entity.Endereco;
 import model.entity.Estoque;
 import model.entity.Unidade;
-import model.filtro.VacinaFiltro;
 import model.seletor.VacinaSeletor;
 import model.service.EstoqueService;
 

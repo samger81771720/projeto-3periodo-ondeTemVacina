@@ -1,4 +1,4 @@
-package model.filtro;
+package model.dto;
 
 import model.entity.Fabricante;
 import model.entity.Unidade;

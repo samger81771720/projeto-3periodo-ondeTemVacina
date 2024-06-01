@@ -3,9 +3,9 @@ package model.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.dto.VacinaFiltro;
 import model.entity.Estoque;
 import model.entity.Unidade;
-import model.filtro.VacinaFiltro;
 import model.repository.EstoqueRepository;
 import model.seletor.VacinaSeletor;
 

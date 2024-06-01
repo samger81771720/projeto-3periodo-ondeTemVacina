@@ -8,8 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.dto.VacinaFiltro;
 import model.entity.Estoque;
-import model.filtro.VacinaFiltro;
 import model.seletor.VacinaSeletor;
 
 public class EstoqueRepository implements BaseRepository<Estoque>{
@@ -174,7 +175,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 				+ " JOIN "
 				+ "    VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where VACINAS.ESTOQUE.quantidade > 0 ";
 		
-		// sql = preencherFiltros(seletor,sql);
+		if(seletor.temFiltro()) {
+			sql = preencherFiltros(seletor,sql);
+		}
 		
 		if(seletor.temPaginacao()) {
 			sql += " LIMIT " + seletor.getLimite(); 
@@ -234,31 +237,56 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	      }
 	}
 	
-	/*private String preencherFiltros(VacinaSeletor seletor, String sql) {
+	private String preencherFiltros(VacinaSeletor seletor, String sql) {
 
 		final String AND = " and ";
-		final String JOIN = " join ";
-
-	    sql += JOIN
-	    		+ " VACINAS.FABRICANTE ON VACINAS.VACINA.idFabricante = VACINAS.FABRICANTE.id"
-	    		+   JOIN
-	    		+ " VACINAS.ESTOQUE ON VACINAS.VACINA.id = VACINAS.ESTOQUE.idVacina"
-	    		+   JOIN
-	    		+ " VACINAS.UNIDADE ON VACINAS.ESTOQUE.idUnidade = VACINAS.UNIDADE.id"
-	    		+   JOIN
-	    		+ " VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id"
-	    		+   JOIN
-	    		+ " VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where "
-	    		+ " VACINAS.ESTOQUE.quantidade > 0";
-	    if (
-	    		seletor.getVacina() != null 
-				&& seletor.getVacina().getNome() != null  
-		        && !seletor.getVacina().getNome().isBlank() 
-		        && !seletor.getVacina().getNome().isEmpty()
+		
+		/*
+		
+		|| (this.idadeMinima != 0)
+		|| (this.idadeMaxima != 0)
+		|| (this.isContraIndicacao())
+		
+	
+		|| (this.nomeBairro != null && this.nomeBairro.trim().length() > 0)
+		
+		|| (this.numeroCep != null && this.numeroCep.trim().length() > 0);
+		*/
+	    
+		if (
+	    		seletor.getNomeVacina() != null && seletor.getNomeVacina().trim().length() > 0
 	    	) {
-	        sql += AND + " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getVacina().getNome() + "%')";
+	        sql += AND + " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getNomeVacina() + "%')";
 	    }
-	    if (
+	    
+		
+		if (
+	    		seletor.getCategoria() != null && seletor.getCategoria().trim().length() > 0
+	    	) {
+	        sql += AND + " UPPER(VACINA.categoria) LIKE UPPER ('%" + seletor.getCategoria() + "%')";
+	    }
+		
+		if (
+	    		seletor.getNomeFabricante() != null && seletor.getNomeFabricante().trim().length() > 0
+	    	) {
+	        sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" + seletor.getNomeFabricante() + "%')";
+	    }
+		
+		if (
+	    		seletor.getNomeUnidade() != null && seletor.getNomeUnidade().trim().length() > 0
+	    	) {
+	        sql += AND + " UPPER(UNIDADE.nome) LIKE UPPER ('%" + seletor.getNomeUnidade() + "%')";
+	    }
+		
+		// ainda faltam fazer testes do nome do bairro
+		if (
+	    		seletor.getNomeBairro() != null && seletor.getNomeBairro().trim().length() > 0
+	    	) {
+	        sql += AND + " UPPER(ENDERECO.bairro) LIKE UPPER ('%" + seletor.getNomeBairro() + "%')";
+	    }
+		
+		/*
+		if (
 	    		seletor.getVacina() != null 
 				&& seletor.getVacina().getCategoria() != null  
 		        && !seletor.getVacina().getCategoria().isBlank() 
@@ -333,8 +361,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	    	 seletor.getEndereco() != null && seletor.getEndereco().getCep() != null && !seletor.getEndereco().getCep().isBlank() && !seletor.getEndereco().getCep().isEmpty()) {
 	        sql += AND + " UPPER(ENDERECO.cep) LIKE UPPER ('%"  + seletor.getEndereco().getCep() + "%')";
 	    }
+	    */
 	    return sql;
-	}*/
+	}
 	
 	private VacinaFiltro construirDoResultSet(ResultSet resultado) throws SQLException{
 		

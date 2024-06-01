@@ -52,6 +52,16 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		return aplicacao;
 	}
 	
+	/*
+	1. sql = preencherFiltros(seletor, sql);
+	Neste caso, o método preencherFiltros é responsável por 
+	pegar a consulta sql existente e preenchida nesse trecho 
+	String sql = "INSERT INTO VACINAS.APLICACAO (idPessoa, idVacina, idUnidade, dataAplicacao) VALUES (?, ?, ?,?)"; 
+	e retorná-la já modificada com os filtros aplicados. 
+	Ou seja, o método preencherFiltros 
+	retorna a consulta completa, incluindo todas as partes da 
+	consulta original e os novos filtros.
+	*/
 	public List<AplicacaoSeletor> consultarComFiltros(AplicacaoSeletor seletor){
 		ArrayList<AplicacaoSeletor> listaDasAplicacoes = new ArrayList<>();
 		Connection conn = Banco.getConnection();
