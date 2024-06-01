@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 import exception.ControleVacinasException;
+import model.dto.AplicacaoFiltro;
 import model.entity.Aplicacao;
 import model.repository.AplicacaoRepository;
 import model.repository.UnidadeRepository;
@@ -24,7 +25,7 @@ public class AplicacaoService {
 		return aplicacaoRepository.consultarPorId(id);
 	}
 	
-	public List<AplicacaoSeletor> consultarComFiltros(AplicacaoSeletor seletor){
+	public List<AplicacaoFiltro> consultarComFiltros(AplicacaoSeletor seletor){
 		return aplicacaoRepository.consultarComFiltros(seletor);
 	}
 	

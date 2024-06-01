@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import model.dto.AplicacaoFiltro;
 import model.entity.Aplicacao;
 import model.entity.Fabricante;
 import model.entity.Pessoa;
@@ -53,7 +55,8 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 	}
 	
 	/*
-	1. sql = preencherFiltros(seletor, sql);
+	                             sql = preencherFiltros(seletor, sql);
+	
 	Neste caso, o método preencherFiltros é responsável por 
 	pegar a consulta sql existente e preenchida nesse trecho 
 	String sql = "INSERT INTO VACINAS.APLICACAO (idPessoa, idVacina, idUnidade, dataAplicacao) VALUES (?, ?, ?,?)"; 
@@ -62,8 +65,8 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 	retorna a consulta completa, incluindo todas as partes da 
 	consulta original e os novos filtros.
 	*/
-	public List<AplicacaoSeletor> consultarComFiltros(AplicacaoSeletor seletor){
-		ArrayList<AplicacaoSeletor> listaDasAplicacoes = new ArrayList<>();
+	public List<AplicacaoFiltro> consultarComFiltros(AplicacaoSeletor seletor){
+		ArrayList<AplicacaoFiltro> listaDasAplicacoes = new ArrayList<>();
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -91,8 +94,8 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		try {
 			resultado = stmt.executeQuery(sql);
 			while(resultado.next()) {
-				seletor = construirDoResultSet(resultado);
-				listaDasAplicacoes.add(seletor);
+				AplicacaoFiltro consultaComFiltro = construirDoResultSet(resultado);
+				listaDasAplicacoes.add(consultaComFiltro);
 			}		} catch(SQLException erro){
 			System.out.println(
 					"Erro durante a execução do método \"consultarComFiltros\" ao consultar "
@@ -170,15 +173,12 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		    return sql;
 		}
 		
-	private AplicacaoSeletor  construirDoResultSet(ResultSet resultado) throws SQLException{
-		
-		AplicacaoSeletor seletor = new AplicacaoSeletor();
-		
-		seletor.setAplicacao(consultarPorId(resultado.getInt("id")));
-		
-		seletor.setFabricanteDaVacinaAplicada(resultado.getString("nomeFabricante"));
-		
-		return seletor;
+	private AplicacaoFiltro  construirDoResultSet(ResultSet resultado) throws SQLException{
+		AplicacaoFiltro consultaComFiltro = new AplicacaoFiltro();
+		AplicacaoRepository aplicacaoRepository = new AplicacaoRepository();
+		consultaComFiltro.setAplicacao(aplicacaoRepository.consultarPorId(resultado.getInt("id")));
+		consultaComFiltro.setFabricanteDaVacinaAplicada(resultado.getString("nomeFabricante"));
+		return consultaComFiltro;
 	}
 	
 	private Aplicacao converterParaObjeto(ResultSet resultado) throws SQLException{

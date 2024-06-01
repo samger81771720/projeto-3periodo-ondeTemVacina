@@ -10,6 +10,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import model.dto.AplicacaoFiltro;
 import model.entity.Aplicacao;
 import model.entity.Endereco;
 import model.seletor.AplicacaoSeletor;
@@ -38,7 +39,7 @@ public class AplicacaoController {
 	@Path("/filtroAplicacoesPessoa")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<AplicacaoSeletor> consultarComFiltros(AplicacaoSeletor seletor){
+	public List<AplicacaoFiltro> consultarComFiltros(AplicacaoSeletor seletor){
 		return aplicacaoService.consultarComFiltros(seletor);
 	}
 	

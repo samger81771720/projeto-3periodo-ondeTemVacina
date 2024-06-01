@@ -13,8 +13,6 @@ public class AplicacaoSeletor extends BaseSeletor{
 	private String nomeVacinaAplicada;
 	private LocalDate dataInicioPesquisaSeletor;
 	private LocalDate dataFinalPesquisaSeletor;
-	private Aplicacao aplicacao;
-	private String fabricanteDaVacinaAplicada;
 	
 	public AplicacaoSeletor() {
 		super();
@@ -58,22 +56,6 @@ public class AplicacaoSeletor extends BaseSeletor{
 
 	public void setDataFinalPesquisaSeletor(LocalDate dataFinalPesquisaSeletor) {
 		this.dataFinalPesquisaSeletor = dataFinalPesquisaSeletor;
-	}
-
-	public Aplicacao getAplicacao() {
-		return aplicacao;
-	}
-
-	public void setAplicacao(Aplicacao aplicacao) {
-		this.aplicacao = aplicacao;
-	}
-	
-	public String getFabricanteDaVacinaAplicada() {
-		return fabricanteDaVacinaAplicada;
-	}
-
-	public void setFabricanteDaVacinaAplicada(String fabricanteDaVacinaAplicada) {
-		this.fabricanteDaVacinaAplicada = fabricanteDaVacinaAplicada;
 	}
 
 	public boolean temFiltro() {
