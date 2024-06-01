@@ -1,91 +1,87 @@
 package model.seletor;
 
-import model.entity.Endereco;
-import model.entity.Fabricante;
-import model.entity.Unidade;
-import model.entity.Vacina;
-
-/* 
- Foi necessário utilizar atributos de outras classes, 
- pois alguns registros(quando voltavam da consulta
-  do objeto seletor do banco  de dados) não vinham.  
-   */
 public class VacinaSeletor extends BaseSeletor{
 	
-	private Vacina vacina;
-	private Unidade unidade;
-	private Fabricante fabricanteDaVacina;
-	private Endereco endereco;// REMOVER ESSE OBJETO, POIS QUEM TEM ENDEREÇO É A UNIDADE
+	private String nomeVacina;
+	private String categoria;
+	private int idadeMinima;
+	private int idadeMaxima;
+	private boolean contraIndicacao;
+	private String nomeFabricante;
+	private String nomeUnidade;
+	private String nomeBairro;
+	private String numeroCep;
 	
 	public VacinaSeletor() {
 		super();
 	}
-
-	public Vacina getVacina() {
-		return vacina;
-	}
-
-	public void setVacina(Vacina vacina) {
-		this.vacina = vacina;
-	}
-
-	public Unidade getUnidade() {
-		return unidade;
-	}
-
-	public void setUnidade(Unidade unidade) {
-		this.unidade = unidade;
-	}
 	
-	public Endereco getEndereco() {
-		return endereco;
+	public String getNomeVacina() {
+		return nomeVacina;
 	}
-
-	public void setEndereco(Endereco endereco) {
-		this.endereco = endereco;
+	public void setNomeVacina(String nomeVacina) {
+		this.nomeVacina = nomeVacina;
 	}
-
-	public Fabricante getFabricanteDaVacina() {
-		return fabricanteDaVacina;
+	public String getCategoria() {
+		return categoria;
 	}
-
-	public void setFabricanteDaVacina(Fabricante fabricanteDaVacina) {
-		this.fabricanteDaVacina = fabricanteDaVacina;
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
+	}
+	public int getIdadeMinima() {
+		return idadeMinima;
+	}
+	public void setIdadeMinima(int idadeMinima) {
+		this.idadeMinima = idadeMinima;
+	}
+	public int getIdadeMaxima() {
+		return idadeMaxima;
+	}
+	public void setIdadeMaxima(int idadeMaxima) {
+		this.idadeMaxima = idadeMaxima;
+	}
+	public boolean isContraIndicacao() {
+		return contraIndicacao;
+	}
+	public void setContraIndicacao(boolean contraIndicacao) {
+		this.contraIndicacao = contraIndicacao;
+	}
+	public String getNomeFabricante() {
+		return nomeFabricante;
+	}
+	public void setNomeFabricante(String nomeFabricante) {
+		this.nomeFabricante = nomeFabricante;
+	}
+	public String getNomeUnidade() {
+		return nomeUnidade;
+	}
+	public void setNomeUnidade(String nomeUnidade) {
+		this.nomeUnidade = nomeUnidade;
+	}
+	public String getNomeBairro() {
+		return nomeBairro;
+	}
+	public void setNomeBairro(String nomeBairro) {
+		this.nomeBairro = nomeBairro;
+	}
+	public String getNumeroCep() {
+		return numeroCep;
+	}
+	public void setNumeroCep(String numeroCep) {
+		this.numeroCep = numeroCep;
 	}
 	
 	public boolean temFiltro() {
-		
 		return 
-						(this.vacina != null && this.vacina.getNome() != null 
-						&& !this.vacina.getNome().isBlank() 
-						&& !this.vacina.getNome().isEmpty())    
-									
-						|| (this.vacina.getCategoria() != null 	
-						&& !this.vacina.getCategoria().isBlank()	
-						&& !this.vacina.getCategoria().isEmpty())
-						
-						|| (this.vacina.getIdadeMinima() != 0)  
-						|| (this.vacina.getIdadeMaxima() != 0)
-						|| (this.vacina.isContraIndicacao())
-						
-						|| (this.fabricanteDaVacina != null 
-						&& !this.fabricanteDaVacina.getNome().isBlank() 
-						&& !this.fabricanteDaVacina.getNome().isEmpty())
-							
-						|| (this.unidade != null 
-						&& this.unidade.getNome() != null 
-						&& !this.unidade.getNome().isBlank() 
-						&& !this.unidade.getNome().isEmpty())
-							
-						|| (this.endereco != null 
-						&& this.endereco.getBairro() != null 
-						&& !this.endereco.getBairro().isEmpty() 
-						&& !this.endereco.getBairro().isBlank())
-						
-						|| (this.endereco != null 
-						&& this.endereco.getCep() != null 
-						&& !this.endereco.getCep().isEmpty() 
-						&& !this.endereco.getCep().isBlank());
+						(this.nomeVacina != null && this.nomeVacina.trim().length() > 0)
+						|| (this.categoria != null && this.categoria.trim().length() > 0)
+						|| (this.idadeMinima != 0)
+						|| (this.idadeMaxima != 0)
+						|| (this.isContraIndicacao())
+						|| (this.nomeFabricante != null && this.nomeFabricante.trim().length() > 0)
+						|| (this.nomeUnidade != null && this.nomeUnidade.trim().length() > 0)
+						|| (this.nomeBairro != null && this.nomeBairro.trim().length() > 0)
+						|| (this.numeroCep != null && this.numeroCep.trim().length() > 0);
 	}
-
+	
 }

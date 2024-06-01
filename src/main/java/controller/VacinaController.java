@@ -30,14 +30,6 @@ public class VacinaController {
 		return vacinaService.excluir(id);
 	}
 	
-	@POST
-	@Path("/filtroVacinasUnidade")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<VacinaSeletor> consultarComFitros(VacinaSeletor seletor){
-		return vacinaService.consultarComFiltros(seletor);
-	}
-	
 }
 
 

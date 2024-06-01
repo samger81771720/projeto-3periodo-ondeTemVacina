@@ -15,6 +15,8 @@ import model.entity.Contato;
 import model.entity.Endereco;
 import model.entity.Estoque;
 import model.entity.Unidade;
+import model.filtro.VacinaFiltro;
+import model.seletor.VacinaSeletor;
 import model.service.EstoqueService;
 
 @Path("/estoque")
@@ -53,6 +55,14 @@ public class EstoqueController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Estoque salvar(Estoque novoEstoque) {
 		return estoqueService.salvar(novoEstoque);
+	}
+	
+	@POST
+	@Path("/filtro-Vacinas-EstoqueDaUnidade")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<VacinaFiltro> consultarComFitros(VacinaSeletor seletor){
+		return estoqueService.consultarComFiltros(seletor);
 	}
 
 }

@@ -4,7 +4,6 @@ import java.util.List;
 
 import model.entity.Vacina;
 import model.repository.VacinaRepository;
-import model.seletor.VacinaSeletor;
 
 public class VacinaService {
 	
@@ -18,8 +17,4 @@ public class VacinaService {
 		return vacinaRepository.excluir(id);
 	}
 	
-	public List<VacinaSeletor> consultarComFiltros(VacinaSeletor seletor){
-		return vacinaRepository.consultarComFiltros(seletor);
-	}
-
 }

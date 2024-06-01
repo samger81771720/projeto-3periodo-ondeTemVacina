@@ -9,6 +9,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import model.entity.Estoque;
+import model.filtro.VacinaFiltro;
+import model.seletor.VacinaSeletor;
 
 public class EstoqueRepository implements BaseRepository<Estoque>{
 
@@ -138,6 +140,67 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return false;
 	}
 	
+	public List<VacinaFiltro> consultarComFiltros(VacinaSeletor seletor){
+		
+		ArrayList<VacinaFiltro> listagemComFiltrosSelecionados = new ArrayList<>();
+		
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		
+		String sql = "select "
+				+ "	VACINA.id as idVacina, "
+				+ "	VACINA.nome as nomeVacina, "
+				+ "	VACINA.categoria as categoriaVacina, "
+				+ "	VACINA.idadeMinima as idadeMinimaVacina, "
+				+ "	VACINA.idadeMaxima as idadeMaximaVacina, "
+				+ "	VACINA.contraIndicacao as contraIndicacaoVacina, "
+				+ "	FABRICANTE.nome as nomeFabricante, "
+				+ "	FABRICANTE.id as idFabricante, "
+				+ "	UNIDADE.id as idUnidade, "
+				+ "	UNIDADE.nome as nomeUnidade, "
+				+ "	ENDERECO.bairro as bairroUnidade, "
+				+ "	ENDERECO.cep as cepUnidade "
+				+ " FROM "
+				+ "    VACINAS.VACINA "
+				+ " JOIN "
+				+ "    VACINAS.FABRICANTE ON VACINAS.VACINA.idFabricante = VACINAS.FABRICANTE.id "
+				+ " JOIN "
+				+ "    VACINAS.ESTOQUE ON VACINAS.VACINA.id = VACINAS.ESTOQUE.idVacina "
+				+ " JOIN "
+				+ "    VACINAS.UNIDADE ON VACINAS.ESTOQUE.idUnidade = VACINAS.UNIDADE.id "
+				+ " JOIN "
+				+ "    VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id "
+				+ " JOIN "
+				+ "    VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where VACINAS.ESTOQUE.quantidade > 0 ";
+		
+		// sql = preencherFiltros(seletor,sql);
+		
+		if(seletor.temPaginacao()) {
+			sql += " LIMIT " + seletor.getLimite(); 
+			sql += " OFFSET " + seletor.getOffSet();
+		}
+		
+		try {
+			resultado = stmt.executeQuery(sql);
+			while(resultado.next()) {
+				VacinaFiltro vacinaFiltro = construirDoResultSet(resultado);
+				listagemComFiltrosSelecionados.add(vacinaFiltro);
+			}
+		} catch(SQLException erro){
+			System.out.println(
+					"Erro durante a execução do método \"consultarComFiltros\" ao consultar "
+				 + "as unidades com seus respectivos estoques de vacinas de acordo com o  filtro selecionado."
+					);
+			System.out.println("Erro: "+erro.getMessage());
+		} finally{
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return listagemComFiltrosSelecionados;
+	}
+	
 	private Estoque converterParaObjeto(ResultSet resultado) throws SQLException{
 		Estoque estoque = new Estoque();
 		UnidadeRepository unidadeRepository = new UnidadeRepository();
@@ -170,4 +233,123 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	         pstmt.setInt(7, novoEstoque.getVacina().getId());
 	      }
 	}
+	
+	/*private String preencherFiltros(VacinaSeletor seletor, String sql) {
+
+		final String AND = " and ";
+		final String JOIN = " join ";
+
+	    sql += JOIN
+	    		+ " VACINAS.FABRICANTE ON VACINAS.VACINA.idFabricante = VACINAS.FABRICANTE.id"
+	    		+   JOIN
+	    		+ " VACINAS.ESTOQUE ON VACINAS.VACINA.id = VACINAS.ESTOQUE.idVacina"
+	    		+   JOIN
+	    		+ " VACINAS.UNIDADE ON VACINAS.ESTOQUE.idUnidade = VACINAS.UNIDADE.id"
+	    		+   JOIN
+	    		+ " VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id"
+	    		+   JOIN
+	    		+ " VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where "
+	    		+ " VACINAS.ESTOQUE.quantidade > 0";
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getNome() != null  
+		        && !seletor.getVacina().getNome().isBlank() 
+		        && !seletor.getVacina().getNome().isEmpty()
+	    	) {
+	        sql += AND + " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getVacina().getNome() + "%')";
+	    }
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getCategoria() != null  
+		        && !seletor.getVacina().getCategoria().isBlank() 
+		        && !seletor.getVacina().getCategoria().isEmpty()
+	    	) {
+	        sql += AND + " UPPER(VACINA.categoria) LIKE UPPER ('%" + seletor.getVacina().getCategoria() + "%')";
+	    }
+	    
+	    
+	    
+	    // ok between ok
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getIdadeMinima() != 0
+				&& seletor.getVacina().getIdadeMaxima() != 0
+		 	) {
+	        sql += AND + " VACINA.idadeMinima between " + seletor.getVacina().getIdadeMinima() + AND + seletor.getVacina().getIdadeMaxima() + AND + "VACINA.idadeMaxima between " + seletor.getVacina().getIdadeMinima() + AND + seletor.getVacina().getIdadeMaxima();
+	    }
+	    
+	    
+	    // ok ok
+	    if (
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getIdadeMinima() != 0  
+		 	) {
+	        sql += AND + " VACINA.idadeMinima >=  " + seletor.getVacina().getIdadeMinima() +  AND + " VACINA.idadeMaxima >= " + seletor.getVacina().getIdadeMinima();
+	    }
+	    
+	    
+	    
+	    if ( // OK ok
+	    		seletor.getVacina() != null 
+				&& seletor.getVacina().getIdadeMaxima() != 0  
+		 	) {
+	    	sql += AND + " VACINA.idadeMaxima <=  " + seletor.getVacina().getIdadeMaxima() +  AND + " VACINA.idadeMinima <= " + seletor.getVacina().getIdadeMaxima();
+	    }
+	    
+	    
+	    
+	    if(
+	    	seletor.getVacina() != null
+	    	&& seletor.getVacina().isContraIndicacao()
+	    	) {
+	    	sql += AND + " VACINA.contraIndicacao = true ";
+		    }
+	    if(
+	    		(seletor.getFabricanteDaVacina() != null 
+	    		&& !seletor.getFabricanteDaVacina().getNome().isBlank() 
+	    		&& !seletor.getFabricanteDaVacina().getNome().isEmpty())	
+	    	) {
+	    	sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" 
+	    		   + seletor.getVacina().getFabricanteDaVacina().getNome() + "%')";
+	    }
+	    if (
+	    	  seletor.getUnidade() != null
+			  && seletor.getUnidade().getNome() != null
+			  && !seletor.getUnidade().getNome().isBlank() 
+			  && !seletor.getUnidade().getNome().isEmpty()
+	    	) {
+	        sql += AND + " UPPER(UNIDADE.nome) LIKE UPPER ('%" + seletor.getUnidade().getNome() + "%')";
+	    }
+	    if (
+	    	 seletor.getEndereco() != null
+	    	 && seletor.getEndereco().getBairro() != null
+	    	 && !seletor.getEndereco().getBairro().isBlank()
+	    	 && !seletor.getEndereco().getBairro().isEmpty()
+	    	) {
+	        sql += AND + " UPPER(ENDERECO.bairro) LIKE UPPER ('%" 
+	        	   + seletor.getEndereco().getBairro() + "%')";
+	    }
+	    if (
+	    	 seletor.getEndereco() != null && seletor.getEndereco().getCep() != null && !seletor.getEndereco().getCep().isBlank() && !seletor.getEndereco().getCep().isEmpty()) {
+	        sql += AND + " UPPER(ENDERECO.cep) LIKE UPPER ('%"  + seletor.getEndereco().getCep() + "%')";
+	    }
+	    return sql;
+	}*/
+	
+	private VacinaFiltro construirDoResultSet(ResultSet resultado) throws SQLException{
+		
+		VacinaFiltro vacinaFiltro = new VacinaFiltro();
+		
+		VacinaRepository vacinaRepository = new VacinaRepository();
+		vacinaFiltro.setVacina(vacinaRepository.consultarPorId(resultado.getInt("idVacina")));
+		
+		FabricanteRepository fabricanteRepository = new FabricanteRepository();
+		vacinaFiltro.setFabricante(fabricanteRepository.consultarPorId(resultado.getInt("idFabricante")));
+		
+		UnidadeRepository unidadeRepository = new UnidadeRepository();
+		vacinaFiltro.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("idUnidade")));
+		
+		return vacinaFiltro;
+	}
+
 }

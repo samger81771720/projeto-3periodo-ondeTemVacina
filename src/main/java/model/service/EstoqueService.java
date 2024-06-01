@@ -5,7 +5,9 @@ import java.util.List;
 
 import model.entity.Estoque;
 import model.entity.Unidade;
+import model.filtro.VacinaFiltro;
 import model.repository.EstoqueRepository;
+import model.seletor.VacinaSeletor;
 
 public class EstoqueService {
 	
@@ -29,6 +31,10 @@ public class EstoqueService {
 	
 	public boolean alterar(Estoque estoqueAnterior) {
 		return estoqueRepository.alterar(estoqueAnterior);
+	}
+	
+	public List<VacinaFiltro> consultarComFiltros(VacinaSeletor seletor){
+		return estoqueRepository.consultarComFiltros(seletor);
 	}
 	
 }
