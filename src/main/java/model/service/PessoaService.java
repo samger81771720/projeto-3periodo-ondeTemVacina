@@ -9,6 +9,7 @@ public class PessoaService {
 	
 	PessoaRepository pessoaRepository = new PessoaRepository();
 	
+	// Funcionalidade terá outras implementações futuramente
 	public Pessoa efetuarLogin(Pessoa pessoa) throws ControleVacinasException {
 		validarCamposPreenchidosParalogin(pessoa);
 	   Pessoa pessoaLogada = pessoaRepository.efetuarLogin(pessoa);
@@ -27,14 +28,18 @@ public class PessoaService {
 	}
 	
 	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException{
-		 	validarCamposPreenchidosDePessoa(novaPessoa);
-			verificarCpfParaCadastrar(novaPessoa);
-			verificarDisponibilidadeLogin(novaPessoa);
-			verificarDisponibilidadeSenha(novaPessoa);
+	 	validarCamposPreenchidosDePessoa(novaPessoa);
+		verificarCpfParaCadastrar(novaPessoa);
+		verificarDisponibilidadeLogin(novaPessoa);
+		verificarDisponibilidadeSenha(novaPessoa);
 		return pessoaRepository.salvar(novaPessoa);
 	}
 	
-	public boolean alterar(Pessoa pessoaAtualizada) {
+	public boolean alterar(Pessoa pessoaAtualizada) throws ControleVacinasException{
+		validarCamposPreenchidosDePessoa(pessoaAtualizada);
+		verificarCpfParaCadastrar(pessoaAtualizada);
+		verificarDisponibilidadeLogin(pessoaAtualizada);
+		verificarDisponibilidadeSenha(pessoaAtualizada);
 		return pessoaRepository.alterar(pessoaAtualizada);
 	}
 	
@@ -63,7 +68,7 @@ public class PessoaService {
 		if (dataNascimento != null) {
 		    LocalDate dataLimite = LocalDate.now().minusYears(120);
 		    if (dataNascimento.isBefore(dataLimite)) {
-		        mensagemValidacao += " - A pessoa não pode ter mais de 120 anos. ";
+		        mensagemValidacao += " - A pessoa não pode ter mais de 120 anos de idade. ";
 		    }
 		} else {
 		    mensagemValidacao += " - O campo data de nascimento precisa ser preenchido. ";
@@ -94,10 +99,10 @@ public class PessoaService {
 			mensagemValidacao += " - O campo login precisa ser preenchido. ";
 		}
 		if (novaPessoa.getLogin().contains(" ") || novaPessoa.getLogin().length() < 8 || novaPessoa.getLogin().length() > 20) {
-		    mensagemValidacao += " - O campo login precisa ser preenchido com no mínimo oito e no máximo doze caracteres, sem espaços.";
+		    mensagemValidacao += " - O campo login precisa ser preenchido com no mínimo oito e no máximo vinte caracteres, sem espaços.";
 		}
 		if ( novaPessoa.getSenha().contains(" ") ||  novaPessoa.getSenha().length() < 8 ||  novaPessoa.getSenha().length() > 20) {
-		    mensagemValidacao += " - O campo senha precisa ser preenchido com no mínimo oito e no máximo doze caracteres, sem espaços.";
+		    mensagemValidacao += " - O campo senha precisa ser preenchido com no mínimo oito e no máximo vinte caracteres, sem espaços.";
 		}
 		if(novaPessoa.getTipo() != Pessoa.ADMINISTRADOR  && novaPessoa.getTipo() != Pessoa.USUARIO) {
 			mensagemValidacao += " - Os únicos tipos permitidos para preencher esse campo são: USUÁRIO ou ADMINISTRADOR.";
@@ -124,13 +129,13 @@ public class PessoaService {
 	    		|| novaPessoa.getLogin().trim().length() > 0 
 	    		|| novaPessoa.getSenha().trim().length() > 0
 	    	) {
-	        mensagemValidacao += " - O campo login e/ou o campo senha precisam ser preenchidos e não podem haver espaços em branco no preenchimento dos campos. ";
+	        mensagemValidacao += " - O campo login e o campo senha precisam ser preenchidos e não podem haver espaços em branco no preenchimento dos campos. ";
 	    }
 	    if(novaPessoa.getLogin().contains(" ") || novaPessoa.getLogin().length()<8 || novaPessoa.getLogin().length() > 20) {
-	    	mensagemValidacao += " - O campo login precisa ter no mínimo oito e no máximo 12 caracteres e sem espaços. ";
+	    	mensagemValidacao += " - O campo login precisa ter no mínimo 8 e no máximo 12 caracteres e sem espaços. ";
 	    }
 	    if(novaPessoa.getSenha().contains(" ") || novaPessoa.getSenha().length()<8 || novaPessoa.getSenha().length() > 20) {
-	    	mensagemValidacao += " - O campo senha precisa ter no mínimo oito e no máximo 12 caracteres e sem espaços. ";
+	    	mensagemValidacao += " - O campo senha precisa ter no mínimo 8 e no máximo 12 caracteres e sem espaços. ";
 	    }
 	    if(!mensagemValidacao.isEmpty()) {
 			throw new ControleVacinasException("As observações a seguir precisam ser atendidas para efetuar o login com sucesso: " + mensagemValidacao);

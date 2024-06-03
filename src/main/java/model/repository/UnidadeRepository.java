@@ -77,9 +77,11 @@ public class UnidadeRepository implements BaseRepository<Unidade>{
 		            }
 		        }
 		} catch (SQLException erro) {
-			System.out.println("Erro ao tentar verificar se há estoque da vacina " + aplicacao.getVacinaAplicada().getNome() 
-											    + " na unidade " + aplicacao.getUnidadeOndeAplicou().getNome() 
-											    +" para realizar o registro de aplicação na no usuário " + aplicacao.getPessoaQueRecebeu().getNome());
+			System.out.println("Erro ao tentar verificar se há estoque da vacina " 
+												   + aplicacao.getVacinaAplicada().getNome() 
+											       + " na unidade " + aplicacao.getUnidadeOndeAplicou().getNome() 
+											       +" para realizar o registro de aplicação na no usuário " 
+											       + aplicacao.getPessoaQueRecebeu().getNome());
 			System.out.println("Erro: "+erro.getMessage());
 		} finally {
 			Banco.closeResultSet(resultado);
