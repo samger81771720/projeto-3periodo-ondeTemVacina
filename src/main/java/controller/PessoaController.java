@@ -36,7 +36,7 @@ public class PessoaController {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public boolean alterar(Pessoa pessoaAtualizada) {
+	public boolean alterar(Pessoa pessoaAtualizada)throws ControleVacinasException {
 		return pessoaService.alterar(pessoaAtualizada);
 	}
 	

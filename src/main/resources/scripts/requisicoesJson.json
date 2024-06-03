@@ -1,0 +1,721 @@
+{
+	"info": {
+		"_postman_id": "9a3cb82c-025e-4e6f-b4d8-21fbc2371d6a",
+		"name": "Projeto Semestre Vacinas",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "31217826"
+	},
+	"item": [
+		{
+			"name": "UNIDADE - Consultar Por Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/unidade/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"unidade",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ENDEREÇO - Salvar Endereço",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bairro\": \"Cabo Sampaio\",\r\n    \"cep\": \"99999-222\",\r\n    \"complemento\": \"Apto 101\",\r\n    \"estado\": \"RJ\",\r\n    \"localidade\": \"Pernambuco\",\r\n    \"logradouro\": \"Rua dos Cabra Macho\",\r\n    \"numero\": \"51\",\r\n    \"pais\": \"Brasil\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/endereco",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"endereco"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ENDEREÇO - Atualizar Endereço",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"bairro\": \"Cabo Geraldo\",\r\n    \"cep\": \"55555-111\",\r\n    \"complemento\": \"Apto 103\",\r\n    \"estado\": \"AL\",\r\n    \"id\": 36,\r\n    \"localidade\": \"Alagoas\",\r\n    \"logradouro\": \"Rua dos Homi\",\r\n    \"numero\": \"99\",\r\n    \"pais\": \"Brasil\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/endereco",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"endereco"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ENDEREÇO - Excluir endereço",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/endereco/36",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"endereco",
+						"36"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ENDEREÇO - Consultar por id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/endereco/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"endereco",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ENDEREÇO - Consultar todos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/endereco/consultarTodosEnderecos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"endereco",
+						"consultarTodosEnderecos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ESTOQUE - Consultar Estoque da Unidade",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/estoque/consultarEstoquePorUnidade/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"estoque",
+						"consultarEstoquePorUnidade",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ESTOQUE - Consultar Todos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/estoque/consultarTodos",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"estoque",
+						"consultarTodos"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ESTOQUE - Excluir Estoque",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/estoque/2/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"estoque",
+						"2",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ESTOQUE - Cadastrar Estoque Da Unidade",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"unidade\": {\r\n        \"id\": 2,\r\n        \"nome\": \"\",\r\n        \"enderecoDaUnidade\": {\r\n            \"id\": \"\",\r\n            \"logradouro\": \"\",\r\n            \"numero\": \"\",\r\n            \"complemento\": \"\",\r\n            \"bairro\": \"\",\r\n            \"localidade\": \"\",\r\n            \"estado\": \"\",\r\n            \"cep\": \"\",\r\n            \"pais\": \"\"\r\n        },\r\n        \"contatoDaUnidade\": {\r\n            \"id\": \"\",\r\n            \"telefone\": \"\",\r\n            \"email\": \"\"\r\n        }\r\n    },\r\n    \"vacina\": {\r\n        \"id\": 2,\r\n        \"nome\": \"\",\r\n        \"fabricanteDaVacina\": {\r\n            \"id\": \"\",\r\n            \"nome\": \"\",\r\n            \"enderecoDoFabricante\": {\r\n                \"id\": \"\",\r\n                \"logradouro\": \"\",\r\n                \"numero\": \"\",\r\n                \"complemento\": \"\",\r\n                \"bairro\": \"\",\r\n                \"localidade\": \"\",\r\n                \"estado\": \"\",\r\n                \"cep\": \"\",\r\n                \"pais\": \"\"\r\n            },\r\n            \"contatoDoFabricante\": {\r\n                \"id\": \"\",\r\n                \"telefone\": \"\",\r\n                \"email\": \"\"\r\n            }\r\n        },\r\n        \"categoria\": \"\",\r\n        \"idadeMinima\": \"\",\r\n        \"idadeMaxima\": \"\",\r\n        \"contraIndicacao\": false\r\n    },\r\n    \"quantidade\": 5236,\r\n    \"dataLote\": \"2020-01-01\",\r\n    \"validade\": \"2022-01-01\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/estoque",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"estoque"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ESTOQUE - Atualizar Estoque",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"unidade\": {\r\n        \"id\": 2,\r\n        \"nome\": \"\",\r\n        \"enderecoDaUnidade\": {\r\n            \"id\": \"\",\r\n            \"logradouro\": \"\",\r\n            \"numero\": \"\",\r\n            \"complemento\": \"\",\r\n            \"bairro\": \"\",\r\n            \"localidade\": \"\",\r\n            \"estado\": \"\",\r\n            \"cep\": \"\",\r\n            \"pais\": \"\"\r\n        },\r\n        \"contatoDaUnidade\": {\r\n            \"id\": \"\",\r\n            \"telefone\": \"\",\r\n            \"email\": \"\"\r\n        }\r\n    },\r\n    \"vacina\": {\r\n        \"id\": 2,\r\n        \"nome\": \"\",\r\n        \"fabricanteDaVacina\": {\r\n            \"id\": \"\",\r\n            \"nome\": \"\",\r\n            \"enderecoDoFabricante\": {\r\n                \"id\": \"\",\r\n                \"logradouro\": \"\",\r\n                \"numero\": \"\",\r\n                \"complemento\": \"\",\r\n                \"bairro\": \"\",\r\n                \"localidade\": \"\",\r\n                \"estado\": \"\",\r\n                \"cep\": \"\",\r\n                \"pais\": \"\"\r\n            },\r\n            \"contatoDoFabricante\": {\r\n                \"id\": \"\",\r\n                \"telefone\": \"\",\r\n                \"email\": \"\"\r\n            }\r\n        },\r\n        \"categoria\": \"\",\r\n        \"idadeMinima\": \"\",\r\n        \"idadeMaxima\": \"\",\r\n        \"contraIndicacao\": true\r\n    },\r\n    \"quantidade\": 1111,\r\n    \"dataLote\": \"2024-04-04\",\r\n    \"validade\": \"2025-05-05\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/estoque",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"estoque"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "FABRICANTE - Consultar Por Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/fabricante/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"fabricante",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PESSOA - Efetuar Login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"login\": \"carlos.santos3\",\r\n  \"senha\": \"senhaPadrao123\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/pessoa/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"pessoa",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PESSOA - Salvar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"contatoDaPessoa\": {\r\n        \"email\": \"abcdefgh@dominio.com\",\r\n        \"telefone\": \"(48) 99986-9808\"\r\n    },\r\n    \"cpf\": \"05157892863\",\r\n    \"dataNascimento\": \"1978-05-26\",\r\n    \"doencaPreexistente\": true,\r\n    \"enderecoDaPessoa\": {\r\n        \"bairro\": \"Auxiliadora\",\r\n        \"cep\": \"99999-222\",\r\n        \"complemento\": \"Apto 501\",\r\n        \"estado\": \"RS\",\r\n        \"localidade\": \"Porto Alegre\",\r\n        \"logradouro\": \"Rua Campos Sales\",\r\n        \"numero\": \"321\",\r\n        \"pais\": \"Brasil\"\r\n    },\r\n    \"login\": \"pslgm99s\",\r\n    \"nome\": \"Andre Sampaio\",\r\n    \"senha\": \"aasenhaa8\",\r\n    \"sexo\": \"M\",\r\n    \"tipo\": 2\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/pessoa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"pessoa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PESSOA - Atualizar Pessoa",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"contatoDaPessoa\": {\r\n        \"email\": \"exemplo222@dominio.com\",\r\n        \"telefone\": \"(51) 99986-9808\"\r\n    },\r\n    \"cpf\": \"54896532999\",\r\n    \"dataNascimento\": \"1951-12-29\",\r\n    \"doencaPreexistente\": true,\r\n    \"enderecoDaPessoa\": {\r\n        \"bairro\": \"Auxiliadora\",\r\n        \"cep\": \"99999-222\",\r\n        \"complemento\": \"Apto 501\",\r\n        \"estado\": \"RS\",\r\n        \"localidade\": \"Porto Alegre\",\r\n        \"logradouro\": \"Rua Campos Sales\",\r\n        \"numero\": \"321\",\r\n        \"pais\": \"Brasil\"\r\n    },\r\n    \"id\": 20,\r\n    \"login\": \"joaoritterjunior\",\r\n    \"nome\": \"João Ritter Junior\",\r\n    \"senha\": \"senha123456\",\r\n    \"sexo\": \"O\",\r\n    \"tipo\": 2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/pessoa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"pessoa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VACINA - Consultar Por Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/vacina/3",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"vacina",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VACINA - Excluir Vacina",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/vacina/33",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"vacina",
+						"33"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VACINA - Consultar Todas Vacinas",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/vacina/consultarTodasVacinas",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"vacina",
+						"consultarTodasVacinas"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VACINA - Cadastrar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoria\": \"Corona Vírus\",\r\n    \"contraIndicacao\": false,\r\n    \"fabricanteDaVacina\": {\r\n        \"contatoDoFabricante\": {\r\n            \"email\": \"astrazeneca@empresa_astrazeneca.com\",\r\n            \"id\": 3,\r\n            \"telefone\": \"11987654333\"\r\n        },\r\n        \"enderecoDoFabricante\": {\r\n            \"bairro\": \"Centro\",\r\n            \"cep\": \"33445-566\",\r\n            \"complemento\": \"\",\r\n            \"estado\": \"MG\",\r\n            \"id\": 13,\r\n            \"localidade\": \"Belo Horizonte\",\r\n            \"logradouro\": \"Rua Amazonas\",\r\n            \"numero\": \"909\",\r\n            \"pais\": \"Brasil\"\r\n        },\r\n        \"id\": 3,\r\n        \"nome\": \"AstraZeneca\"\r\n    },\r\n    \"id\": 0,\r\n    \"idadeMaxima\": 120,\r\n    \"idadeMinima\": 0,\r\n    \"nome\": \"Sampaio\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/vacina",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"vacina"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "VACINA - alterar",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"categoria\": \"Corona Vírus Plus\",\r\n    \"contraIndicacao\": true,\r\n    \"fabricanteDaVacina\": {\r\n        \"contatoDoFabricante\": {\r\n            \"email\": \"astrazeneca@empresa_astrazeneca.com\",\r\n            \"id\": 3,\r\n            \"telefone\": \"11987654333\"\r\n        },\r\n        \"enderecoDoFabricante\": {\r\n            \"bairro\": \"Centro\",\r\n            \"cep\": \"33445-566\",\r\n            \"complemento\": \"\",\r\n            \"estado\": \"MG\",\r\n            \"id\": 13,\r\n            \"localidade\": \"Belo Horizonte\",\r\n            \"logradouro\": \"Rua Amazonas\",\r\n            \"numero\": \"909\",\r\n            \"pais\": \"Brasil\"\r\n        },\r\n        \"id\": 3,\r\n        \"nome\": \"AstraZeneca\"\r\n    },\r\n    \"id\": 1,\r\n    \"idadeMaxima\": 20,\r\n    \"idadeMinima\": 10,\r\n    \"nome\": \"Vac Ger\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/vacina",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"vacina"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLICACAO - Salvar Aplicação",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"id\": 0,\r\n  \"pessoaQueRecebeu\": {\r\n    \"id\": 1,\r\n    \"enderecoDaPessoa\": {\r\n      \"id\": 1,\r\n      \"logradouro\": \"Rua das Flores\",\r\n      \"numero\": 123,\r\n      \"complemento\": \"Apto 101\",\r\n      \"bairro\": \"Jardim Primavera\",\r\n      \"localidade\": \"São Paulo\",\r\n      \"estado\": \"SP\",\r\n      \"cep\": \"1234-678\",\r\n      \"pais\": \"Brasil\"\r\n    },\r\n    \"contatoDaPessoa\": {\r\n      \"id\": 11,\r\n      \"telefone\": \"11987654341\",\r\n      \"email\": \"joao.silva@gmail.com\"\r\n    },\r\n    \"nome\": \"João Silva\",\r\n    \"dataNascimento\": \"1980-01-15\",\r\n    \"sexo\": \"M\",\r\n    \"cpf\": \"12345678901\",\r\n    \"login\": \"joao.silva1\",\r\n    \"senha\": \"senhaPadrao123\",\r\n    \"tipo\": 2,\r\n    \"doencaPreexistente\": false\r\n  },\r\n  \"vacinaAplicada\": {\r\n    \"id\":3,\r\n    \"categoria\": \"Corona Vírus\",\r\n    \"contraIndicacao\": false,\r\n    \"fabricanteDaVacina\": {\r\n        \"contatoDoFabricante\": {\r\n            \"email\": \"astrazeneca@empresa_astrazeneca.com\",\r\n            \"id\": 3,\r\n            \"telefone\": \"11987654333\"\r\n        },\r\n        \"enderecoDoFabricante\": {\r\n            \"bairro\": \"Centro\",\r\n            \"cep\": \"33445-566\",\r\n            \"complemento\": \"\",\r\n            \"estado\": \"MG\",\r\n            \"id\": 13,\r\n            \"localidade\": \"Belo Horizonte\",\r\n            \"logradouro\": \"Rua Amazonas\",\r\n            \"numero\": \"909\",\r\n            \"pais\": \"Brasil\"\r\n        },\r\n        \"id\": 3,\r\n        \"nome\": \"AstraZeneca\"\r\n    },\r\n    \"idadeMaxima\": 99,\r\n    \"idadeMinima\": 12,\r\n    \"nome\": \"Spikevax\"\r\n}\r\n  ,\r\n  \"unidadeOndeAplicou\": {\r\n    \"contatoDaUnidade\": {\r\n        \"email\": \"contato@hospitalcentral.com\",\r\n        \"id\": 21,\r\n        \"telefone\": \"1123456789\"\r\n    },\r\n    \"enderecoDaUnidade\": {\r\n        \"bairro\": \"Centro\",\r\n        \"cep\": \"11224-455\",\r\n        \"complemento\": \"\",\r\n        \"estado\": \"BA\",\r\n        \"id\": 21,\r\n        \"localidade\": \"Salvador\",\r\n        \"logradouro\": \"Rua Rio Grande do Sul\",\r\n        \"numero\": \"777\",\r\n        \"pais\": \"Brasil\"\r\n    },\r\n    \"id\": 1,\r\n    \"nome\": \"Hospital Central\"\r\n  },\r\n  \"dataAplicacao\": \"2024-05-30\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/aplicacao",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"aplicacao"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APLICACAO - Consultar Por Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/aplicacao/195",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"aplicacao",
+						"195"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Vacina com Filtros",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nomeVacina\": null,\r\n    \"categoria\": null,\r\n    \"idadeMinima\": 0,\r\n    \"idadeMaxima\": 0,\r\n    \"contraIndicacao\": false,\r\n    \"nomeFabricante\": null,\r\n    \"nomeUnidade\": null,\r\n    \"nomeBairro\": null,\r\n    \"numeroCep\": null,\r\n    \"vacina\": {\r\n        \"id\": 0,\r\n        \"nome\": null,\r\n        \"enderecoDaUnidade\": {\r\n            \"id\": 0,\r\n            \"logradouro\": null,\r\n            \"numero\": 0,\r\n            \"complemento\": null,\r\n            \"bairro\": null,\r\n            \"localidade\": null,\r\n            \"estado\": null,\r\n            \"cep\": null,\r\n            \"pais\": null\r\n        },\r\n        \"contatoDaUnidade\": {\r\n            \"id\": 0,\r\n            \"telefone\": null,\r\n            \"email\": null\r\n        }\r\n    },\r\n    \"fabricante\": {\r\n        \"id\": 0,\r\n        \"nome\": null,\r\n        \"enderecoDoFabricante\": {\r\n            \"id\": 0,\r\n            \"logradouro\": null,\r\n            \"numero\": 0,\r\n            \"complemento\": null,\r\n            \"bairro\": null,\r\n            \"localidade\": null,\r\n            \"estado\": null,\r\n            \"cep\": null,\r\n            \"pais\": null\r\n        },\r\n        \"contatoDoFabricante\": {\r\n            \"id\": 0,\r\n            \"telefone\": null,\r\n            \"email\": null\r\n        }\r\n    },\r\n    \"unidade\": {\r\n        \"id\": 0,\r\n        \"nome\": null,\r\n        \"enderecoDaUnidade\": {\r\n            \"id\": 0,\r\n            \"logradouro\": null,\r\n            \"numero\": 0,\r\n            \"complemento\": null,\r\n            \"bairro\": null,\r\n            \"localidade\": null,\r\n            \"estado\": null,\r\n            \"cep\": null,\r\n            \"pais\": null\r\n        },\r\n        \"contatoDaUnidade\": {\r\n            \"id\": 0,\r\n            \"telefone\": null,\r\n            \"email\": null\r\n        }\r\n    }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/estoque/filtro-Vacinas-EstoqueDaUnidade",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"estoque",
+						"filtro-Vacinas-EstoqueDaUnidade"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Aplicação com Filtros",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"idPessoaRecebeuAplicacao\": 10,\r\n  \"nomeUnidadeAplicacao\": \"UBS Centro\",\r\n  \"nomeVacinaAplicada\": null,\r\n  \"dataInicioPesquisaSeletor\": \"2023-01-20\",\r\n  \"dataFinalPesquisaSeletor\": \"2023-01-30\"\r\n}\r\n\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/aplicacao/filtroAplicacoesPessoa",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"aplicacao",
+						"filtroAplicacoesPessoa"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CONTATO - Salvar Contato",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"telefone\": \"48999869806\",\r\n    \"email\": \"andre@gmail.com\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/contato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"contato"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CONTATO - Consultar por id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/contato/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"contato",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CONTATO - Alterar Contato",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"email\": \"jorge@gmail.com\",\r\n    \"id\": 31,\r\n    \"telefone\": \"48555555555\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/projeto-vacinas-3periodo/rest/contato",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"projeto-vacinas-3periodo",
+						"rest",
+						"contato"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
