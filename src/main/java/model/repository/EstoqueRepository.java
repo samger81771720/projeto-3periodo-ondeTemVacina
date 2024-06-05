@@ -9,7 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.dto.VacinaFiltro;
+import model.dto.VacinaDTO;
 import model.entity.Estoque;
 import model.seletor.VacinaSeletor;
 
@@ -141,9 +141,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return false;
 	}
 	
-	public List<VacinaFiltro> consultarComFiltros(VacinaSeletor seletor){
+	public List<VacinaDTO> consultarComFiltros(VacinaSeletor seletor){
 		
-		ArrayList<VacinaFiltro> listagemComFiltrosSelecionados = new ArrayList<>();
+		ArrayList<VacinaDTO> listagemComFiltrosSelecionados = new ArrayList<>();
 		
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
@@ -187,8 +187,8 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		try {
 			resultado = stmt.executeQuery(sql);
 			while(resultado.next()) {
-				VacinaFiltro vacinaFiltro = construirDoResultSet(resultado);
-				listagemComFiltrosSelecionados.add(vacinaFiltro);
+				VacinaDTO vacinaDTO = construirDoResultSet(resultado);
+				listagemComFiltrosSelecionados.add(vacinaDTO);
 			}
 		} catch(SQLException erro){
 			System.out.println(
@@ -301,20 +301,20 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	    return sql;
 	}
 	
-	private VacinaFiltro construirDoResultSet(ResultSet resultado) throws SQLException{
+	private VacinaDTO construirDoResultSet(ResultSet resultado) throws SQLException{
 		
-		VacinaFiltro vacinaFiltro = new VacinaFiltro();
+		VacinaDTO vacinaDTO = new VacinaDTO();
 		
 		VacinaRepository vacinaRepository = new VacinaRepository();
-		vacinaFiltro.setVacina(vacinaRepository.consultarPorId(resultado.getInt("idVacina")));
+		vacinaDTO.setVacina(vacinaRepository.consultarPorId(resultado.getInt("idVacina")));
 		
 		FabricanteRepository fabricanteRepository = new FabricanteRepository();
-		vacinaFiltro.setFabricante(fabricanteRepository.consultarPorId(resultado.getInt("idFabricante")));
+		vacinaDTO.setFabricante(fabricanteRepository.consultarPorId(resultado.getInt("idFabricante")));
 		
 		UnidadeRepository unidadeRepository = new UnidadeRepository();
-		vacinaFiltro.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("idUnidade")));
+		vacinaDTO.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("idUnidade")));
 		
-		return vacinaFiltro;
+		return vacinaDTO;
 	}
 
 }

@@ -2,7 +2,7 @@ package model.dto;
 
 import model.entity.Aplicacao;
 
-public class AplicacaoFiltro {
+public class AplicacaoDTO {
 	
 	private Aplicacao aplicacao;
 	private String fabricanteDaVacinaAplicada;

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.dto.AplicacaoFiltro;
+import model.dto.AplicacaoDTO;
 import model.entity.Aplicacao;
 import model.entity.Fabricante;
 import model.entity.Pessoa;
@@ -65,8 +65,8 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 	retorna a consulta completa, incluindo todas as partes da 
 	consulta original e os novos filtros.
 	*/
-	public List<AplicacaoFiltro> consultarComFiltros(AplicacaoSeletor seletor){
-		ArrayList<AplicacaoFiltro> listaDasAplicacoes = new ArrayList<>();
+	public List<AplicacaoDTO> consultarComFiltros(AplicacaoSeletor seletor){
+		ArrayList<AplicacaoDTO> listaDasAplicacoes = new ArrayList<>();
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
@@ -94,7 +94,7 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		try {
 			resultado = stmt.executeQuery(sql);
 			while(resultado.next()) {
-				AplicacaoFiltro consultaComFiltro = construirDoResultSet(resultado);
+				AplicacaoDTO consultaComFiltro = construirDoResultSet(resultado);
 				listaDasAplicacoes.add(consultaComFiltro);
 			}		} catch(SQLException erro){
 			System.out.println(
@@ -173,8 +173,8 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		    return sql;
 		}
 		
-	private AplicacaoFiltro  construirDoResultSet(ResultSet resultado) throws SQLException{
-		AplicacaoFiltro consultaComFiltro = new AplicacaoFiltro();
+	private AplicacaoDTO  construirDoResultSet(ResultSet resultado) throws SQLException{
+		AplicacaoDTO consultaComFiltro = new AplicacaoDTO();
 		AplicacaoRepository aplicacaoRepository = new AplicacaoRepository();
 		consultaComFiltro.setAplicacao(aplicacaoRepository.consultarPorId(resultado.getInt("id")));
 		consultaComFiltro.setFabricanteDaVacinaAplicada(resultado.getString("nomeFabricante"));

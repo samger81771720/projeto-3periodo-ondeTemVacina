@@ -3,7 +3,7 @@ package model.service;
 import java.util.ArrayList;
 import java.util.List;
 
-import model.dto.VacinaFiltro;
+import model.dto.VacinaDTO;
 import model.entity.Estoque;
 import model.entity.Unidade;
 import model.repository.EstoqueRepository;
@@ -33,7 +33,7 @@ public class EstoqueService {
 		return estoqueRepository.alterar(estoqueAnterior);
 	}
 	
-	public List<VacinaFiltro> consultarComFiltros(VacinaSeletor seletor){
+	public List<VacinaDTO> consultarComFiltros(VacinaSeletor seletor){
 		return estoqueRepository.consultarComFiltros(seletor);
 	}
 	

@@ -4,7 +4,7 @@ import model.entity.Fabricante;
 import model.entity.Unidade;
 import model.entity.Vacina;
 
-public class VacinaFiltro {
+public class VacinaDTO {
 	
 	private Vacina vacina;
 	private Fabricante fabricante;

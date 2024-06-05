@@ -11,7 +11,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import model.dto.VacinaFiltro;
+import model.dto.VacinaDTO;
 import model.entity.Contato;
 import model.entity.Endereco;
 import model.entity.Estoque;
@@ -61,7 +61,7 @@ public class EstoqueController {
 	@Path("/filtro-Vacinas-EstoqueDaUnidade")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<VacinaFiltro> consultarComFitros(VacinaSeletor seletor){
+	public List<VacinaDTO> consultarComFitros(VacinaSeletor seletor){
 		return estoqueService.consultarComFiltros(seletor);
 	}
 
