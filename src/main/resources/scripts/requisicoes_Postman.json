@@ -155,7 +155,7 @@
 			"response": []
 		},
 		{
-			"name": "ESTOQUE - Consultar Estoque da Unidade",
+			"name": "UNIDADE - Consultar Estoque da Unidade",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -574,7 +574,7 @@
 			"response": []
 		},
 		{
-			"name": "Vacina com Filtros",
+			"name": "FILTRO VACINA- Consultar com Filtros",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -605,7 +605,7 @@
 			"response": []
 		},
 		{
-			"name": "Aplicação com Filtros",
+			"name": "FILTRO APLICACAO - Conultar com Filtros",
 			"request": {
 				"method": "POST",
 				"header": [],

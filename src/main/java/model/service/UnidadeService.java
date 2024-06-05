@@ -1,6 +1,10 @@
 package model.service;
 
+import java.util.List;
+
+import model.entity.Estoque;
 import model.entity.Unidade;
+import model.repository.EstoqueRepository;
 import model.repository.UnidadeRepository;
 
 public class UnidadeService {
@@ -9,6 +13,10 @@ public class UnidadeService {
 	
 	public Unidade consultarPorId(int id) {
 		return unidadeRepository.consultarPorId(id);
+	}
+	
+	public List<Estoque> consultarEstoquesDaUnidade(int idUnidade) {
+		return unidadeRepository.consultarEstoquesDaUnidade(idUnidade);
 	}
 	
 }

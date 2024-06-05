@@ -13,10 +13,6 @@ public class EstoqueService {
 	
 	EstoqueRepository estoqueRepository = new EstoqueRepository();
 	
-	public List<Estoque> consultarEstoquesDaUnidade(int idUnidade) {
-		return estoqueRepository.consultarEstoquesDaUnidade(idUnidade);
-	}
-	
 	public ArrayList<Estoque> consultarTodos() {
 		return estoqueRepository.consultarTodos();
 	}
@@ -29,8 +25,8 @@ public class EstoqueService {
 		return estoqueRepository.salvar(novoEstoque);
 	}
 	
-	public boolean alterar(Estoque estoqueAnterior) {
-		return estoqueRepository.alterar(estoqueAnterior);
+	public boolean alterar(Estoque estoque) {
+		return estoqueRepository.alterar(estoque);
 	}
 	
 	public List<VacinaDTO> consultarComFiltros(VacinaSeletor seletor){

@@ -25,13 +25,6 @@ public class EstoqueController {
 	EstoqueService estoqueService = new EstoqueService();
 	
 	@GET
-	@Path("/consultarEstoquePorUnidade/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Estoque> consultarEstoquesDaUnidade(@PathParam("id")int idUnidade) {
-		return estoqueService.consultarEstoquesDaUnidade(idUnidade);
-	}
-	
-	@GET
 	@Path("/consultarTodos")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Estoque> consultarTodos() {
@@ -47,8 +40,8 @@ public class EstoqueController {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
-	public boolean alterar(Estoque estoqueAnterior) {
-		return estoqueService.alterar(estoqueAnterior);
+	public boolean alterar(Estoque estoque) {
+		return estoqueService.alterar(estoque);
 	}
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

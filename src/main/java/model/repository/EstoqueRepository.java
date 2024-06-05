@@ -62,17 +62,17 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	}
 
 	@Override
-	public boolean alterar(Estoque estoqueAnterior) {
+	public boolean alterar(Estoque estoque) {
 		boolean alterou = false;
 	    String query = "update VACINAS.ESTOQUE set idUnidade = ?, idVacina = ?, quantidade = ?, "
 	    						  + "dataLote = ?, validade = ? where idUnidade = ? and idVacina = ? ";
 	    Connection conn = Banco.getConnection();
 	    PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
 	    try {
-	    	this.preencherParametrosParaInsertOuUpdate(pstmt, estoqueAnterior, true);
+	    	this.preencherParametrosParaInsertOuUpdate(pstmt, estoque, true);
 	        alterou = pstmt.executeUpdate() > 0;
 	    } catch (SQLException erro) {
-	        System.out.println("Erro ao tentar atualizar o estoque da unidade " + estoqueAnterior.getUnidade().getNome());
+	        System.out.println("Erro ao tentar atualizar o estoque da unidade " + estoque.getUnidade().getNome());
 	        System.out.println("Erro: " + erro.getMessage());
 	    } finally {
 	        Banco.closeStatement(pstmt);
@@ -81,30 +81,6 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	    return alterou;
 	}
 
-	public List<Estoque> consultarEstoquesDaUnidade(int idUnidade) {
-		ArrayList<Estoque> estoqueDaUnidade = new ArrayList<>();
-		Connection conn = Banco.getConnection();
-		Statement stmt = Banco.getStatement(conn);
-		ResultSet resultado = null;
-		String query = "select idUnidade, idVacina, quantidade, dataLote, "
-								  + "validade from VACINAS.ESTOQUE where idUnidade = " 
-								  + idUnidade;
-		try{
-			resultado = stmt.executeQuery(query);
-			while(resultado.next()){
-				estoqueDaUnidade.add(this.converterParaObjeto(resultado));
-			}
-		} catch (SQLException erro){
-			System.out.println("Erro ao executar o estoque da unidade de id " + idUnidade);
-			System.out.println("Erro: " + erro.getMessage());
-		} finally {
-			Banco.closeResultSet(resultado);
-			Banco.closeStatement(stmt);
-			Banco.closeConnection(conn);
-		}
-		return estoqueDaUnidade;
-	}
-	
 	@Override
 	public ArrayList<Estoque> consultarTodos() {
 		Connection conn = Banco.getConnection();

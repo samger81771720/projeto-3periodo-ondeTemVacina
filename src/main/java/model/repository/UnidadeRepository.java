@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import model.entity.Aplicacao;
 import model.entity.Contato;
 import model.entity.Endereco;
+import model.entity.Estoque;
 import model.entity.Unidade;
 
 public class UnidadeRepository implements BaseRepository<Unidade>{
@@ -42,7 +44,7 @@ public class UnidadeRepository implements BaseRepository<Unidade>{
 		try {
 			resultado = stmt.executeQuery(query);
 			if(resultado.next()) {
-				unidade = this.converterParaObjeto(resultado);
+				unidade = this.converterParaObjetoUnidade(resultado);
 			}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao tentar consultar a unidade de id "+id);
@@ -53,6 +55,30 @@ public class UnidadeRepository implements BaseRepository<Unidade>{
 			Banco.closeConnection(conn);
 		}
 		return unidade;
+	}
+	
+	public List<Estoque> consultarEstoquesDaUnidade(int idUnidade) {
+		ArrayList<Estoque> estoqueDaUnidade = new ArrayList<>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		String query = "select idUnidade, idVacina, quantidade, dataLote, "
+								  + "validade from VACINAS.ESTOQUE where idUnidade = " 
+								  + idUnidade;
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				estoqueDaUnidade.add(this.converterParaObjetoEstoque(resultado));
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao executar o estoque da unidade de id " + idUnidade);
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return estoqueDaUnidade;
 	}
 
 	@Override
@@ -117,7 +143,7 @@ public class UnidadeRepository implements BaseRepository<Unidade>{
 	    return deuBaixa;
 	}
 
-	private Unidade converterParaObjeto(ResultSet resultado) throws SQLException {
+	private Unidade converterParaObjetoUnidade(ResultSet resultado) throws SQLException {
 		Unidade unidade = new Unidade();
 		unidade.setId(resultado.getInt("id"));
 		unidade.setNome(resultado.getString("nome"));
@@ -128,6 +154,22 @@ public class UnidadeRepository implements BaseRepository<Unidade>{
 		Contato contatoDaUnidade = contatoRepository.consultarPorId(resultado.getInt("idContato"));
 		unidade.setContatoDaUnidade(contatoDaUnidade);
 		return unidade;
+	}
+	
+	private Estoque converterParaObjetoEstoque(ResultSet resultado) throws SQLException{
+		Estoque estoque = new Estoque();
+		UnidadeRepository unidadeRepository = new UnidadeRepository();
+		estoque.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("idUnidade")));
+		VacinaRepository vacinaRepositor = new VacinaRepository();
+		estoque.setVacina(vacinaRepositor.consultarPorId(resultado.getInt("idVacina")));
+		estoque.setQuantidade(resultado.getInt("quantidade"));
+		if(resultado.getDate("dataLote") != null) {
+			estoque.setDataLote(resultado.getDate("dataLote").toLocalDate());;
+		}
+		if(resultado.getDate("validade") != null) {
+			estoque.setValidade(resultado.getDate("validade").toLocalDate());
+		}
+		return estoque;
 	}
 	
 }
