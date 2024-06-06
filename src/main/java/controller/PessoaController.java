@@ -3,9 +3,11 @@ package controller;
 
 import exception.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.Endereco;
@@ -38,6 +40,12 @@ public class PessoaController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public boolean alterar(Pessoa pessoaAtualizada)throws ControleVacinasException {
 		return pessoaService.alterar(pessoaAtualizada);
+	}
+	
+	@GET
+	@Path("/{id}")
+	public Pessoa consultarPorId(@PathParam("id")int id){
+		return pessoaService.consultarPorId(id);
 	}
 	
 }

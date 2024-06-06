@@ -27,6 +27,11 @@ public class PessoaService {
 	    }
 	}
 	
+	public Pessoa consultarPorId(int id) {
+		return pessoaRepository.consultarPorId(id);
+	}
+	
+	
 	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException{
 	 	validarCamposPreenchidosDePessoa(novaPessoa);
 		verificarCpfParaCadastrar(novaPessoa);
@@ -36,10 +41,22 @@ public class PessoaService {
 	}
 	
 	public boolean alterar(Pessoa pessoaAtualizada) throws ControleVacinasException{
-		validarCamposPreenchidosDePessoa(pessoaAtualizada);
-		verificarCpfParaCadastrar(pessoaAtualizada);
-		verificarDisponibilidadeLogin(pessoaAtualizada);
-		verificarDisponibilidadeSenha(pessoaAtualizada);
+		
+		Pessoa pessoaConsultada = pessoaRepository.consultarPorId(pessoaAtualizada.getId()); 
+		
+		if(!pessoaConsultada.getCpf().equals(pessoaAtualizada.getCpf())) {
+			throw new ControleVacinasException("Não é possível atualizar o número do seu CPF.");
+		}
+		 validarCamposPreenchidosDePessoa(pessoaAtualizada);
+		
+		if(!pessoaRepository.consultarPorId(pessoaAtualizada.getId()).getLogin().equals(pessoaAtualizada.getLogin()))  {
+			verificarDisponibilidadeLogin(pessoaAtualizada);
+		}
+		
+		if(!pessoaRepository.consultarPorId(pessoaAtualizada.getId()).getSenha().equals(pessoaAtualizada.getSenha()))  {
+			verificarDisponibilidadeSenha(pessoaAtualizada);
+		}
+		
 		return pessoaRepository.alterar(pessoaAtualizada);
 	}
 	
@@ -48,20 +65,20 @@ public class PessoaService {
 		String mensagemValidacao = "";
 		   
 	    if (novaPessoa.getEnderecoDaPessoa().getCep() == null ||
-	    	 novaPessoa.getEnderecoDaPessoa().getCep().trim().length() > 0) {
+	    	 novaPessoa.getEnderecoDaPessoa().getCep().trim().length() == 0) {
 	         mensagemValidacao += " - O campo CEP, referente ao endereço da pessoa, precisa ser preenchido. ";
 	    }
 	    if (novaPessoa.getContatoDaPessoa().getTelefone() == null ||
-	    	 novaPessoa.getContatoDaPessoa().getTelefone().trim().length() > 0) {
+	    	 novaPessoa.getContatoDaPessoa().getTelefone().trim().length() == 0) {
 	         mensagemValidacao += " - O campo telefone referente ao contato da pessoa precisa ser preenchido. ";
 	    }
-		if (novaPessoa.getNome() == null || novaPessoa.getNome().trim().length() > 0) {
+		if (novaPessoa.getNome() == null || novaPessoa.getNome().trim().length() == 0) {
 		    mensagemValidacao += " - O campo nome precisa ser preenchido. ";
 		}
 		if(novaPessoa.getNome().trim().length()<8) {
 			mensagemValidacao += " - O campo nome precisa ter ao menos oito letras e os espaços em branco não fazem parte da contagem. ";
 		}
-		if (!novaPessoa.getNome().matches("^[a-zA-Z ]+$")) {
+		if (!novaPessoa.getNome().matches("^[\\p{L} ]+$")) {
 		    mensagemValidacao += "O campo nome precisa ser preenchido apenas com letras. ";
 		}
 		LocalDate dataNascimento = novaPessoa.getDataNascimento();
@@ -75,13 +92,13 @@ public class PessoaService {
 		}
 		if (
 				novaPessoa.getSexo().toUpperCase() == null ||
-			    novaPessoa.getSexo().toUpperCase().trim().length() > 0
+			    novaPessoa.getSexo().toUpperCase().trim().length() == 0
 			) {
 		    mensagemValidacao += " - O campo sexo precisa ser informado.";
 		}
 	   if(
 		   novaPessoa.getCpf() == null ||
-		   novaPessoa.getCpf().trim().length() > 0
+		   novaPessoa.getCpf().trim().length() == 0
 		   ) {
 			mensagemValidacao += " - O campo cpf precisa ser preenchido. ";
 		}
@@ -94,7 +111,7 @@ public class PessoaService {
 		}
 		if(
 			novaPessoa.getLogin() == null ||
-			novaPessoa.getLogin().trim().length() > 0
+			novaPessoa.getLogin().trim().length() == 0
 			) {
 			mensagemValidacao += " - O campo login precisa ser preenchido. ";
 		}
@@ -126,8 +143,8 @@ public class PessoaService {
 	    if (
 	    		novaPessoa.getLogin() == null 
 	    		|| novaPessoa.getSenha() == null
-	    		|| novaPessoa.getLogin().trim().length() > 0 
-	    		|| novaPessoa.getSenha().trim().length() > 0
+	    		|| novaPessoa.getLogin().trim().length() == 0 
+	    		|| novaPessoa.getSenha().trim().length() == 0
 	    	) {
 	        mensagemValidacao += " - O campo login e o campo senha precisam ser preenchidos e não podem haver espaços em branco no preenchimento dos campos. ";
 	    }

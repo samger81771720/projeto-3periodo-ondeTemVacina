@@ -60,11 +60,11 @@ public class AplicacaoSeletor extends BaseSeletor{
 
 	public boolean temFiltro() {
 		return (this.dataInicioPesquisaSeletor != null) 
-				   || (this.dataFinalPesquisaSeletor != null)	
-				   || (this.nomeUnidadeAplicacao != null 
-				&& this.nomeUnidadeAplicacao.trim().length() > 0) 
-				   || (this.nomeVacinaAplicada != null 
-				&& this.nomeVacinaAplicada.trim().length() > 0);
+				    || (this.dataFinalPesquisaSeletor != null)	
+				    || (this.nomeUnidadeAplicacao != null 
+				 && this.nomeUnidadeAplicacao.trim().length() > 0) 
+			   	    || (this.nomeVacinaAplicada != null 
+				 && this.nomeVacinaAplicada.trim().length() > 0);
 	}
 	
 }

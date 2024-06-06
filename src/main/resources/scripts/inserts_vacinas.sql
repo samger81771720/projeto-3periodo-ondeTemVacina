@@ -1,4 +1,5 @@
--- REGISTROS DE ENDEREÇOS
+
+   -- REGISTROS DE ENDEREÇOS
 
 INSERT INTO VACINAS.ENDERECO (logradouro, numero, complemento, bairro, localidade, estado, cep, pais) VALUES
 ('Rua das Flores', '123', 'Apto 101', 'Jardim Primavera', 'São Paulo', 'SP', '1234-678', 'Brasil'),
@@ -83,15 +84,15 @@ INSERT INTO VACINAS.CONTATO (telefone, email) VALUES
 
 INSERT INTO VACINAS.PESSOA (idEndereco, idContato, nome, dataNascimento, sexo, cpf, login, senha, tipo, doencaPreexistente) VALUES
 (1, 11, 'João Silva', '1980-01-15', 'M', '12345678901', 'joao.silva1', 'senhaPadrao123', 2, false),
-(2, 12, 'Maria Oliveira', '1975-02-20', 'F', '23456789012', 'maria.oliveira2', 'senhaPadrao123', 1, false),
-(3, 13, 'Carlos Santos', '1988-03-10', 'M', '34567890123', 'carlos.santos3', 'senhaPadrao123', 2, false),
-(4, 14, 'Ana Mendes', '1990-04-25', 'F', '45678901234', 'ana.mendes4', 'senhaPadrao123', 1, false),
-(5, 15, 'Paulo Souza', '1985-05-30', 'M', '56789012345', 'paulo.souza5', 'senhaPadrao123', 2, false),
-(6, 16, 'Lucia Costa', '1992-06-15', 'F', '67890123456', 'lucia.costa6', 'senhaPadrao123', 1, false),
-(7, 17, 'Fernando Alves', '1983-07-22', 'M', '78901234567', 'fernando.alves7', 'senhaPadrao123', 2, false),
-(8, 18, 'Marina Rocha', '1987-08-14', 'F', '89012345678', 'marina.rocha8', 'senhaPadrao123', 1, false),
-(9, 19, 'Julio Ferreira', '1995-09-05', 'M', '90123456789', 'julio.ferreira9', 'senhaPadrao123', 2, false),
-(10, 20, 'Amanda Ribeiro', '1991-10-18', 'F', '01234567890', 'amanda.ribeiro10', 'senhaPadrao123', 1, false);
+(2, 12, 'Maria Oliveira', '1975-02-20', 'F', '23456789012', 'maria.oliveira2', 'senhaPadrao124', 1, false),
+(3, 13, 'Carlos Santos', '1988-03-10', 'M', '34567890123', 'carlos.santos3', 'senhaPadrao125', 2, false),
+(4, 14, 'Ana Mendes', '1990-04-25', 'F', '45678901234', 'ana.mendes4', 'senhaPadrao126', 1, false),
+(5, 15, 'Paulo Souza', '1985-05-30', 'M', '56789012345', 'paulo.souza5', 'senhaPadrao127', 2, false),
+(6, 16, 'Lucia Costa', '1992-06-15', 'F', '67890123456', 'lucia.costa6', 'senhaPadrao128', 1, false),
+(7, 17, 'Fernando Alves', '1983-07-22', 'M', '78901234567', 'fernando.alves7', 'senhaPadrao129', 2, false),
+(8, 18, 'Marina Rocha', '1987-08-14', 'F', '89012345678', 'marina.rocha8', 'senhaPadrao121', 1, false),
+(9, 19, 'Julio Ferreira', '1995-09-05', 'M', '90123456789', 'julio.ferreira9', 'senhaPadrao122', 2, false),
+(10, 20, 'Amanda Ribeiro', '1991-10-18', 'F', '01234567890', 'amanda.ribeiro10', 'senhaPadrao133', 1, false);
 
 -- REGISTROS DE FABRICANTES
 
@@ -161,6 +162,7 @@ INSERT INTO VACINAS.VACINA (idFabricante, nome, categoria, idadeMinima, idadeMax
 
 
 -- REGISTROS DE APLICAÇÃO
+
 
 INSERT INTO VACINAS.APLICACAO (idPessoa, idVacina, idUnidade, dataAplicacao) VALUES
 (10, 30, 9, '2023-01-30'),
@@ -278,8 +280,7 @@ INSERT INTO VACINAS.APLICACAO (idPessoa, idVacina, idUnidade, dataAplicacao) VAL
 (10, 21, 10, '2023-01-30');
 
 
- 
--- REGISTROS DE ESTOQUE
+
 
 
 -- REGISTROS DE ESTOQUE
@@ -301,6 +302,7 @@ INSERT INTO VACINAS.APLICACAO (idPessoa, idVacina, idUnidade, dataAplicacao) VAL
     (1, 24, 40, '2024-04-21', '2025-10-21');
    
        
+    
     -- Unidade 2
     INSERT INTO VACINAS.ESTOQUE (idUnidade, idVacina, quantidade, dataLote, validade) VALUES
     (2, 4, 55, '2024-01-02', '2025-01-02'),

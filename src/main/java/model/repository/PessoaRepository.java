@@ -65,8 +65,38 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 
 	@Override
 	public Pessoa consultarPorId(int id) {
-		// TODO Stub de método gerado automaticamente
-		return null;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		Pessoa pessoa = null;
+		String query = "select "
+											+ "	id, "
+											+ "	idEndereco, "
+											+ "	idContato, "
+											+ "	nome, "
+											+ "	dataNascimento, "
+											+ "	sexo, "
+											+ "	cpf, "
+											+ "	login, "
+											+ "	senha, "
+											+ "	tipo, "
+											+ " doencaPreexistente "
+											+ " from VACINAS.PESSOA "
+											+ "where	id = " + id;
+		try {
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()) {
+				pessoa = this.converterParaObjeto(resultado);
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao tentar consultar a pessoa de id " + id);
+			System.out.println("Erro: "+erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return pessoa;
 	}
 	
 	public Pessoa efetuarLogin(Pessoa pessoaLogin) {
