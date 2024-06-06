@@ -1,6 +1,8 @@
 
 package controller;
 
+import java.util.List;
+
 import exception.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
@@ -46,6 +48,13 @@ public class PessoaController {
 	@Path("/{id}")
 	public Pessoa consultarPorId(@PathParam("id")int id){
 		return pessoaService.consultarPorId(id);
+	}
+	
+	@GET
+	@Path("/consultarTodosPessoas")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Pessoa> consultarTodos(){
+		 return pessoaService.consultarTodos();
 	}
 	
 }

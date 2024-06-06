@@ -170,8 +170,39 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 	
 	@Override
 	public ArrayList<Pessoa> consultarTodos() {
-		// TODO Stub de método gerado automaticamente
-		return null;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ArrayList<Pessoa> listaDePessoas = new ArrayList<>();
+		ResultSet resultado = null;
+		String query = "select"
+												+ "	id, "
+												+ "	idEndereco, "
+												+ "	idContato, "
+												+ "	nome, "
+												+ "	dataNascimento, "
+												+ "	sexo, "
+												+ "	cpf, "
+												+ "	login, "
+												+ "	senha, "
+												+ "	tipo, "
+												+ "	doencaPreexistente "
+												+ "  from "
+												+ "	VACINAS.PESSOA";
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Pessoa pessoa = this.converterParaObjeto(resultado);
+				listaDePessoas.add(pessoa);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao consultar a lista de pessoas.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return listaDePessoas;
 	}
 	
 	private Pessoa converterParaObjeto(ResultSet resultado) throws SQLException {

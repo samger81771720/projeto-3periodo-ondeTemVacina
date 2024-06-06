@@ -1,6 +1,8 @@
 package model.service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+
 import exception.ControleVacinasException;
 import model.entity.Pessoa;
 import model.repository.PessoaRepository;
@@ -58,6 +60,10 @@ public class PessoaService {
 		}
 		
 		return pessoaRepository.alterar(pessoaAtualizada);
+	}
+	
+	public ArrayList<Pessoa> consultarTodos() {
+		return pessoaRepository.consultarTodos();
 	}
 	
 	private void validarCamposPreenchidosDePessoa(Pessoa novaPessoa) throws ControleVacinasException {
