@@ -83,8 +83,32 @@ public class UnidadeRepository implements BaseRepository<Unidade>{
 
 	@Override
 	public ArrayList<Unidade> consultarTodos() {
-		// TODO Stub de método gerado automaticamente
-		return null;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ArrayList<Unidade> unidades = new ArrayList<>();
+		ResultSet resultado = null;
+		String query = " select "
+												+ " id, "
+												+ " idEndereco, "
+												+ " idContato, "
+												+ " nome "
+												+ " from "
+												+ " VACINAS.UNIDADE ";
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Unidade unidade = this.converterParaObjetoUnidade(resultado);
+				unidades.add(unidade);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao consultar a lista de unidades.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return unidades;
 	}
 	
 	public boolean consultarEstoqueUnidade(Aplicacao aplicacao) {

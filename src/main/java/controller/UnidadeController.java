@@ -7,6 +7,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import model.entity.Endereco;
 import model.entity.Estoque;
 import model.entity.Unidade;
 import model.service.UnidadeService;
@@ -27,6 +28,13 @@ public class UnidadeController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Estoque> consultarEstoquesDaUnidade(@PathParam("id")int idUnidade) {
 		return unidadeService.consultarEstoquesDaUnidade(idUnidade);
+	}
+	
+	@GET
+	@Path("/consultarTodasUnidades")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Unidade> consultarTodos(){
+		 return unidadeService.consultarTodos();
 	}
 
 }

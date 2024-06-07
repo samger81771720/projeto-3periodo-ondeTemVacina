@@ -1,5 +1,6 @@
 package model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import model.entity.Estoque;
@@ -17,6 +18,10 @@ public class UnidadeService {
 	
 	public List<Estoque> consultarEstoquesDaUnidade(int idUnidade) {
 		return unidadeRepository.consultarEstoquesDaUnidade(idUnidade);
+	}
+	
+	public ArrayList<Unidade> consultarTodos() {
+		return unidadeRepository.consultarTodos();
 	}
 	
 }

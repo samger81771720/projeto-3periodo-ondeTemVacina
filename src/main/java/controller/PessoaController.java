@@ -54,7 +54,7 @@ public class PessoaController {
 	}
 	
 	@GET
-	@Path("/consultarTodosPessoas")
+	@Path("/consultarTodasPessoas")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarTodos(){
 		 return pessoaService.consultarTodos();
