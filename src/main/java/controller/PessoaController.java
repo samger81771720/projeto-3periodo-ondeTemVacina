@@ -12,9 +12,12 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
+import model.dto.VacinaDTO;
 import model.entity.Endereco;
 import model.entity.Pessoa;
 import model.entity.Vacina;
+import model.seletor.PessoaSeletor;
+import model.seletor.VacinaSeletor;
 import model.service.PessoaService;
 
 @Path("/pessoa")
@@ -55,6 +58,14 @@ public class PessoaController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarTodos(){
 		 return pessoaService.consultarTodos();
+	}
+	
+	@POST
+	@Path("/filtroConsultarPessoas")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Pessoa> consultarPessoasComFiltro(PessoaSeletor seletor) throws ControleVacinasException{
+		return pessoaService.consultarPessoasComFiltro(seletor);
 	}
 	
 }

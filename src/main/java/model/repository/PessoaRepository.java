@@ -7,10 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
+import model.dto.VacinaDTO;
 import model.entity.Contato;
 import model.entity.Endereco;
 import model.entity.Pessoa;
+import model.seletor.PessoaSeletor;
+import model.seletor.VacinaSeletor;
 
 public class PessoaRepository implements BaseRepository<Pessoa>{
 
@@ -204,6 +208,55 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		}
 		return listaDePessoas;
 	}
+	
+	public List<Pessoa> consultarPessoasComFiltro(PessoaSeletor seletor){
+			
+			ArrayList<Pessoa> listagemComPessoas = new ArrayList<>();
+			
+			Connection conn = Banco.getConnection();
+			Statement stmt = Banco.getStatement(conn);
+			ResultSet resultado = null;
+			String sql = "select "
+											+ " id, "
+											+ " idEndereco, "
+											+ " idContato, "
+											+ " nome, "
+											+ " dataNascimento, "
+											+ " sexo, "
+											+ " cpf, "
+											+ " login, "
+											+ " senha, "
+											+ " tipo, "
+											+ " doencaPreexistente "
+											+ " from "
+											+ " VACINAS.PESSOA "
+											+ " where "
+											+ " UPPER(VACINAS.PESSOA.nome) LIKE UPPER('%" + seletor.getNomePessoa() + "%') "
+											+ " order by "
+											+ " nome asc ";
+			/*if(seletor.temPaginacao()) {
+				sql += " LIMIT " + seletor.getLimite(); 
+				sql += " OFFSET " + seletor.getOffSet();
+			}*/
+			try {
+				resultado = stmt.executeQuery(sql);
+				while(resultado.next()) {
+					Pessoa pessoa = converterParaObjeto(resultado);
+					listagemComPessoas.add(pessoa);
+				}
+			} catch(SQLException erro){
+				System.out.println(
+						"Erro durante a execução do método \"consultarComFiltros\" ao consultar "
+					 + "a pessoa selecionada com filtros."
+						);
+				System.out.println("Erro: "+erro.getMessage());
+			} finally{
+				Banco.closeResultSet(resultado);
+				Banco.closeStatement(stmt);
+				Banco.closeConnection(conn);
+			}
+			return listagemComPessoas;
+		}
 	
 	private Pessoa converterParaObjeto(ResultSet resultado) throws SQLException {
 		Pessoa pessoa = new Pessoa();

@@ -2,10 +2,12 @@ package model.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import exception.ControleVacinasException;
 import model.entity.Pessoa;
 import model.repository.PessoaRepository;
+import model.seletor.PessoaSeletor;
 
 public class PessoaService {
 	
@@ -175,6 +177,14 @@ public class PessoaService {
 	private void verificarDisponibilidadeSenha(Pessoa pessoaSenhaDesejada) throws ControleVacinasException{
 		if(pessoaRepository.verificarDisponibilidadeSenha(pessoaSenhaDesejada)) {
 			throw new ControleVacinasException("Senha já existente no sistema. Tente outra.");
+		}
+	}
+	
+	public List<Pessoa> consultarPessoasComFiltro(PessoaSeletor seletor) throws ControleVacinasException{
+		if(seletor.getNomePessoa() != null && seletor.getNomePessoa().trim().length() > 0) {
+			return pessoaRepository.consultarPessoasComFiltro(seletor);
+		} else {
+			throw new ControleVacinasException("Preencha o campo nome para fazer a busca.");
 		}
 	}
 		
