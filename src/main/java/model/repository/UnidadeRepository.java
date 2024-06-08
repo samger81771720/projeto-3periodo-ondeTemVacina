@@ -93,7 +93,8 @@ public class UnidadeRepository implements BaseRepository<Unidade>{
 												+ " idContato, "
 												+ " nome "
 												+ " from "
-												+ " VACINAS.UNIDADE ";
+												+ " VACINAS.UNIDADE "
+												+ " order by nome ";
 		try{
 			resultado = stmt.executeQuery(query);
 			while(resultado.next()){
