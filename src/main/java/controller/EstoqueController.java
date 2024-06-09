@@ -57,5 +57,11 @@ public class EstoqueController {
 	public List<VacinaDTO> consultarComFitros(VacinaSeletor seletor){
 		return estoqueService.consultarComFiltros(seletor);
 	}
+	
+	@GET
+	@Path("/{idUnidade}/{idVacina}")
+	public Estoque consultarPorIds(@PathParam("idUnidade") int idUnidade, @PathParam("idVacina") int idVacina){
+		return estoqueService.consultarPorIds(idUnidade,idVacina);
+	}
 
 }

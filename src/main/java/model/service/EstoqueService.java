@@ -33,4 +33,8 @@ public class EstoqueService {
 		return estoqueRepository.consultarComFiltros(seletor);
 	}
 	
+	public Estoque consultarPorIds(int idUnidade, int idVacina) {
+		return estoqueRepository.consultarPorIds(idUnidade, idVacina);
+	}
+	
 }

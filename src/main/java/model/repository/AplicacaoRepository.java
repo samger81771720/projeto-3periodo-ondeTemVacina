@@ -17,6 +17,7 @@ import model.entity.Pessoa;
 import model.entity.Unidade;
 import model.entity.Vacina;
 import model.seletor.AplicacaoSeletor;
+import model.seletor.PessoaSeletor;
 import model.seletor.VacinaSeletor;
 
 public class AplicacaoRepository implements BaseRepository<Aplicacao>{
@@ -147,32 +148,46 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 	public ArrayList<Aplicacao> consultarTodos() {
 		return null;
 	}
-	
-		private String preencherFiltros(AplicacaoSeletor seletor, String sql) {
-		    final String AND = " AND ";
-		    if (seletor.getNomeUnidadeAplicacao() != null && seletor.getNomeUnidadeAplicacao().trim().length() > 0) {
-		    	sql += AND;
-		    	sql += " UPPER(VACINAS.UNIDADE.nome) LIKE UPPER ('%" + seletor.getNomeUnidadeAplicacao() + "%')";
-		    }
-		    if (seletor.getNomeVacinaAplicada() != null && seletor.getNomeVacinaAplicada().trim().length() > 0) {
-		    	sql += AND;
-		    	sql += " UPPER(VACINAS.VACINA.nome) LIKE UPPER ('%" + seletor.getNomeVacinaAplicada() + "%')";
-		    }
-		    if (seletor.getDataInicioPesquisaSeletor() != null && seletor.getDataFinalPesquisaSeletor() != null) {
-		        sql += AND;
-		        sql += " dataAplicacao BETWEEN '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor())
-		                + "' AND '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
-		    } else if (seletor.getDataInicioPesquisaSeletor() != null) {
-		        sql += AND;
-		        sql += " dataAplicacao >= '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor()) + "'";
-		    } else if (seletor.getDataFinalPesquisaSeletor() != null) {
-		        sql += AND;
-		        sql += " dataAplicacao <= '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
-		    }
-		    sql += " order by dataAplicacao ";
-		    return sql;
+	/*	
+	public int contarPaginas(PessoaSeletor seletor) {
+		
+		int totalPaginas = 0;
+		int totalRegistros = this.contarTotalRegistros(seletor);
+		totalPaginas = totalRegistros  / seletor.getLimite();
+		int resto = totalRegistros % seletor.getLimite();
+		
+		if(resto > 0) {
+			totalPaginas ++;
 		}
 		
+		return totalPaginas;
+	}
+	*/
+	private String preencherFiltros(AplicacaoSeletor seletor, String sql) {
+	    final String AND = " AND ";
+	    if (seletor.getNomeUnidadeAplicacao() != null && seletor.getNomeUnidadeAplicacao().trim().length() > 0) {
+	    	sql += AND;
+	    	sql += " UPPER(VACINAS.UNIDADE.nome) LIKE UPPER ('%" + seletor.getNomeUnidadeAplicacao() + "%')";
+	    }
+	    if (seletor.getNomeVacinaAplicada() != null && seletor.getNomeVacinaAplicada().trim().length() > 0) {
+	    	sql += AND;
+	    	sql += " UPPER(VACINAS.VACINA.nome) LIKE UPPER ('%" + seletor.getNomeVacinaAplicada() + "%')";
+	    }
+	    if (seletor.getDataInicioPesquisaSeletor() != null && seletor.getDataFinalPesquisaSeletor() != null) {
+	        sql += AND;
+	        sql += " dataAplicacao BETWEEN '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor())
+	                + "' AND '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
+	    } else if (seletor.getDataInicioPesquisaSeletor() != null) {
+	        sql += AND;
+	        sql += " dataAplicacao >= '" + Date.valueOf(seletor.getDataInicioPesquisaSeletor()) + "'";
+	    } else if (seletor.getDataFinalPesquisaSeletor() != null) {
+	        sql += AND;
+	        sql += " dataAplicacao <= '" + Date.valueOf(seletor.getDataFinalPesquisaSeletor()) + "'";
+	    }
+	    sql += " order by dataAplicacao ";
+	    return sql;
+	}
+	
 	private AplicacaoDTO  construirDoResultSet(ResultSet resultado) throws SQLException{
 		AplicacaoDTO consultaComFiltro = new AplicacaoDTO();
 		AplicacaoRepository aplicacaoRepository = new AplicacaoRepository();
@@ -196,5 +211,35 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		aplicacao.setDataAplicacao(resultado.getDate("dataAplicacao").toLocalDate());
 		return aplicacao;
 	}
-
+	/*
+	public int contarTotalRegistros(AplicacaoSeletor seletor) {
+		
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		
+		int totalRegistros = 0;
+		ResultSet resultado = null;
+		String query = "select count(p.id_Pessoa) from VACINACAO.PESSOA p "
+								  + "inner join VACINACAO.PAIS pa on p.id_Pais = pa.id_Pais";
+		
+		if(seletor.temFiltro()) {
+			query +=  preencherFiltros(seletor, query);
+		}
+		
+		try {
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()) {
+				totalRegistros = resultado.getInt(1);
+			}
+		} catch (SQLException erro){
+				System.out.println("Erro ao contabilizar o total de pessoas filtradas no método \"contarTotalRegistros\".");
+				System.out.println("Erro: " + erro.getMessage());
+			} finally {
+				Banco.closeResultSet(resultado);
+				Banco.closeStatement(stmt);
+				Banco.closeConnection(conn);
+			}
+		return totalRegistros;
+	}
+*/
 }

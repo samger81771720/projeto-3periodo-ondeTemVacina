@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import model.dto.VacinaDTO;
+import model.entity.Endereco;
 import model.entity.Estoque;
 import model.seletor.VacinaSeletor;
 
@@ -107,10 +108,39 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return listaDeTodosEstoques;
 	}
 
-		@Override
-	public Estoque consultarPorId(int id) {
-		return null;
+	public Estoque consultarPorIds(int idUnidade, int idVacina) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		Estoque estoque = null;
+		String query = " select "
+											+ " idUnidade, "
+											+ " idVacina, "
+											+ " quantidade, "
+											+ " dataLote, "
+											+ " validade "
+											+ " from "
+											+ " VACINAS.ESTOQUE "
+											+ " where "
+											+ " idUnidade = " + idUnidade 
+											+ " and "
+											+ " idVacina  = " + idVacina;
+		try {
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()) {
+				estoque = this.converterParaObjeto(resultado);
+			}
+		} catch (SQLException erro) {
+			System.out.println("Erro ao tentar consultar o estoque da unidade de id " + idUnidade);
+			System.out.println("Erro: "+erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return estoque;		
 	}
+	
 	
 	@Override
 	public boolean excluir(int id) {
@@ -291,6 +321,11 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		vacinaDTO.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("idUnidade")));
 		
 		return vacinaDTO;
+	}
+
+	@Override
+	public Estoque consultarPorId(int id) {
+		return null;
 	}
 
 }
