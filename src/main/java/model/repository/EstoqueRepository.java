@@ -12,10 +12,11 @@ import java.util.List;
 import model.dto.VacinaDTO;
 import model.entity.Endereco;
 import model.entity.Estoque;
+import model.entity.Unidade;
+import model.entity.Vacina;
 import model.seletor.VacinaSeletor;
 
 public class EstoqueRepository implements BaseRepository<Estoque>{
-
 	
 	@Override
 	public Estoque salvar(Estoque novoEstoque) {
@@ -25,23 +26,22 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	    try {
 	        this.preencherParametrosParaInsertOuUpdate(pstmt, novoEstoque, false);
 	        int linhasAfetadas = pstmt.executeUpdate();
-	        if (linhasAfetadas == 1) {
-	            return novoEstoque;
-	        } else {
-	            throw new SQLException("A tentaiva de inserção de um registro no "
-	            													+ "estoque da unidade não afetou nenhuma linha.");
+	        if (linhasAfetadas != 1) {
+	            throw new SQLException("A tentativa de inserção de um registro no estoque da unidade não foi bem sucedida.");
 	        }
 	    } catch (SQLException erro) {
-	        System.out.println("Erro na tentativa de salvar um novo estoque da unidade "
-	                             + novoEstoque.getUnidade().getNome() + " no banco de dados.");
+	        System.out.println("Erro na tentativa de salvar um novo estoque da unidade " + novoEstoque.getUnidade().getNome() + " no banco de dados.");
 	        System.out.println("Erro: " + erro.getMessage());
 	        return null;
 	    } finally {
 	        Banco.closeStatement(pstmt);
 	        Banco.closeConnection(conn);
 	    }
+	    return novoEstoque; 
 	}
 
+
+	
 	public boolean excluirEstoqueDaUnidade(int idUnidade, int idVacina) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
