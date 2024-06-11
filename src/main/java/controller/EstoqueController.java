@@ -63,5 +63,13 @@ public class EstoqueController {
 	public Estoque consultarPorIds(@PathParam("idUnidade") int idUnidade, @PathParam("idVacina") int idVacina){
 		return estoqueService.consultarPorIds(idUnidade,idVacina);
 	}
+	
+	@POST
+	@Path("/consultarEstoquesDaUnidadePorId")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public ArrayList<Estoque> consultarEstoquesDaUnidadePorId(Estoque estoqueDaUnidade){
+		return estoqueService.consultarEstoquesDaUnidadePorId(estoqueDaUnidade);
+	}
 
 }

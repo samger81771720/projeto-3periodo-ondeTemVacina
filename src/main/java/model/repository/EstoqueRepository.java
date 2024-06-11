@@ -107,6 +107,38 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		}
 		return listaDeTodosEstoques;
 	}
+	
+	public ArrayList<Estoque> consultarEstoquesDaUnidadePorId(Estoque estoqueDaUnidade) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ArrayList<Estoque> listaDeTodosEstoques = new ArrayList<>();
+		ResultSet resultado = null;
+		String query = " select "
+											+ " idUnidade, "
+											+ " idVacina, "
+											+ " quantidade, "
+											+ " dataLote, "
+											+ " validade "
+											+ " from "
+											+ " VACINAS.ESTOQUE "
+								   + " where "
+											+ " idUnidade = " + estoqueDaUnidade.getUnidade().getId();
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Estoque estoque = this.converterParaObjeto(resultado);
+				listaDeTodosEstoques.add(estoque);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao consultar a lista com os estoques da unidade pelo id da unidade.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return listaDeTodosEstoques;
+	}
 
 	public Estoque consultarPorIds(int idUnidade, int idVacina) {
 		Connection conn = Banco.getConnection();

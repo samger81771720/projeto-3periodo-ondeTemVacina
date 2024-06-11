@@ -37,4 +37,8 @@ public class EstoqueService {
 		return estoqueRepository.consultarPorIds(idUnidade, idVacina);
 	}
 	
+	public ArrayList<Estoque> consultarEstoquesDaUnidadePorId(Estoque estoqueDaUnidade) {
+		return estoqueRepository.consultarEstoquesDaUnidadePorId(estoqueDaUnidade);
+	}
+	
 }
