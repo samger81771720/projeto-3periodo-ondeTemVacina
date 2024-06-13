@@ -5,6 +5,7 @@ import java.util.List;
 
 import exception.ControleVacinasException;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.PUT;
@@ -66,6 +67,12 @@ public class PessoaController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarPessoasComFiltro(PessoaSeletor seletor) throws ControleVacinasException{
 		return pessoaService.consultarPessoasComFiltro(seletor);
+	}
+	
+	@DELETE
+	@Path("/{id}")
+	public boolean excluir(@PathParam("id")int id) {
+		return pessoaService.excluir(id);
 	}
 	
 }

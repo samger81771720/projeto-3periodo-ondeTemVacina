@@ -35,7 +35,6 @@ public class PessoaService {
 		return pessoaRepository.consultarPorId(id);
 	}
 	
-	
 	public Pessoa salvar(Pessoa novaPessoa) throws ControleVacinasException{
 	 	validarCamposPreenchidosDePessoa(novaPessoa);
 		verificarCpfParaCadastrar(novaPessoa);
@@ -68,6 +67,10 @@ public class PessoaService {
 		return pessoaRepository.consultarTodos();
 	}
 	
+	public boolean excluir(int id) {
+		return pessoaRepository.excluir(id);
+	}
+	
 	private void validarCamposPreenchidosDePessoa(Pessoa novaPessoa) throws ControleVacinasException {
 		   
 		String mensagemValidacao = "";
@@ -83,8 +86,8 @@ public class PessoaService {
 		if (novaPessoa.getNome() == null || novaPessoa.getNome().trim().length() == 0) {
 		    mensagemValidacao += " - O campo nome precisa ser preenchido. ";
 		}
-		if(novaPessoa.getNome().trim().length()<8) {
-			mensagemValidacao += " - O campo nome precisa ter ao menos oito letras e os espaços em branco não fazem parte da contagem. ";
+		if(novaPessoa.getNome().replaceAll(" ", "").length() < 8) {
+		    mensagemValidacao += " - O campo nome precisa ter ao menos oito letras e os espaços em branco não fazem parte da contagem.";
 		}
 		if (!novaPessoa.getNome().matches("^[\\p{L} ]+$")) {
 		    mensagemValidacao += "O campo nome precisa ser preenchido apenas com letras. ";
@@ -96,9 +99,9 @@ public class PessoaService {
 		        mensagemValidacao += " - A pessoa não pode ter mais de 120 anos de idade. ";
 		    }
 		} else {
-		    mensagemValidacao += " - O campo data de nascimento precisa ser preenchido. ";
+			mensagemValidacao += " - O campo data de nascimento precisa ser preenchido. ";
 		}
-		if (
+		if (// CONTINUAR  A CONFERÊNCIA DE ATUALIZAR O USUÁRIO DAQUI
 				novaPessoa.getSexo().toUpperCase() == null ||
 			    novaPessoa.getSexo().toUpperCase().trim().length() == 0
 			) {
