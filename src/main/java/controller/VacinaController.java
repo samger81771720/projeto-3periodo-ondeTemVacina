@@ -34,6 +34,13 @@ public class VacinaController {
 		 return vacinaService.consultarTodos();
 	}
 	
+	@GET
+	@Path("/consultarTodasCategorias")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> consultarTodasCategorias(){
+		 return vacinaService.consultarTodasCategorias();
+	}
+	
 	@DELETE
 	@Path("/{id}")
 	public boolean excluir(@PathParam("id")int id) {

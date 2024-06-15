@@ -217,6 +217,8 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 			 sql = preencherFiltros(seletor,sql);
 		}
 		
+		sql += " order by  nomeVacina ";
+		
 		if(seletor.temPaginacao()) {
 			sql += " LIMIT " + seletor.getLimite(); 
 			sql += " OFFSET " + seletor.getOffSet();

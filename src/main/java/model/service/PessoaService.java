@@ -76,17 +76,17 @@ public class PessoaService {
 		String mensagemValidacao = "";
 		   
 	    if (novaPessoa.getEnderecoDaPessoa().getCep() == null ||
-	    	 novaPessoa.getEnderecoDaPessoa().getCep().trim().length() == 0) {
+	    	 novaPessoa.getEnderecoDaPessoa().getCep().replace(" ", "").length() == 0) {
 	         mensagemValidacao += " - O campo CEP, referente ao endereço da pessoa, precisa ser preenchido. ";
 	    }
 	    if (novaPessoa.getContatoDaPessoa().getTelefone() == null ||
-	    	 novaPessoa.getContatoDaPessoa().getTelefone().trim().length() == 0) {
+	    	 novaPessoa.getContatoDaPessoa().getTelefone().replace(" ", "").length() == 0) {
 	         mensagemValidacao += " - O campo telefone referente ao contato da pessoa precisa ser preenchido. ";
 	    }
-		if (novaPessoa.getNome() == null || novaPessoa.getNome().trim().length() == 0) {
+		if (novaPessoa.getNome() == null || novaPessoa.getNome().replace(" ", "").length() == 0) {
 		    mensagemValidacao += " - O campo nome precisa ser preenchido. ";
 		}
-		if(novaPessoa.getNome().replaceAll(" ", "").length() < 8) {
+		if(novaPessoa.getNome().replace(" ", "").length() < 8) {
 		    mensagemValidacao += " - O campo nome precisa ter ao menos oito letras e os espaços em branco não fazem parte da contagem.";
 		}
 		if (!novaPessoa.getNome().matches("^[\\p{L} ]+$")) {
@@ -101,15 +101,15 @@ public class PessoaService {
 		} else {
 			mensagemValidacao += " - O campo data de nascimento precisa ser preenchido. ";
 		}
-		if (// CONTINUAR  A CONFERÊNCIA DE ATUALIZAR O USUÁRIO DAQUI
+		if (
 				novaPessoa.getSexo().toUpperCase() == null ||
-			    novaPessoa.getSexo().toUpperCase().trim().length() == 0
+			    novaPessoa.getSexo().toUpperCase().replace(" ", "").length() == 0
 			) {
 		    mensagemValidacao += " - O campo sexo precisa ser informado.";
 		}
 	   if(
 		   novaPessoa.getCpf() == null ||
-		   novaPessoa.getCpf().trim().length() == 0
+		   novaPessoa.getCpf().replace(" ", "").length() == 0
 		   ) {
 			mensagemValidacao += " - O campo cpf precisa ser preenchido. ";
 		}
@@ -122,7 +122,7 @@ public class PessoaService {
 		}
 		if(
 			novaPessoa.getLogin() == null ||
-			novaPessoa.getLogin().trim().length() == 0
+			novaPessoa.getLogin().replace(" ", "").length() == 0
 			) {
 			mensagemValidacao += " - O campo login precisa ser preenchido. ";
 		}
@@ -154,8 +154,8 @@ public class PessoaService {
 	    if (
 	    		novaPessoa.getLogin() == null 
 	    		|| novaPessoa.getSenha() == null
-	    		|| novaPessoa.getLogin().trim().length() == 0 
-	    		|| novaPessoa.getSenha().trim().length() == 0
+	    		|| novaPessoa.getLogin().replace(" ", "").length() == 0 
+	    		|| novaPessoa.getSenha().replace(" ", "").length() == 0
 	    	) {
 	        mensagemValidacao += " - O campo login e o campo senha precisam ser preenchidos e não podem haver espaços em branco no preenchimento dos campos. ";
 	    }
@@ -184,7 +184,7 @@ public class PessoaService {
 	}
 	
 	public List<Pessoa> consultarPessoasComFiltro(PessoaSeletor seletor) throws ControleVacinasException{
-		if(seletor.getNomePessoa() != null && seletor.getNomePessoa().trim().length() > 0) {
+		if(seletor.getNomePessoa() != null && seletor.getNomePessoa().replace(" ", "").length() > 0) {
 			return pessoaRepository.consultarPessoasComFiltro(seletor);
 		} else {
 			throw new ControleVacinasException("Preencha o campo nome para fazer a busca.");

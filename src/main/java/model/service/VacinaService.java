@@ -29,5 +29,9 @@ public class VacinaService {
 	public boolean alterar(Vacina vacinaAlterada) {
 		return vacinaRepository.alterar(vacinaAlterada);
 	}
+	
+	public List<String> consultarTodasCategorias() {
+		return vacinaRepository.consultarTodasCategorias();
+	}
 
 }

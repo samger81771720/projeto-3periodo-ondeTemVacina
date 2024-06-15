@@ -5,11 +5,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import model.entity.Contato;
-import model.entity.Endereco;
 import model.entity.Fabricante;
-import model.entity.Unidade;
+
 
 public class FabricanteRepository implements BaseRepository<Fabricante>{
 
@@ -53,7 +50,32 @@ public class FabricanteRepository implements BaseRepository<Fabricante>{
 
 	@Override
 	public ArrayList<Fabricante> consultarTodos() {
-		return null;
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ArrayList<Fabricante> listaDeFabricantes = new ArrayList<>();
+		ResultSet resultado = null;
+		String query = " select "
+										+ " id, "
+										+ " idEndereco, "
+										+ " idContato, "
+										+ " nome "
+										+ " from "
+										+ " VACINAS.FABRICANTE ";
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				Fabricante fabricante = this.converterParaObjeto(resultado);
+				listaDeFabricantes.add(fabricante);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao consultar a lista de fabricantes.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return listaDeFabricantes;
 	}
 	
 	private Fabricante converterParaObjeto(ResultSet resultado) throws SQLException {

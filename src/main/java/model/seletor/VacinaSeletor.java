@@ -2,13 +2,13 @@ package model.seletor;
 
 public class VacinaSeletor extends BaseSeletor{
 	
-	private String nomeVacina;
-	private String categoria;
+	private String nomeVacina; 
+	private String categoria; 
 	private int idadeMinima;
 	private int idadeMaxima;
-	private boolean contraIndicacao;
-	private String nomeFabricante;
-	private String nomeUnidade;
+	private boolean contraIndicacao; 
+	private String nomeFabricante; 
+	private String nomeUnidade; 
 	private String nomeBairro;
 	private String numeroCep;
 	

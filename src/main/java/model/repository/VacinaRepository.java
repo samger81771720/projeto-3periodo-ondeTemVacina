@@ -1,12 +1,12 @@
 package model.repository;
-
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
+
 import model.entity.Vacina;
 
 public class VacinaRepository implements BaseRepository<Vacina>{
@@ -32,7 +32,7 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 			        Banco.closeStatement(pstmt);
 			        Banco.closeConnection(conn);
 			    }
-			    return novaVacina; 
+		return novaVacina; 
 	}
 
 	@Override
@@ -145,6 +145,31 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 				Banco.closeConnection(conn);
 			}
 			return vacinas;
+	}
+	
+	public List<String> consultarTodasCategorias() {
+		ArrayList<String> listaDeCategorias = new ArrayList<>();
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		ResultSet resultado = null;
+		String query = "select distinct CATEGORIA from VACINAS.VACINA";
+		 //SELECT DISTINCT: Seleciona apenas valores únicos da coluna especificada.
+		try{
+			resultado = stmt.executeQuery(query);
+			while(resultado.next()){
+				String categoria = "";
+				categoria = resultado.getString("categoria");
+				listaDeCategorias.add(categoria);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao executar consultar todas as categorias.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return listaDeCategorias;
 	}
 	
 	private Vacina converterParaObjeto(ResultSet resultado) throws SQLException{
