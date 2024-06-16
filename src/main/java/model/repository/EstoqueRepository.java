@@ -217,8 +217,6 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 			 sql = preencherFiltros(seletor,sql);
 		}
 		
-		sql += " order by  nomeVacina ";
-		
 		if(seletor.temPaginacao()) {
 			sql += " LIMIT " + seletor.getLimite(); 
 			sql += " OFFSET " + seletor.getOffSet();
@@ -334,11 +332,15 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	        	   +    AND + " VACINA.idadeMaxima <= " + seletor.getIdadeMaxima()  + ")";
 	    }
 		
+		if(!seletor.isContraIndicacao()) {
+			sql += AND + " VACINA.contraIndicacao = false";
+		}
+		
 		if(seletor.isContraIndicacao()) {
 			sql += AND + " VACINA.contraIndicacao = true";
 		}
 		
-	    return sql;
+		return sql;
 	}
 	
 	private VacinaDTO construirDoResultSet(ResultSet resultado) throws SQLException{
