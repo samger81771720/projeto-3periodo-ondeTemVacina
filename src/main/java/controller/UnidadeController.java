@@ -31,7 +31,7 @@ public class UnidadeController {
 	}
 	
 	@GET
-	@Path("/consultarTodasUnidades")
+	@Path("/consultarTodas")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Unidade> consultarTodos(){
 		 return unidadeService.consultarTodos();

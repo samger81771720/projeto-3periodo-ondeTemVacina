@@ -6,7 +6,7 @@ public class VacinaSeletor extends BaseSeletor{
 	private String categoria; 
 	private int idadeMinima;
 	private int idadeMaxima;
-	private boolean contraIndicacao; 
+	private Boolean contraIndicacao; 
 	private String nomeFabricante; 
 	private String nomeUnidade; 
 	private String nomeBairro;
@@ -40,10 +40,10 @@ public class VacinaSeletor extends BaseSeletor{
 	public void setIdadeMaxima(int idadeMaxima) {
 		this.idadeMaxima = idadeMaxima;
 	}
-	public boolean isContraIndicacao() {
+	public Boolean isContraIndicacao() {
 		return contraIndicacao;
 	}
-	public void setContraIndicacao(boolean contraIndicacao) {
+	public void setContraIndicacao(Boolean contraIndicacao) {
 		this.contraIndicacao = contraIndicacao;
 	}
 	public String getNomeFabricante() {
@@ -73,11 +73,11 @@ public class VacinaSeletor extends BaseSeletor{
 	
 	public boolean temFiltro() {
 		return 
-						(this.nomeVacina != null && this.nomeVacina.trim().length() > 0)
+						   (this.nomeVacina != null && this.nomeVacina.trim().length() > 0)
 						|| (this.categoria != null && this.categoria.trim().length() > 0)
 						|| (this.idadeMinima != 0)
 						|| (this.idadeMaxima != 0)
-						|| (this.isContraIndicacao())
+						|| (this.isContraIndicacao() != null)
 						|| (this.nomeFabricante != null && this.nomeFabricante.trim().length() > 0)
 						|| (this.nomeUnidade != null && this.nomeUnidade.trim().length() > 0)
 						|| (this.nomeBairro != null && this.nomeBairro.trim().length() > 0)

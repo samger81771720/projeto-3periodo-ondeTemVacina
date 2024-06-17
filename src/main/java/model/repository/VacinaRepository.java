@@ -152,7 +152,7 @@ public class VacinaRepository implements BaseRepository<Vacina>{
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
-		String query = "select distinct CATEGORIA from VACINAS.VACINA";
+		String query = " select distinct CATEGORIA from VACINAS.VACINA ";
 		 //SELECT DISTINCT: Seleciona apenas valores únicos da coluna especificada.
 		try{
 			resultado = stmt.executeQuery(query);
