@@ -40,8 +40,6 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	    return novoEstoque; 
 	}
 
-
-	
 	public boolean excluirEstoqueDaUnidade(int idUnidade, int idVacina) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
@@ -332,13 +330,13 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	        	   +    AND + " VACINA.idadeMaxima <= " + seletor.getIdadeMaxima()  + ")";
 	    }
 		
-		if(!seletor.isContraIndicacao()) {
-			sql += AND + " VACINA.contraIndicacao = false";
-		}
-		
-		if(seletor.isContraIndicacao()) {
-			sql += AND + " VACINA.contraIndicacao = true";
-		}
+		  if (seletor.isContraIndicacao() != null) {
+		        if (!seletor.isContraIndicacao()) {
+		            sql += AND + " VACINA.contraIndicacao = false";
+		        } else {
+		            sql += AND + " VACINA.contraIndicacao = true";
+		        }
+		    }
 		
 		return sql;
 	}
