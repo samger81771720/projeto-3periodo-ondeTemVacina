@@ -1,4 +1,3 @@
-
 create schema if not exists VACINAS;
 
 create table if not exists VACINAS.ENDERECO(
