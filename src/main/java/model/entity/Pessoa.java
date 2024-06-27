@@ -6,9 +6,6 @@ public class Pessoa {
 	
 	public static final int USUARIO = 1;
 	public static final int ADMINISTRADOR = 2;
-	public static final String MASCULINO = "M";
-	public static final String FEMININO = "F";
-	public static final String OUTRO = "O";
 	
 	private int id;
 	private Endereco enderecoDaPessoa;
@@ -21,6 +18,7 @@ public class Pessoa {
 	private String senha;
 	private int tipo;
 	private boolean doencaPreexistente;
+	private String idSessao;
 	
 	public Pessoa() {
 		super();
@@ -91,7 +89,17 @@ public class Pessoa {
 	public void setDoencaPreexistente(boolean doencaPreexistente) {
 		this.doencaPreexistente = doencaPreexistente;
 	}
-	
-	
+	public String getIdSessao() {
+		return idSessao;
+	}
+	public void setIdSessao(String idSessao) {
+		this.idSessao = idSessao;
+	}
+	public static int getUsuario() {
+		return USUARIO;
+	}
+	public static int getAdministrador() {
+		return ADMINISTRADOR;
+	}
 	
 }

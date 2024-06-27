@@ -14,7 +14,7 @@ public class PessoaService {
 	PessoaRepository pessoaRepository = new PessoaRepository();
 	
 	// Funcionalidade terá outras implementações futuramente
-	public Pessoa efetuarLogin(Pessoa pessoa) throws ControleVacinasException {
+	/*public Pessoa efetuarLogin(Pessoa pessoa) throws ControleVacinasException {
 		validarCamposPreenchidosParalogin(pessoa);
 	   Pessoa pessoaLogada = pessoaRepository.efetuarLogin(pessoa);
 	    if (pessoaLogada != null) {
@@ -29,7 +29,7 @@ public class PessoaService {
 	    } else {
 	        throw new ControleVacinasException("Verifique os dados de acesso e tente novamente.");
 	    }
-	}
+	}*/
 	
 	public Pessoa consultarPorId(int id) {
 		return pessoaRepository.consultarPorId(id);

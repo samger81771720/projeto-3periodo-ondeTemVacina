@@ -148,21 +148,7 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 	public ArrayList<Aplicacao> consultarTodos() {
 		return null;
 	}
-	/*	
-	public int contarPaginas(PessoaSeletor seletor) {
-		
-		int totalPaginas = 0;
-		int totalRegistros = this.contarTotalRegistros(seletor);
-		totalPaginas = totalRegistros  / seletor.getLimite();
-		int resto = totalRegistros % seletor.getLimite();
-		
-		if(resto > 0) {
-			totalPaginas ++;
-		}
-		
-		return totalPaginas;
-	}
-	*/
+	
 	private String preencherFiltros(AplicacaoSeletor seletor, String sql) {
 	    final String AND = " AND ";
 	    if (seletor.getNomeUnidadeAplicacao() != null && seletor.getNomeUnidadeAplicacao().trim().length() > 0) {
@@ -211,35 +197,5 @@ public class AplicacaoRepository implements BaseRepository<Aplicacao>{
 		aplicacao.setDataAplicacao(resultado.getDate("dataAplicacao").toLocalDate());
 		return aplicacao;
 	}
-	/*
-	public int contarTotalRegistros(AplicacaoSeletor seletor) {
-		
-		Connection conn = Banco.getConnection();
-		Statement stmt = Banco.getStatement(conn);
-		
-		int totalRegistros = 0;
-		ResultSet resultado = null;
-		String query = "select count(p.id_Pessoa) from VACINACAO.PESSOA p "
-								  + "inner join VACINACAO.PAIS pa on p.id_Pais = pa.id_Pais";
-		
-		if(seletor.temFiltro()) {
-			query +=  preencherFiltros(seletor, query);
-		}
-		
-		try {
-			resultado = stmt.executeQuery(query);
-			if(resultado.next()) {
-				totalRegistros = resultado.getInt(1);
-			}
-		} catch (SQLException erro){
-				System.out.println("Erro ao contabilizar o total de pessoas filtradas no método \"contarTotalRegistros\".");
-				System.out.println("Erro: " + erro.getMessage());
-			} finally {
-				Banco.closeResultSet(resultado);
-				Banco.closeStatement(stmt);
-				Banco.closeConnection(conn);
-			}
-		return totalRegistros;
-	}
-*/
+
 }

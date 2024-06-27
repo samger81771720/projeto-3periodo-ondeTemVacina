@@ -11,7 +11,7 @@ import model.entity.Endereco;
 import model.entity.Fabricante;
 import model.service.FabricanteService;
 
-@Path("/fabricante")
+@Path("/restrito/fabricante")
 public class FabricanteController {
 	
 	FabricanteService fabricanteService = new FabricanteService();

@@ -12,7 +12,7 @@ import model.entity.Estoque;
 import model.entity.Unidade;
 import model.service.UnidadeService;
 
-@Path("/unidade")
+@Path("/restrito/unidade")
 public class UnidadeController {
 	
 	UnidadeService unidadeService = new UnidadeService();

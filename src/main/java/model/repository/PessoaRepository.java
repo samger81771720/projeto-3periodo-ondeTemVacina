@@ -8,13 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import model.dto.VacinaDTO;
+import model.dto.UsuarioDTO;
 import model.entity.Contato;
 import model.entity.Endereco;
 import model.entity.Pessoa;
 import model.seletor.PessoaSeletor;
-import model.seletor.VacinaSeletor;
 
 public class PessoaRepository implements BaseRepository<Pessoa>{
 
@@ -117,20 +115,20 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return pessoa;
 	}
 	
-	public Pessoa efetuarLogin(Pessoa pessoaLogin) {
+	public Pessoa efetuarLogin(UsuarioDTO usuarioTentandoAutenticar) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
 		Pessoa pessoa = null;
 		String query="select id, idEndereco, idContato, nome,	dataNascimento,	sexo, cpf, login, senha, tipo, doencaPreexistente "
-				+ "from VACINAS.PESSOA p where p.login = '" + pessoaLogin.getLogin() + "' and p.senha = '" + pessoaLogin.getSenha() + "'";
+				+ "from VACINAS.PESSOA p where p.login = '" + usuarioTentandoAutenticar.getLogin() + "' and p.senha = '" + usuarioTentandoAutenticar.getSenha() + "'";
 		try {
 			resultado = stmt.executeQuery(query);
 		if(resultado.next()) {
 			pessoa = this.converterParaObjeto(resultado);
 		}
 		} catch (SQLException erro) {
-			System.out.println("Erro ao tentar confirmar o login e senha do usuário de nome  "+pessoaLogin.getNome());
+			System.out.println("Erro ao tentar confirmar o login e senha com os dados informados.");
 			System.out.println("Erro: "+erro.getMessage());
 		} finally {
 			Banco.closeResultSet(resultado);
@@ -270,7 +268,29 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 				Banco.closeConnection(conn);
 			}
 			return listagemComPessoas;
+	}
+	
+	public boolean alterarIdSessao(Pessoa novaPessoa) {
+		boolean alterou = false;
+		String query = " update VACINAS.PESSOA set "
+								     + " id_sessao = ? "
+								     + " where id = ? ";
+		Connection conn = Banco.getConnection();
+		PreparedStatement pstmt = Banco.getPreparedStatement(conn, query);
+		try {
+			pstmt.setString(1, novaPessoa.getIdSessao());
+			pstmt.setInt(2, novaPessoa.getId());
+			
+			alterou = pstmt.executeUpdate() > 0;
+		} catch (SQLException erro) {
+			System.out.println("Erro ao atualizar idSessao da pessoa informada.");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeStatement(pstmt);
+			Banco.closeConnection(conn);
 		}
+		return alterou;
+	}
 	
 	private Pessoa converterParaObjeto(ResultSet resultado) throws SQLException {
 		Pessoa pessoa = new Pessoa();
@@ -343,6 +363,29 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 			 Banco.closeConnection(conn);
 		 }
 		return cpfExiste;
+	}
+	
+	public Pessoa consultarPorIdSessao(String idSessao) {
+		Connection conn = Banco.getConnection();
+		Statement stmt = Banco.getStatement(conn);
+		
+		ResultSet resultado = null;
+		Pessoa pessoa = new Pessoa();
+		String query = " select * from VACINAS.PESSOA where id_sessao =  '" + idSessao + "' ";
+		try{
+			resultado = stmt.executeQuery(query);
+			if(resultado.next()){
+				pessoa = this.converterParaObjeto(resultado);
+			}
+		} catch (SQLException erro){
+			System.out.println("Erro ao consultar a pessoa com o idSessao (" + idSessao + ")");
+			System.out.println("Erro: " + erro.getMessage());
+		} finally {
+			Banco.closeResultSet(resultado);
+			Banco.closeStatement(stmt);
+			Banco.closeConnection(conn);
+		}
+		return pessoa;
 	}
 
 }

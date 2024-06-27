@@ -1,3 +1,5 @@
+drop database if exists VACINAS;
+
 create schema if not exists VACINAS;
 
 create table if not exists VACINAS.ENDERECO(
@@ -33,6 +35,7 @@ create table if not exists VACINAS.PESSOA(
 	login varchar(255) not null unique,
 	senha varchar(255) not null,
 	tipo integer not null comment '1 = USUÁRIO, 2 = ADMINISTRADOR',
+	id_sessao varchar(500),
 	doencaPreexistente boolean not null default false comment 'TRUE = Possui doença preexistente, FALSE = Não possui doença preexistente',
 	constraint PESSOA_pk primary key(id),
 	constraint CONTATO_PESSOA_fk foreign key(idContato) references VACINAS.CONTATO(id),

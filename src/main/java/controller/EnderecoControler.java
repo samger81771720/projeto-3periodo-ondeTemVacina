@@ -14,7 +14,7 @@ import jakarta.ws.rs.core.MediaType;
 import model.entity.Endereco;
 import model.service.EnderecoService;
 
-@Path("/endereco")
+@Path("/restrito/endereco")
 public class EnderecoControler {
 
 	EnderecoService enderecoService = new EnderecoService();

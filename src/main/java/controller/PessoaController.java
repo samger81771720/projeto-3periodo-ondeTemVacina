@@ -13,19 +13,16 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-import model.dto.VacinaDTO;
-import model.entity.Endereco;
 import model.entity.Pessoa;
-import model.entity.Vacina;
 import model.seletor.PessoaSeletor;
-import model.seletor.VacinaSeletor;
 import model.service.PessoaService;
 
-@Path("/pessoa")
+@Path("/restrito/pessoa")
 public class PessoaController {
 	
 	PessoaService pessoaService = new PessoaService();
 	
+	/*
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -33,6 +30,7 @@ public class PessoaController {
 	public Pessoa logarController (Pessoa pessoa)throws ControleVacinasException {
 		return pessoaService.efetuarLogin(pessoa);
 	}
+	*/
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)

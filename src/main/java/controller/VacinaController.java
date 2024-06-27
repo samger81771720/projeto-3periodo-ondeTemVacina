@@ -16,7 +16,7 @@ import model.entity.Vacina;
 import model.seletor.VacinaSeletor;
 import model.service.VacinaService;
 
-@Path("/vacina")
+@Path("/restrito/vacina")
 public class VacinaController {
 	
 	VacinaService vacinaService = new VacinaService();

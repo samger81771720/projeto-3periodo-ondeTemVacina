@@ -17,7 +17,7 @@ import model.seletor.AplicacaoSeletor;
 import model.seletor.VacinaSeletor;
 import model.service.AplicacaoService;
 
-@Path("/aplicacao")
+@Path("/restrito/aplicacao")
 public class AplicacaoController {
 	
 	AplicacaoService aplicacaoService = new AplicacaoService();

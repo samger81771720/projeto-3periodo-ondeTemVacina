@@ -11,7 +11,7 @@ import jakarta.ws.rs.core.MediaType;
 import model.entity.Contato;
 import model.service.ContatoService;
 
-@Path("/contato")
+@Path("/restrito/contato")
 public class ContatoController {
 	
 	ContatoService contatoService = new ContatoService();

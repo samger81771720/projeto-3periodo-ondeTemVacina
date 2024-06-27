@@ -19,7 +19,7 @@ import model.entity.Unidade;
 import model.seletor.VacinaSeletor;
 import model.service.EstoqueService;
 
-@Path("/estoque")
+@Path("/restrito/estoque")
 public class EstoqueController {
 	
 	EstoqueService estoqueService = new EstoqueService();
