@@ -13,6 +13,7 @@ import model.entity.Contato;
 import model.entity.Endereco;
 import model.entity.Pessoa;
 import model.seletor.PessoaSeletor;
+import util.StringsUtils;
 
 public class PessoaRepository implements BaseRepository<Pessoa>{
 
@@ -121,7 +122,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		ResultSet resultado = null;
 		Pessoa pessoa = null;
 		String query="select id, idEndereco, idContato, nome,	dataNascimento,	sexo, cpf, login, senha, tipo, doencaPreexistente "
-				+ "from VACINAS.PESSOA p where p.login = '" + usuarioTentandoAutenticar.getLogin() + "' and p.senha = '" + usuarioTentandoAutenticar.getSenha() + "'";
+				+ "from VACINAS.PESSOA p where p.login = '" + usuarioTentandoAutenticar.getLogin() + "' and p.senha = '" + StringsUtils.cifrar(usuarioTentandoAutenticar.getSenha()) + "'";
 		try {
 			resultado = stmt.executeQuery(query);
 		if(resultado.next()) {
@@ -166,7 +167,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		 Statement stmt = Banco.getStatement(conn);
 		 ResultSet resultado = null;
 		 boolean senhaExiste = false;
-		 String query = "select count(id) as contagem from VACINAS.PESSOA where	senha = '" + pessoaSenhaDesejada.getSenha() + "'";
+		 String query = "select count(id) as contagem from VACINAS.PESSOA where	senha = '" + StringsUtils.cifrar(pessoaSenhaDesejada.getSenha()) + "'";
 		 try {
 			 resultado = stmt.executeQuery(query);
 			 if(resultado.next()){
@@ -292,56 +293,6 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return alterou;
 	}
 	
-	private Pessoa converterParaObjeto(ResultSet resultado) throws SQLException {
-		Pessoa pessoa = new Pessoa();
-		pessoa.setId(resultado.getInt("id"));
-		EnderecoRepository enderecoRepository = new EnderecoRepository();
-		Endereco enderecoDaPessoa = enderecoRepository.consultarPorId(resultado.getInt("idEndereco"));
-		pessoa.setEnderecoDaPessoa(enderecoDaPessoa);
-		ContatoRepository contatoRepository = new ContatoRepository();
-		Contato contatoDaPessoa = contatoRepository.consultarPorId(resultado.getInt("idContato"));
-		pessoa.setContatoDaPessoa(contatoDaPessoa);
-		pessoa.setNome(resultado.getString("nome"));
-		if(resultado.getDate("dataNascimento")!=null) {
-			pessoa.setDataNascimento(resultado.getDate("dataNascimento").toLocalDate());
-		}
-		pessoa.setSexo(resultado.getString("sexo"));
-		pessoa.setCpf(resultado.getString("cpf"));
-		pessoa.setLogin(resultado.getString("login"));
-		pessoa.setSenha(resultado.getString("senha"));
-		pessoa.setTipo(resultado.getInt("tipo"));
-		pessoa.setDoencaPreexistente(resultado.getBoolean("doencaPreexistente"));
-		return pessoa;
-	}
-	
-	private void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Pessoa novaPessoa,  boolean isUpdate) throws SQLException  {
-		
-		EnderecoRepository  enderecoRepository = new EnderecoRepository();
-		Endereco enderecoDaPessoa = enderecoRepository.salvar(novaPessoa.getEnderecoDaPessoa());
-		novaPessoa.setEnderecoDaPessoa(enderecoDaPessoa);  
-		
-		ContatoRepository contatoRepository = new ContatoRepository();
-		Contato contatoDaPessoa = contatoRepository.salvar(novaPessoa.getContatoDaPessoa());
-		novaPessoa.setContatoDaPessoa(contatoDaPessoa); 
-		
-		pstmt.setInt(1, novaPessoa.getEnderecoDaPessoa().getId());
-		pstmt.setInt(2, novaPessoa.getContatoDaPessoa().getId());		
-		pstmt.setString(3, novaPessoa.getNome());
-		if(novaPessoa.getDataNascimento() != null) {
-			pstmt.setDate(4, Date.valueOf(novaPessoa.getDataNascimento()));
-		}
-		pstmt.setString(5, novaPessoa.getSexo());
-		pstmt.setString(6, novaPessoa.getCpf());
-		pstmt.setString(7,novaPessoa.getLogin());
-		pstmt.setString(8,novaPessoa.getSenha());
-		pstmt.setInt(9, novaPessoa.getTipo());
-		pstmt.setBoolean(10, novaPessoa.isDoencaPreexistente());
-			 if (isUpdate) {
-	            pstmt.setInt(11, novaPessoa.getId());
-	            }
-	
-	}
-
 	public boolean verificarCpfParaCadastrar(Pessoa novaPessoa) {
 		 Connection conn = Banco.getConnection();
 		 Statement stmt = Banco.getStatement(conn);
@@ -387,6 +338,55 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		}
 		return pessoa;
 	}
-
+	
+	private Pessoa converterParaObjeto(ResultSet resultado) throws SQLException {
+		Pessoa pessoa = new Pessoa();
+		pessoa.setId(resultado.getInt("id"));
+		EnderecoRepository enderecoRepository = new EnderecoRepository();
+		Endereco enderecoDaPessoa = enderecoRepository.consultarPorId(resultado.getInt("idEndereco"));
+		pessoa.setEnderecoDaPessoa(enderecoDaPessoa);
+		ContatoRepository contatoRepository = new ContatoRepository();
+		Contato contatoDaPessoa = contatoRepository.consultarPorId(resultado.getInt("idContato"));
+		pessoa.setContatoDaPessoa(contatoDaPessoa);
+		pessoa.setNome(resultado.getString("nome"));
+		if(resultado.getDate("dataNascimento")!=null) {
+			pessoa.setDataNascimento(resultado.getDate("dataNascimento").toLocalDate());
+		}
+		pessoa.setSexo(resultado.getString("sexo"));
+		pessoa.setCpf(resultado.getString("cpf"));
+		pessoa.setLogin(resultado.getString("login"));
+		pessoa.setTipo(resultado.getInt("tipo"));
+		pessoa.setDoencaPreexistente(resultado.getBoolean("doencaPreexistente"));
+		return pessoa;
+	}
+	
+	private void preencherParametrosParaInsertOuUpdate(PreparedStatement pstmt, Pessoa novaPessoa,  boolean isUpdate) throws SQLException  {
+		
+		EnderecoRepository  enderecoRepository = new EnderecoRepository();
+		Endereco enderecoDaPessoa = enderecoRepository.salvar(novaPessoa.getEnderecoDaPessoa());
+		novaPessoa.setEnderecoDaPessoa(enderecoDaPessoa);  
+		
+		ContatoRepository contatoRepository = new ContatoRepository();
+		Contato contatoDaPessoa = contatoRepository.salvar(novaPessoa.getContatoDaPessoa());
+		novaPessoa.setContatoDaPessoa(contatoDaPessoa); 
+		
+		pstmt.setInt(1, novaPessoa.getEnderecoDaPessoa().getId());
+		pstmt.setInt(2, novaPessoa.getContatoDaPessoa().getId());		
+		pstmt.setString(3, novaPessoa.getNome());
+		if(novaPessoa.getDataNascimento() != null) {
+			pstmt.setDate(4, Date.valueOf(novaPessoa.getDataNascimento()));
+		}
+		pstmt.setString(5, novaPessoa.getSexo());
+		pstmt.setString(6, novaPessoa.getCpf());
+		pstmt.setString(7,novaPessoa.getLogin());
+		pstmt.setString(8, StringsUtils.cifrar(novaPessoa.getSenha()));
+		pstmt.setInt(9, novaPessoa.getTipo());
+		pstmt.setBoolean(10, novaPessoa.isDoencaPreexistente());
+			 if (isUpdate) {
+	            pstmt.setInt(11, novaPessoa.getId());
+	            }
+	
+	}
+	
 }
 
