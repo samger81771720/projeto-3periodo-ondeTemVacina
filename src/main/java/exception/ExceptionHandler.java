@@ -54,5 +54,20 @@ public class ExceptionHandler implements ExceptionMapper<Exception> {
 				.entity(json)
 				.build();
 	}
+	
+	public static String converterExceptionParaJson(Exception exception) {
+		Map<String, String> mapAtributos = new HashMap<String, String>();
+		mapAtributos.put("mensagem", exception.getMessage());
+		
+		//Fonte: https://www.baeldung.com/java-stacktrace-to-string
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		exception.printStackTrace(pw);
+		mapAtributos.put("stacktrace", sw.toString());
+		
+		//Define o JSON que será retornado
+		Gson gson = new GsonBuilder().create();
+		return gson.toJson(mapAtributos);
+	}
 
 }
