@@ -4,6 +4,8 @@ package controller;
 import java.util.List;
 
 import exception.ControleVacinasException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
@@ -12,6 +14,7 @@ import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.Pessoa;
 import model.seletor.PessoaSeletor;
@@ -20,17 +23,10 @@ import model.service.PessoaService;
 @Path("/restrito/pessoa")
 public class PessoaController {
 	
-	PessoaService pessoaService = new PessoaService();
+	@Context
+	private HttpServletRequest request;
 	
-	/*
-	@POST
-	@Path("/login")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Pessoa logarController (Pessoa pessoa)throws ControleVacinasException {
-		return pessoaService.efetuarLogin(pessoa);
-	}
-	*/
+	PessoaService pessoaService = new PessoaService();
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -74,3 +70,25 @@ public class PessoaController {
 	}
 	
 }
+
+
+/*
+ A anotação @Context em Java/Jakarta EE é usada 
+ para injetar objetos contextuais específicos no código, 
+ como HttpServletRequest, HttpServletResponse, 
+ ServletContext, entre outros. Esses objetos são 
+ providos pelo ambiente de execução (por exemplo, 
+ um contêiner de servlets) e permitem interação 
+ com o ambiente de execução sem necessidade 
+ de inicialização explícita.
+  
+  */
+
+/*
+
+A classe HttpServletRequest representa uma requisição HTTP 
+recebida pelo servidor do back end. Ela é utilizada pelo servidor(no caso dessa aplicação, pelo tomcat) 
+para processar as solicitações feitas pelos clientes (como 
+navegadores web, aplicativos móveis, entre outros) e responder 
+de acordo com a lógica da aplicação back end. 
+  */

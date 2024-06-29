@@ -321,7 +321,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		Statement stmt = Banco.getStatement(conn);
 		
 		ResultSet resultado = null;
-		Pessoa pessoa = new Pessoa();
+		Pessoa pessoa = null;
 		String query = " select * from VACINAS.PESSOA where id_sessao =  '" + idSessao + "' ";
 		try{
 			resultado = stmt.executeQuery(query);

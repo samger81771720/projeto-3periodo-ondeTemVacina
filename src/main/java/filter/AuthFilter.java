@@ -14,13 +14,20 @@ import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Provider;
 import model.service.LoginService;
 
-/*
-ContainerRequestFilter - "Interface que filtra (bloqueando ou modificando, quando necessário) as requisições http."
-*/
 
-@Provider // Indica que essa classe é um provedor JAX-RS e deve ser descoberta pelo runtime.
+
+
+/*
+A anotação " @Provider " permite que a classe AuthFilter seja registrada como um 
+filtro JAX-RS quando a aplicação é iniciada. O método filter da classe AuthFilter 
+é chamado para cada requisição recebida, onde ela verifica se a URL é restrita 
+e valida o ID de sessão em tempo de execução.
+*/
+@Provider 
 public class AuthFilter implements ContainerRequestFilter {
-	
+	/*                                                                                 ^^^^^
+	ContainerRequestFilter - "Interface que filtra (bloqueando ou modificando, quando necessário) as requisições http."
+	*/
 	private static final String BASE_URL_RESTRITA = "restrito"; // Define uma constante para a URL base restrita.
 	public static final String CHAVE_ID_SESSAO = "idSessao"; // Define uma constante para a chave de ID de sessão.
 	
