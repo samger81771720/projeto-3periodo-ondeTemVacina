@@ -26,6 +26,16 @@ public class AuthFilter implements ContainerRequestFilter {
 	
 	private LoginService loginService = new LoginService(); // Cria uma instância da classe LoginService.
 	
+	/*
+	 "ContainerRequestContext" - Representa o contexto da requisição HTTP, fornecendo métodos para acessar detalhes dessa requisição.
+	  ContainerRequestContext e UriInfo não pertencem à mesma interface, nem fazem parte da interface ContainerRequestFilter. 
+	  Eles são classes/interfaces distintas no JAX-RS, cada uma com seu próprio propósito.
+	  
+	 ContainerRequestContext e UriInfo são componentes distintos do JAX-RS, cada um com sua própria funcionalidade.
+	" ContainerRequestContext " - fornece acesso ao contexto da requisição e pode retornar um UriInfo.
+	" UriInfo " -  fornece detalhes específicos sobre a URI da requisição.
+	  
+	 */
 	@Override
 	public void filter(ContainerRequestContext requestContext) throws IOException { // Implementa o método filter da interface ContainerRequestFilter.
 	    UriInfo url = requestContext.getUriInfo(); // Obtém informações sobre a URI da requisição.
