@@ -20,7 +20,7 @@ import model.entity.Pessoa;
 import model.seletor.PessoaSeletor;
 import model.service.PessoaService;
 
-@Path("/restrito/pessoa")
+@Path("/pessoa")
 public class PessoaController {
 	
 	@Context
@@ -49,14 +49,14 @@ public class PessoaController {
 	}
 	
 	@GET
-	@Path("/consultarTodasPessoas")
+	@Path("/restrito/consultarTodasPessoas")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarTodos(){
 		 return pessoaService.consultarTodos();
 	}
 	
 	@POST
-	@Path("/filtroConsultarPessoas")
+	@Path("/restrito/filtroConsultarPessoas")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarPessoasComFiltro(PessoaSeletor seletor) throws ControleVacinasException{

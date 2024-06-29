@@ -14,9 +14,6 @@ import jakarta.ws.rs.core.UriInfo;
 import jakarta.ws.rs.ext.Provider;
 import model.service.LoginService;
 
-
-
-
 /*
 A anotação " @Provider " permite que a classe AuthFilter seja registrada como um 
 filtro JAX-RS quando a aplicação é iniciada. O método filter da classe AuthFilter 
