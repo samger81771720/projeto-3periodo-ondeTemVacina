@@ -191,20 +191,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		Statement stmt = Banco.getStatement(conn);
 		ArrayList<Pessoa> listaDePessoas = new ArrayList<>();
 		ResultSet resultado = null;
-		String query = "select"
-												+ "	id, "
-												+ "	idEndereco, "
-												+ "	idContato, "
-												+ "	nome, "
-												+ "	dataNascimento, "
-												+ "	sexo, "
-												+ "	cpf, "
-												+ "	login, "
-												+ "	senha, "
-												+ "	tipo, "
-												+ "	doencaPreexistente "
-												+ "  from "
-												+ "	VACINAS.PESSOA";
+		String query = " select * from VACINAS.PESSOA ";
 		try{
 			resultado = stmt.executeQuery(query);
 			while(resultado.next()){
@@ -319,10 +306,9 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 	public Pessoa consultarPorIdSessao(String idSessao) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
-		
 		ResultSet resultado = null;
 		Pessoa pessoa = null;
-		String query = " select * from VACINAS.PESSOA where id_sessao =  '" + idSessao + "' ";
+		String query = " select * from VACINAS.PESSOA where id_sessao =  '" + idSessao + "'";
 		try{
 			resultado = stmt.executeQuery(query);
 			if(resultado.next()){
@@ -357,6 +343,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		pessoa.setLogin(resultado.getString("login"));
 		pessoa.setTipo(resultado.getInt("tipo"));
 		pessoa.setDoencaPreexistente(resultado.getBoolean("doencaPreexistente"));
+		pessoa.setIdSessao(resultado.getString("id_sessao"));
 		return pessoa;
 	}
 	

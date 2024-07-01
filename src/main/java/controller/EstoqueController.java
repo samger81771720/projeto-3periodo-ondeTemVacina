@@ -40,7 +40,7 @@ public class EstoqueController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Estoque> consultarTodos() throws ControleVacinasException{
 		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
-		if(idSessaoNoHeader == null || idSessaoNoHeader.isEmpty()) {
+		if(idSessaoNoHeader == null || idSessaoNoHeader.replace(" ", "").length() == 0) {
 			throw new ControleVacinasException("Permissão negada. O idSessao não foi informado.");
 		}
 		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
@@ -64,7 +64,7 @@ public class EstoqueController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public boolean alterar(Estoque estoque) throws ControleVacinasException{
 		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
-		if(idSessaoNoHeader == null || idSessaoNoHeader.isEmpty()) {
+		if(idSessaoNoHeader == null || idSessaoNoHeader.replace(" ", "").length() == 0) {
 			throw new ControleVacinasException("Permissão negada. O idSessao não foi informado.");
 		}
 		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
@@ -82,7 +82,7 @@ public class EstoqueController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Estoque salvar(Estoque novoEstoque) throws ControleVacinasException{
 		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
-		if(idSessaoNoHeader == null || idSessaoNoHeader.isEmpty()) {
+		if(idSessaoNoHeader == null || idSessaoNoHeader.replace(" ", "").length() == 0) {
 			throw new ControleVacinasException("Permissão negada. O idSessao não foi informado.");
 		}
 		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);

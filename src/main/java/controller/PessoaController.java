@@ -4,6 +4,7 @@ package controller;
 import java.util.List;
 
 import exception.ControleVacinasException;
+import filter.AuthFilter;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
@@ -17,16 +18,18 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.Pessoa;
+import model.repository.PessoaRepository;
 import model.seletor.PessoaSeletor;
 import model.service.PessoaService;
 
-@Path("/pessoa")
+@Path("/pessoa/restrito")
 public class PessoaController {
 	
 	@Context
 	private HttpServletRequest request;
 	
 	PessoaService pessoaService = new PessoaService();
+	PessoaRepository pessoaRepository = new PessoaRepository();
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -49,14 +52,15 @@ public class PessoaController {
 	}
 	
 	@GET
-	@Path("/restrito/consultarTodasPessoas")
+	@Path("/consultarTodasPessoas")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Pessoa> consultarTodos(){
+	public List<Pessoa> consultarTodos() throws ControleVacinasException{
+		validarTipoDeUsuario();
 		 return pessoaService.consultarTodos();
 	}
 	
 	@POST
-	@Path("/restrito/filtroConsultarPessoas")
+	@Path("/filtroConsultarPessoas")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarPessoasComFiltro(PessoaSeletor seletor) throws ControleVacinasException{
@@ -67,6 +71,16 @@ public class PessoaController {
 	@Path("/{id}")
 	public boolean excluir(@PathParam("id")int id) {
 		return pessoaService.excluir(id);
+	}
+	
+	public boolean validarTipoDeUsuario() throws ControleVacinasException{
+		boolean isAdministrator = true;
+		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
+		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
+		if(pessoaAutenticada.getTipo() != Pessoa.ADMINISTRADOR) {
+			throw new ControleVacinasException("Usuário sem permissão acessar a lista de todas as pessoas.");
+		}
+		return isAdministrator;
 	}
 	
 }
