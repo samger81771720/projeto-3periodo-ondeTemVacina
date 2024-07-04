@@ -28,22 +28,15 @@ public class AplicacaoController {
 	private HttpServletRequest request;
 	
 	AplicacaoService aplicacaoService = new AplicacaoService();
+	PessoaController pessoaController = new PessoaController();
 	PessoaRepository pessoaRepository = new PessoaRepository();
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Aplicacao salvar(Aplicacao aplicacao) throws ControleVacinasException{
-		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
-		if(idSessaoNoHeader == null || idSessaoNoHeader.isEmpty()) {
-			throw new ControleVacinasException("Permissão negada. O idSessao não foi informado.");
-		}
-		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
-		if(pessoaAutenticada == null) {
-			throw new ControleVacinasException("Usuário não encontrado.");
-		}
-		if(pessoaAutenticada.getTipo() != Pessoa.ADMINISTRADOR) {
-			throw new ControleVacinasException("Usuário sem permissão para cadastrar uma aplicação de vacina.");
+		if(!pessoaController.validarTipoDeUsuario()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para salvar uma aplicação.");
 		}
 		return aplicacaoService.salvar(aplicacao);
 	}

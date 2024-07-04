@@ -2,10 +2,12 @@ package controller;
 
 import java.util.List;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
 import model.entity.Endereco;
 import model.entity.Fabricante;
@@ -13,6 +15,9 @@ import model.service.FabricanteService;
 
 @Path("/restrito/fabricante")
 public class FabricanteController {
+	
+	@Context
+	private HttpServletRequest request;
 	
 	FabricanteService fabricanteService = new FabricanteService();
 	

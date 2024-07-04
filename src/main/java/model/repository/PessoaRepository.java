@@ -86,19 +86,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
 		Pessoa pessoa = null;
-		String query = "select "
-											+ "	id, "
-											+ "	idEndereco, "
-											+ "	idContato, "
-											+ "	nome, "
-											+ "	dataNascimento, "
-											+ "	sexo, "
-											+ "	cpf, "
-											+ "	login, "
-											+ "	senha, "
-											+ "	tipo, "
-											+ " doencaPreexistente "
-											+ " from VACINAS.PESSOA "
+		String query = "select * from VACINAS.PESSOA "
 											+ "where	id = " + id;
 		try {
 			resultado = stmt.executeQuery(query);

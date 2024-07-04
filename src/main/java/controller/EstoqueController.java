@@ -33,29 +33,25 @@ public class EstoqueController {
 	private HttpServletRequest request;
 	
 	EstoqueService estoqueService = new EstoqueService();
+	PessoaController pessoaController = new PessoaController();
 	PessoaRepository pessoaRepository = new PessoaRepository();
 	
 	@GET
 	@Path("/consultarTodos")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Estoque> consultarTodos() throws ControleVacinasException{
-		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
-		if(idSessaoNoHeader == null || idSessaoNoHeader.replace(" ", "").length() == 0) {
-			throw new ControleVacinasException("Permissão negada. O idSessao não foi informado.");
-		}
-		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
-		if(pessoaAutenticada == null) {
-			throw new ControleVacinasException("Usuário não encontrado.");
-		}
-		if(pessoaAutenticada.getTipo() != Pessoa.ADMINISTRADOR) {
-			throw new ControleVacinasException("Usuário sem permissão para cadastrar uma aplicação de vacina.");
+		if(!pessoaController.validarTipoDeUsuario()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para fazer uma consulta de todos os estoques no banco de dados.");
 		}
 		return estoqueService.consultarTodos();
 	}
 	
 	@DELETE
 	@Path("/{idUnidade}/{idVacina}")
-	public boolean excluir(@PathParam("idUnidade") int idUnidade, @PathParam("idVacina") int idVacina) {
+	public boolean excluir(@PathParam("idUnidade") int idUnidade, @PathParam("idVacina") int idVacina) throws ControleVacinasException{
+		if(!pessoaController.validarTipoDeUsuario()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para excluir um estoque do banco de dados.");
+		}
 		return estoqueService.excluirEstoqueDaUnidade(idUnidade, idVacina);
 	}
 	
@@ -63,16 +59,8 @@ public class EstoqueController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public boolean alterar(Estoque estoque) throws ControleVacinasException{
-		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
-		if(idSessaoNoHeader == null || idSessaoNoHeader.replace(" ", "").length() == 0) {
-			throw new ControleVacinasException("Permissão negada. O idSessao não foi informado.");
-		}
-		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
-		if(pessoaAutenticada == null) {
-			throw new ControleVacinasException("Usuário não encontrado.");
-		}
-		if(pessoaAutenticada.getTipo() != Pessoa.ADMINISTRADOR) {
-			throw new ControleVacinasException("Usuário sem permissão para cadastrar uma aplicação de vacina.");
+		if(!pessoaController.validarTipoDeUsuario()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para alterar um resgistro de um estoque no banco de dados.");
 		}
 		return estoqueService.alterar(estoque);
 	}
@@ -81,16 +69,8 @@ public class EstoqueController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Estoque salvar(Estoque novoEstoque) throws ControleVacinasException{
-		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
-		if(idSessaoNoHeader == null || idSessaoNoHeader.replace(" ", "").length() == 0) {
-			throw new ControleVacinasException("Permissão negada. O idSessao não foi informado.");
-		}
-		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
-		if(pessoaAutenticada == null) {
-			throw new ControleVacinasException("Usuário não encontrado.");
-		}
-		if(pessoaAutenticada.getTipo() != Pessoa.ADMINISTRADOR) {
-			throw new ControleVacinasException("Usuário sem permissão para cadastrar uma aplicação de vacina.");
+		if(!pessoaController.validarTipoDeUsuario()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para salvar um estoque no banco de dados.");
 		}
 		return estoqueService.salvar(novoEstoque);
 	}
@@ -99,7 +79,7 @@ public class EstoqueController {
 	@Path("/filtro-Vacinas-EstoqueDaUnidade")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<VacinaDTO> consultarComFitros(VacinaSeletor seletor){
+	public List<VacinaDTO> consultarComFitros(VacinaSeletor seletor) {
 		return estoqueService.consultarComFiltros(seletor);
 	}
 	

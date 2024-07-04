@@ -39,6 +39,7 @@ public class PessoaController {
 	}
 	
 	@PUT
+	@Path("/restrito")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public boolean alterar(Pessoa pessoaAtualizada)throws ControleVacinasException {
@@ -46,21 +47,24 @@ public class PessoaController {
 	}
 	
 	@GET
-	@Path("/{id}")
+	@Path("/restrito/{id}")
 	public Pessoa consultarPorId(@PathParam("id")int id){
 		return pessoaService.consultarPorId(id);
 	}
 	
 	@GET
-	@Path("/consultarTodasPessoas")
+	@Path("/restrito/consultarTodasPessoas")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarTodos() throws ControleVacinasException{
-		validarTipoDeUsuario();
+		if(!this.validarTipoDeUsuario()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para consultar os registros de todas as pessoas no banco de dados.");
+		}
 		 return pessoaService.consultarTodos();
 	}
 	
+	//método não está sendo usado
 	@POST
-	@Path("/filtroConsultarPessoas")
+	@Path("/restrito/filtroConsultarPessoas")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarPessoasComFiltro(PessoaSeletor seletor) throws ControleVacinasException{
@@ -68,17 +72,20 @@ public class PessoaController {
 	}
 	
 	@DELETE
-	@Path("/{id}")
-	public boolean excluir(@PathParam("id")int id) {
+	@Path("/restrito/{id}")
+	public boolean excluir(@PathParam("id")int id) throws ControleVacinasException{
+		if(!validarTipoDeUsuario()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para excluir um registro de uma pessoa do banco de dados.");
+		}
 		return pessoaService.excluir(id);
 	}
 	
-	public boolean validarTipoDeUsuario() throws ControleVacinasException{
+	public boolean validarTipoDeUsuario(){
 		boolean isAdministrator = true;
 		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
 		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
 		if(pessoaAutenticada.getTipo() != Pessoa.ADMINISTRADOR) {
-			throw new ControleVacinasException("Usuário sem permissão acessar a lista de todas as pessoas.");
+			isAdministrator = false;
 		}
 		return isAdministrator;
 	}
