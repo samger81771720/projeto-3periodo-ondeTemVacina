@@ -22,7 +22,7 @@ import model.repository.PessoaRepository;
 import model.seletor.PessoaSeletor;
 import model.service.PessoaService;
 
-@Path("/pessoa/restrito")
+@Path("/pessoa")
 public class PessoaController {
 	
 	@Context
