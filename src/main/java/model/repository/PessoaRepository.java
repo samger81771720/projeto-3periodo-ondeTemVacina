@@ -91,7 +91,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		try {
 			resultado = stmt.executeQuery(query);
 			if(resultado.next()) {
-				pessoa = this.converterParaObjeto(resultado);
+				pessoa = this.converterParaObjeto(resultado, true);
 			}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao tentar consultar a pessoa de id " + id);
@@ -113,7 +113,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		try {
 			resultado = stmt.executeQuery(query);
 		if(resultado.next()) {
-			pessoa = this.converterParaObjeto(resultado);
+			pessoa = this.converterParaObjeto(resultado, false);
 		}
 		} catch (SQLException erro) {
 			System.out.println("Erro ao tentar confirmar o login e senha com os dados informados.");
@@ -178,11 +178,11 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		Statement stmt = Banco.getStatement(conn);
 		ArrayList<Pessoa> listaDePessoas = new ArrayList<>();
 		ResultSet resultado = null;
-		String query = " select * from VACINAS.PESSOA ";
+		String query = " select * from VACINAS.PESSOA order by nome ";
 		try{
 			resultado = stmt.executeQuery(query);
 			while(resultado.next()){
-				Pessoa pessoa = this.converterParaObjeto(resultado);
+				Pessoa pessoa = this.converterParaObjeto(resultado, false);
 				listaDePessoas.add(pessoa);
 			}
 		} catch (SQLException erro){
@@ -228,7 +228,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 			try {
 				resultado = stmt.executeQuery(sql);
 				while(resultado.next()) {
-					Pessoa pessoa = converterParaObjeto(resultado);
+					Pessoa pessoa = converterParaObjeto(resultado, false);
 					listagemComPessoas.add(pessoa);
 				}
 			} catch(SQLException erro){
@@ -299,7 +299,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		try{
 			resultado = stmt.executeQuery(query);
 			if(resultado.next()){
-				pessoa = this.converterParaObjeto(resultado);
+				pessoa = this.converterParaObjeto(resultado, false);
 			}
 		} catch (SQLException erro){
 			System.out.println("Erro ao consultar a pessoa com o idSessao (" + idSessao + ")");
@@ -312,7 +312,7 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		return pessoa;
 	}
 	
-	private Pessoa converterParaObjeto(ResultSet resultado) throws SQLException {
+	private Pessoa converterParaObjeto(ResultSet resultado, boolean incluirSenha) throws SQLException {
 		Pessoa pessoa = new Pessoa();
 		pessoa.setId(resultado.getInt("id"));
 		EnderecoRepository enderecoRepository = new EnderecoRepository();
@@ -328,6 +328,9 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		pessoa.setSexo(resultado.getString("sexo"));
 		pessoa.setCpf(resultado.getString("cpf"));
 		pessoa.setLogin(resultado.getString("login"));
+		 if (incluirSenha) {
+	            pessoa.setSenha(resultado.getString("senha"));
+	        }
 		pessoa.setTipo(resultado.getInt("tipo"));
 		pessoa.setDoencaPreexistente(resultado.getBoolean("doencaPreexistente"));
 		pessoa.setIdSessao(resultado.getString("id_sessao"));

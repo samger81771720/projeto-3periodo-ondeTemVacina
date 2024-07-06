@@ -40,9 +40,6 @@ public class EstoqueController {
 	@Path("/consultarTodos")
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Estoque> consultarTodos() throws ControleVacinasException{
-		if(!pessoaController.validarTipoDeUsuario()) {
-			throw new ControleVacinasException("O usuário logado não tem permissão para fazer uma consulta de todos os estoques no banco de dados.");
-		}
 		return estoqueService.consultarTodos();
 	}
 	

@@ -1,6 +1,7 @@
 
 package controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import exception.ControleVacinasException;
@@ -58,7 +59,7 @@ public class PessoaController {
 	public List<Pessoa> consultarTodos() throws ControleVacinasException{
 		if(!this.validarTipoDeUsuario()) {
 			throw new ControleVacinasException("O usuário logado não tem permissão para consultar os registros de todas as pessoas no banco de dados.");
-		}
+		} 
 		 return pessoaService.consultarTodos();
 	}
 	
