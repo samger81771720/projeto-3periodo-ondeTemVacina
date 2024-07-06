@@ -33,7 +33,6 @@ public class EstoqueController {
 	private HttpServletRequest request;
 	
 	EstoqueService estoqueService = new EstoqueService();
-	PessoaController pessoaController = new PessoaController();
 	PessoaRepository pessoaRepository = new PessoaRepository();
 	
 	@GET
@@ -46,8 +45,8 @@ public class EstoqueController {
 	@DELETE
 	@Path("/{idUnidade}/{idVacina}")
 	public boolean excluir(@PathParam("idUnidade") int idUnidade, @PathParam("idVacina") int idVacina) throws ControleVacinasException{
-		if(!pessoaController.validarTipoDeUsuario()) {
-			throw new ControleVacinasException("O usuário logado não tem permissão para excluir um estoque do banco de dados.");
+		if(!this.validarAcaoDeAdministrador()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para salvar um estoque no banco de dados.");
 		}
 		return estoqueService.excluirEstoqueDaUnidade(idUnidade, idVacina);
 	}
@@ -56,8 +55,8 @@ public class EstoqueController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.TEXT_PLAIN)
 	public boolean alterar(Estoque estoque) throws ControleVacinasException{
-		if(!pessoaController.validarTipoDeUsuario()) {
-			throw new ControleVacinasException("O usuário logado não tem permissão para alterar um resgistro de um estoque no banco de dados.");
+		if(!this.validarAcaoDeAdministrador()) {
+			throw new ControleVacinasException("O usuário logado não tem permissão para salvar um estoque no banco de dados.");
 		}
 		return estoqueService.alterar(estoque);
 	}
@@ -66,7 +65,7 @@ public class EstoqueController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Estoque salvar(Estoque novoEstoque) throws ControleVacinasException{
-		if(!pessoaController.validarTipoDeUsuario()) {
+		if(!this.validarAcaoDeAdministrador()) {
 			throw new ControleVacinasException("O usuário logado não tem permissão para salvar um estoque no banco de dados.");
 		}
 		return estoqueService.salvar(novoEstoque);
@@ -92,6 +91,16 @@ public class EstoqueController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public ArrayList<Estoque> consultarEstoquesDaUnidadePorId(Estoque estoqueDaUnidade){
 		return estoqueService.consultarEstoquesDaUnidadePorId(estoqueDaUnidade);
+	}
+	
+	public boolean validarAcaoDeAdministrador(){
+		boolean isAdministrator = true;                                              
+		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO); 
+		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);  
+		if(pessoaAutenticada.getTipo() == Pessoa.USUARIO) {
+			isAdministrator = false;
+		}
+		return isAdministrator;
 	}
 
 }

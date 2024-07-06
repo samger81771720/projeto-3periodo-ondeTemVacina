@@ -1,12 +1,8 @@
-
 package controller;
 
-import java.util.ArrayList;
 import java.util.List;
-
 import exception.ControleVacinasException;
 import filter.AuthFilter;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -57,9 +53,9 @@ public class PessoaController {
 	@Path("/restrito/consultarTodasPessoas")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Pessoa> consultarTodos() throws ControleVacinasException{
-		if(!this.validarTipoDeUsuario()) {
+		if(!this.validarAcaoDeAdministrador()) {
 			throw new ControleVacinasException("O usuário logado não tem permissão para consultar os registros de todas as pessoas no banco de dados.");
-		} 
+		}
 		 return pessoaService.consultarTodos();
 	}
 	
@@ -75,17 +71,18 @@ public class PessoaController {
 	@DELETE
 	@Path("/restrito/{id}")
 	public boolean excluir(@PathParam("id")int id) throws ControleVacinasException{
-		if(!validarTipoDeUsuario()) {
+		if(!this.validarAcaoDeAdministrador()) {
 			throw new ControleVacinasException("O usuário logado não tem permissão para excluir um registro de uma pessoa do banco de dados.");
 		}
 		return pessoaService.excluir(id);
 	}
 	
-	public boolean validarTipoDeUsuario(){
-		boolean isAdministrator = true;
-		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
-		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
-		if(pessoaAutenticada.getTipo() != Pessoa.ADMINISTRADOR) {
+	
+	public boolean validarAcaoDeAdministrador(){
+		boolean isAdministrator = true;                                               // "COMENTÁRIO PRINCIPAL"
+		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO); 
+		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);  
+		if(pessoaAutenticada.getTipo() == Pessoa.USUARIO) {
 			isAdministrator = false;
 		}
 		return isAdministrator;
@@ -114,3 +111,16 @@ para processar as solicitações feitas pelos clientes (como
 navegadores web, aplicativos móveis, entre outros) e responder 
 de acordo com a lógica da aplicação back end. 
   */
+
+/*
+ *COMENTÁRIO PRINCIPAL
+  Só capta o id de sessão no header da requisição a qual invariavelmente irá desembocar 
+  na camada de controle onde o método "request.getHeader(AuthFilter.CHAVE_ID_SESSAO)" 
+  estiver sendo invocado,  ou seja,
+  se o método "request.getHeader(AuthFilter.CHAVE_ID_SESSAO)" 
+  estiver sendo invocado em "PessoaController", como é o caso em questão,
+  o  método request.getHeader(AuthFilter.CHAVE_ID_SESSAO) irá esperar uma requisição apenas 
+  nessa camada de controle, ou seja, no caminho @Path("/pessoa") onde esse método está sendo invocado.
+  Caso seja necessário utilizar o método "validarAcaoDeAdministrador" para validar outras camadas de controle,
+  em cada camada onde será necessária a sua utilização deverá inserir o método "validarAcaoDeAdministrador". 
+ */

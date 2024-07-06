@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.List;
-
 import exception.ControleVacinasException;
 import filter.AuthFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,7 +18,6 @@ import model.entity.Pessoa;
 import model.repository.PessoaRepository;
 import model.seletor.AplicacaoSeletor;
 import model.service.AplicacaoService;
-import model.service.PessoaService;
 
 @Path("/restrito/aplicacao")
 public class AplicacaoController {
@@ -28,14 +26,13 @@ public class AplicacaoController {
 	private HttpServletRequest request;
 	
 	AplicacaoService aplicacaoService = new AplicacaoService();
-	PessoaController pessoaController = new PessoaController();
 	PessoaRepository pessoaRepository = new PessoaRepository();
 	
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Aplicacao salvar(Aplicacao aplicacao) throws ControleVacinasException{
-		if(!pessoaController.validarTipoDeUsuario()) {
+		if(!validarAcaoDeAdministrador()) {
 			throw new ControleVacinasException("O usuário logado não tem permissão para salvar uma aplicação.");
 		}
 		return aplicacaoService.salvar(aplicacao);
@@ -53,6 +50,16 @@ public class AplicacaoController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<AplicacaoDTO> consultarComFiltros(AplicacaoSeletor seletor){
 		return aplicacaoService.consultarComFiltros(seletor);
+	}
+	
+	public boolean validarAcaoDeAdministrador(){
+		boolean isAdministrator = true;
+		String idSessaoNoHeader = request.getHeader(AuthFilter.CHAVE_ID_SESSAO);
+		Pessoa pessoaAutenticada = this.pessoaRepository.consultarPorIdSessao(idSessaoNoHeader);
+		if(pessoaAutenticada.getTipo() == Pessoa.USUARIO) {
+			isAdministrator = false;
+		}
+		return isAdministrator;
 	}
 	
 }
