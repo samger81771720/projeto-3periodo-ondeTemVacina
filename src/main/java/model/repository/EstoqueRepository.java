@@ -215,6 +215,8 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 			 sql = preencherFiltros(seletor,sql);
 		}
 		
+		sql += " order by nomeUnidade ";
+		
 		if(seletor.temPaginacao()) {
 			sql += " LIMIT " + seletor.getLimite(); 
 			sql += " OFFSET " + seletor.getOffSet();
