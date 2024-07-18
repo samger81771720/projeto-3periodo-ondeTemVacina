@@ -19,8 +19,9 @@ public class LoginService {
 		}
 		if(
 			usuarioTentandoAutenticar.getSenha() == null || 
-			usuarioTentandoAutenticar.getSenha().replace(" ", "").length() == 0) {
-			throw new ControleVacinasException("Senha não informada");
+			usuarioTentandoAutenticar.getSenha().replace(" ", "").length() == 0
+			) {
+			throw new ControleVacinasException("Senha não informada"	);
 		}
 		Pessoa pessoaAutenticada = pessoaRepository.efetuarLogin(usuarioTentandoAutenticar);
 		if(pessoaAutenticada == null) {

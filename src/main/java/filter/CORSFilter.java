@@ -35,19 +35,35 @@ public class CORSFilter implements Filter {
 	}
 }
 /*
-Essa classe CORSFilter é um filtro Java Servlet que lida com o CORS (Cross-Origin Resource Sharing), permitindo que aplicações web possam fazer requisições para outros domínios além do domínio de origem.
+Essa classe CORSFilter é um filtro Java Servlet que lida com o CORS 
+(Cross-Origin Resource Sharing), permitindo que aplicações web 
+possam fazer requisições para outros domínios além do domínio de origem.
 
-@Provider: Indica que essa classe é um provedor JAX-RS, mas no contexto de filtros Servlet, isso pode não ter impacto direto. Normalmente usado em ambientes que suportam JAX-RS.
+@Provider: Indica que essa classe é um provedor JAX-RS, mas no contexto 
+de filtros Servlet, isso pode não ter impacto direto. Normalmente usado em 
+ambientes que suportam JAX-RS.
 
-Implementação de Filter: Implementa a interface Filter, que permite interceptar requisições HTTP antes que elas alcancem um servlet ou JSP.
+Implementação de Filter: Implementa a interface Filter, que permite 
+interceptar requisições HTTP antes que elas alcancem um servlet ou JSP.
 
 doFilter: Método principal onde a lógica do filtro é implementada.
 
-Configura cabeçalhos CORS como Access-Control-Allow-Origin para permitir todos os origens (*), especifica os métodos permitidos (GET, POST, PUT, DELETE, OPTIONS, HEAD), expõe cabeçalhos adicionais e permite credenciais (Access-Control-Allow-Credentials).
-Verifica se a requisição é do tipo OPTIONS e, se for, retorna um status 200 OK sem passar pela cadeia de filtros (FilterChain). Caso contrário, permite que a requisição prossiga normalmente.
-Objetivo: Esse filtro é usado para lidar com requisitos de segurança do navegador que restringem requisições feitas de scripts em uma página para um servidor em outro domínio.
+Configura cabeçalhos CORS como Access-Control-Allow-Origin para permitir 
+todos os origens (*), especifica os métodos permitidos 
+(GET, POST, PUT, DELETE, OPTIONS, HEAD), expõe cabeçalhos adicionais 
+e permite credenciais (Access-Control-Allow-Credentials).
+Verifica se a requisição é do tipo OPTIONS e, se for, retorna um status 200 OK 
+sem passar pela cadeia de filtros (FilterChain). Caso contrário, permite que a 
+requisição prossiga normalmente.
 
-Em resumo, o CORSFilter garante que as requisições entre diferentes origens sejam seguras e controladas conforme as políticas CORS definidas, permitindo que aplicações web possam funcionar corretamente com serviços em diferentes domínios.
+Objetivo: Esse filtro é usado para lidar com requisitos de segurança do 
+navegador que restringem requisições feitas de scripts em uma página 
+para um servidor em outro domínio.
+
+Em resumo, o CORSFilter garante que as requisições entre diferentes 
+origens sejam seguras e controladas conforme as políticas CORS 
+definidas, permitindo que aplicações web possam funcionar corretamente 
+com serviços em diferentes domínios.
 
 
 

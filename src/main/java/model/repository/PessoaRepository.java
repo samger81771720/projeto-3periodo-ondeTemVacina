@@ -109,7 +109,10 @@ public class PessoaRepository implements BaseRepository<Pessoa>{
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
 		Pessoa pessoa = null;
-		String query="select * from VACINAS.PESSOA p where p.login = '" + usuarioTentandoAutenticar.getLogin() + "' and p.senha = '" + StringsUtils.cifrar(usuarioTentandoAutenticar.getSenha()) + "'";
+		String query = " select * from VACINAS.PESSOA p where p.login = '" 
+									 + usuarioTentandoAutenticar.getLogin() 
+									 + "' and p.senha = '" 
+									 + StringsUtils.cifrar(usuarioTentandoAutenticar.getSenha()) + "'";
 		try {
 			resultado = stmt.executeQuery(query);
 		if(resultado.next()) {
