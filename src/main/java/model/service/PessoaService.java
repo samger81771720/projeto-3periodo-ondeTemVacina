@@ -14,24 +14,6 @@ public class PessoaService {
 	
 	PessoaRepository pessoaRepository = new PessoaRepository();
 	
-	// Funcionalidade terá outras implementações futuramente
-	/*public Pessoa efetuarLogin(Pessoa pessoa) throws ControleVacinasException {
-		validarCamposPreenchidosParalogin(pessoa);
-	   Pessoa pessoaLogada = pessoaRepository.efetuarLogin(pessoa);
-	    if (pessoaLogada != null) {
-	        switch (pessoaLogada.getTipo()) {
-	            case Pessoa.ADMINISTRADOR:
-	                return pessoaLogada;
-	            case Pessoa.USUARIO:
-	                return pessoaLogada;
-	            default:
-	                throw new ControleVacinasException("Essa pessoa não se encontra cadastrada no sistema.");
-	        }
-	    } else {
-	        throw new ControleVacinasException("Verifique os dados de acesso e tente novamente.");
-	    }
-	}*/
-	
 	public Pessoa consultarPorId(int id) {
 		return pessoaRepository.consultarPorId(id);
 	}
@@ -45,25 +27,17 @@ public class PessoaService {
 	}
 	
 	public boolean alterar(Pessoa pessoaAtualizada) throws ControleVacinasException{
-		
 		Pessoa pessoaConsultada = pessoaRepository.consultarPorId(pessoaAtualizada.getId()); 
-		
 		if(!pessoaConsultada.getCpf().equals(pessoaAtualizada.getCpf())) {
 			throw new ControleVacinasException("Não é possível atualizar o número do seu CPF.");
 		}
 		 validarCamposPreenchidosDePessoa(pessoaAtualizada);
-		
 		if(!pessoaRepository.consultarPorId(pessoaAtualizada.getId()).getLogin().equals(pessoaAtualizada.getLogin()))  {
 			verificarDisponibilidadeLogin(pessoaAtualizada);
 		}
-		
 		if(!pessoaRepository.consultarPorId(pessoaAtualizada.getId()).getSenha().equals(StringsUtils.cifrar(pessoaAtualizada.getSenha())))  {
 			verificarDisponibilidadeSenha(pessoaAtualizada);
 		}
-		/*if(!pessoaRepository.consultarPorId(pessoaAtualizada.getId()).getSenha().equals(pessoaAtualizada.getSenha()))  {
-			verificarDisponibilidadeSenha(pessoaAtualizada);
-		}*/
-		
 		return pessoaRepository.alterar(pessoaAtualizada);
 	}
 	
