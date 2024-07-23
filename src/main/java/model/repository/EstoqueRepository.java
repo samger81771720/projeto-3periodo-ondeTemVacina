@@ -277,6 +277,11 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 			 sql = preencherFiltrosEstoquesComFiltrosComoAdministrador(seletor,sql);
 		}
 		
+		if(seletor.temPaginacao()) {
+			sql += " LIMIT " + seletor.getLimite(); 
+			sql += " OFFSET " + seletor.getOffSet();
+		}
+		
 		try {
 			resultado = stmt.executeQuery(sql);
 			while(resultado.next()) {
@@ -434,25 +439,15 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 			 		sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" + seletor.getFabricante() + "%')";
 		  }
 		  
-		  if (
-				  seletor.getTemOrdenacaoPorUnidade()!= null ||
-				  seletor.getTemOrdenacaoPorCidade()!= null ||
-				  seletor.getTemOrdenacaoPorFabricante()!= null ||
-				  seletor.getTemOrdenacaoPorVacina()!= null
-			  ) {
-			       if (seletor.getTemOrdenacaoPorUnidade()) {
-			    	   sql += " order by nomeDaUnidade ";
-			        } 
-			       if(seletor.getTemOrdenacaoPorCidade()) {
-			        	sql += " order by nomeDaCidade ";
-			        } 
-			       if(seletor.getTemOrdenacaoPorVacina()) {
-			        	sql += " order by nomeDaVacina ";
-			       } 
-			       if(seletor.getTemOrdenacaoPorFabricante()) {
-			        	sql += " order by nomeDoFabricante ";
-			        }
-		  }
+		  if (seletor.getTemOrdenacaoPorUnidade() != null && seletor.getTemOrdenacaoPorUnidade()) {
+		        sql += " order by nomeDaUnidade asc ";
+		    } else if (seletor.getTemOrdenacaoPorCidade() != null && seletor.getTemOrdenacaoPorCidade()) {
+		        sql += " order by nomeDaCidade asc ";
+		    } else if (seletor.getTemOrdenacaoPorVacina() != null && seletor.getTemOrdenacaoPorVacina()) {
+		        sql += " order by nomeDaVacina asc ";
+		    } else if (seletor.getTemOrdenacaoPorFabricante() != null && seletor.getTemOrdenacaoPorFabricante()) {
+		        sql += " order by nomeDoFabricante asc ";
+		    }
 
 		return sql;
 	}
