@@ -8,13 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
 import model.dto.EstoqueDTO;
 import model.dto.VacinaDTO;
-import model.entity.Endereco;
 import model.entity.Estoque;
-import model.entity.Unidade;
-import model.entity.Vacina;
 import model.seletor.EstoqueSeletor;
 import model.seletor.VacinaSeletor;
 
@@ -108,7 +104,7 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return listaDeTodosEstoques;
 	}
 	
-	public ArrayList<Estoque> consultarEstoquesDaUnidadePorId(Estoque estoqueDaUnidade) {
+	public List<Estoque> consultarEstoquesDaUnidadePorId(Estoque estoqueDaUnidade) {
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ArrayList<Estoque> listaDeTodosEstoques = new ArrayList<>();
@@ -119,7 +115,7 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 											+ " quantidade, "
 											+ " dataLote, "
 											+ " validade "
-											+ " from "
+								   + " from "
 											+ " VACINAS.ESTOQUE "
 								   + " where "
 											+ " idUnidade = " + estoqueDaUnidade.getUnidade().getId();
@@ -151,9 +147,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 											+ " quantidade, "
 											+ " dataLote, "
 											+ " validade "
-											+ " from "
+									+ " from "
 											+ " VACINAS.ESTOQUE "
-											+ " where "
+									+ " where "
 											+ " idUnidade = " + idUnidade 
 											+ " and "
 											+ " idVacina  = " + idVacina;
@@ -214,7 +210,7 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 				+ "    VACINAS.CONTATO on VACINAS.UNIDADE.idContato = VACINAS.CONTATO.id where VACINAS.ESTOQUE.quantidade > 0 ";
 		
 		if(seletor.temFiltro()) {
-			 sql = preencherFiltros(seletor,sql);
+			 sql = preencherFiltrosParaConsultarVacinaComFiltros(seletor,sql);
 		}
 		
 		sql += " order by nomeUnidade ";
@@ -251,15 +247,16 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
 		ResultSet resultado = null;
+		String hack = " 1 + 1 = 2 ";
 		
 		String sql = " select "
 				+ " VACINA.id as id_Vacina, "
-				+ " VACINA.nome, "
-				+ " FABRICANTE.nome, "
+				+ " VACINA.nome as nomeDaVacina, "
+				+ " FABRICANTE.nome as nomeDoFabricante, "
 				+ " FABRICANTE.id as id_Fabricante, "
 				+ " UNIDADE.id as id_Unidade, "
-				+ " UNIDADE.nome, "
-				+ " ENDERECO.localidade, "
+				+ " UNIDADE.nome as nomeDaUnidade, "
+				+ " ENDERECO.localidade as nomeDaCidade, "
 				+ " ENDERECO.id as id_EnderecoDaUnidade, "
 				+ " ESTOQUE.idUnidade as idDaUnidadeQuePossuiVacinaEmEstoque, "
 				+ " ESTOQUE.idVacina as idDaVacinaQueUnidadePossuiEmEstoque "
@@ -273,8 +270,12 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 				+ " VACINAS.UNIDADE ON VACINAS.ESTOQUE.idUnidade = VACINAS.UNIDADE.id "
 				+ " JOIN "
 				+ " VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id "
-				+ " WHERE "
-				+ " VACINAS.ESTOQUE.quantidade > 0 ";
+				+ " WHERE " + hack;
+		
+		
+		if(seletor.temFiltro()) {
+			 sql = preencherFiltrosEstoquesComFiltrosComoAdministrador(seletor,sql);
+		}
 		
 		try {
 			resultado = stmt.executeQuery(sql);
@@ -329,7 +330,7 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	      }
 	}
 	
-	private String preencherFiltros(VacinaSeletor seletor, String sql) {
+	private String preencherFiltrosParaConsultarVacinaComFiltros(VacinaSeletor seletor, String sql) {
 
 		final String AND = " and ";
 		
@@ -386,14 +387,73 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 	        	   +    AND + " VACINA.idadeMaxima <= " + seletor.getIdadeMaxima()  + ")";
 	    }
 		
-		  if (seletor.isContraIndicacao() != null) {
-		        if (!seletor.isContraIndicacao()) {
-		            sql += AND + " VACINA.contraIndicacao = false";
+	  if (seletor.isContraIndicacao() != null) {
+	        if (!seletor.isContraIndicacao()) {
+	            sql += AND + " VACINA.contraIndicacao = false";
+	        } else {
+	            sql += AND + " VACINA.contraIndicacao = true";
+	        }
+	    }
+		
+		return sql;
+	}
+	
+	private String preencherFiltrosEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor, String sql) {
+				
+		  final String AND = " and ";
+				
+		  if (seletor.getTemEstoque() != null) {
+		        if (seletor.getTemEstoque()) {
+		            sql += AND + " ESTOQUE.quantidade > 0 ";
 		        } else {
-		            sql += AND + " VACINA.contraIndicacao = true";
+		            sql += AND + " ESTOQUE.quantidade = 0 ";
 		        }
 		    }
-		
+		  
+		  if (
+		    	seletor.getCidade() != null && seletor.getCidade().trim().length() > 0
+		    	) {
+			  		sql += AND + " UPPER(ENDERECO.localidade) LIKE UPPER ('%" + seletor.getCidade() + "%')";
+		  }
+		  
+		  if (
+			    seletor.getUnidade() != null && seletor.getUnidade().trim().length() > 0
+			    ) {
+			  		sql += AND + " UPPER(UNIDADE.nome) LIKE UPPER ('%" + seletor.getUnidade() + "%')";
+		  }
+		  
+		  if (
+				seletor.getVacina() != null && seletor.getVacina().trim().length() > 0
+				) {
+				    sql += AND + " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getVacina() + "%')";
+		  }
+		  
+		  if (
+				  seletor.getFabricante() != null && seletor.getFabricante().trim().length() > 0
+			   ) {
+			 		sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" + seletor.getFabricante() + "%')";
+		  }
+		  
+		  if (
+				  seletor.getTemOrdenacaoPorUnidade()!= null ||
+				  seletor.getTemOrdenacaoPorCidade()!= null ||
+				  seletor.getTemOrdenacaoPorFabricante()!= null ||
+				  seletor.getTemOrdenacaoPorVacina()!= null
+			  ) {
+			       if (seletor.getTemOrdenacaoPorUnidade()) {
+			    	   sql += " order by nomeDaUnidade ";
+			        } 
+			       if(seletor.getTemOrdenacaoPorCidade()) {
+			        	sql += " order by nomeDaCidade ";
+			        } 
+			       if(seletor.getTemOrdenacaoPorVacina()) {
+			        	sql += " order by nomeDaVacina ";
+			       } 
+			       if(seletor.getTemOrdenacaoPorFabricante()) {
+			        	sql += " order by nomeDoFabricante ";
+			        }
+		  }
+
 		return sql;
 	}
 	

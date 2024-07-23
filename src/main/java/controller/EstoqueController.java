@@ -91,7 +91,7 @@ public class EstoqueController {
 	@Path("/consultarEstoquesDaUnidadePorId")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public ArrayList<Estoque> consultarEstoquesDaUnidadePorId(Estoque estoqueDaUnidade){
+	public List<Estoque> consultarEstoquesDaUnidadePorId(Estoque estoqueDaUnidade){
 		return estoqueService.consultarEstoquesDaUnidadePorId(estoqueDaUnidade);
 	}
 	

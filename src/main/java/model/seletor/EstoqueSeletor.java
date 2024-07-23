@@ -7,6 +7,10 @@ public class EstoqueSeletor extends BaseSeletor {
 	private String vacina;
 	private String fabricante;
 	private Boolean temEstoque;
+	private Boolean temOrdenacaoPorUnidade;
+	private Boolean temOrdenacaoPorCidade;
+	private Boolean temOrdenacaoPorVacina;
+	private Boolean temOrdenacaoPorFabricante;
 	
 	public EstoqueSeletor() {
 		super();
@@ -51,13 +55,49 @@ public class EstoqueSeletor extends BaseSeletor {
 	public void setTemEstoque(Boolean temEstoque) {
 		this.temEstoque = temEstoque;
 	}
+	
+	public Boolean getTemOrdenacaoPorUnidade() {
+		return temOrdenacaoPorUnidade;
+	}
+
+	public void setTemOrdenacaoPorUnidade(Boolean temOrdenacaoPorUnidade) {
+		this.temOrdenacaoPorUnidade = temOrdenacaoPorUnidade;
+	}
+	
+	public Boolean getTemOrdenacaoPorCidade() {
+		return temOrdenacaoPorCidade;
+	}
+
+	public void setTemOrdenacaoPorCidade(Boolean temOrdenacaoPorCidade) {
+		this.temOrdenacaoPorCidade = temOrdenacaoPorCidade;
+	}
+
+	public Boolean getTemOrdenacaoPorVacina() {
+		return temOrdenacaoPorVacina;
+	}
+
+	public void setTemOrdenacaoPorVacina(Boolean temOrdenacaoPorVacina) {
+		this.temOrdenacaoPorVacina = temOrdenacaoPorVacina;
+	}
+
+	public Boolean getTemOrdenacaoPorFabricante() {
+		return temOrdenacaoPorFabricante;
+	}
+
+	public void setTemOrdenacaoPorFabricante(Boolean temOrdenacaoPorFabricante) {
+		this.temOrdenacaoPorFabricante = temOrdenacaoPorFabricante;
+	}
 
 	public boolean temFiltro() {
 		return (this.cidade != null && this.cidade.trim().length() > 0)              
 				   || (this.unidade != null && this.unidade.trim().length() > 0)          
 				   || (this.vacina != null && this.vacina.trim().length() > 0)               
 				   || (this.fabricante != null && this.fabricante.trim().length() > 0) 
-			       || (this.temEstoque != null); 
+			       || (this.temEstoque != null)
+			       || (this.temOrdenacaoPorUnidade != null)
+			       || (this.temOrdenacaoPorCidade != null)
+			       || (this.temOrdenacaoPorFabricante != null)
+			       || (this.temOrdenacaoPorVacina != null); 
 	}
 	
 }
