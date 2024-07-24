@@ -403,7 +403,7 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return sql;
 	}
 	
-	private String preencherFiltrosEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor, String sql) {
+	/*private String preencherFiltrosEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor, String sql) {
 				
 		  final String AND = " and ";
 				
@@ -450,7 +450,57 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		    }
 
 		return sql;
+	}*/
+	
+	private String preencherFiltrosEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor, String sql) {
+		
+		  final String AND = " and ";
+				
+		  if (seletor.getTemEstoque() != null) {
+		        if (seletor.getTemEstoque()) {
+		            sql += AND + " ESTOQUE.quantidade > 0 ";
+		        } else {
+		            sql += AND + " ESTOQUE.quantidade = 0 ";
+		        }
+		  }
+		  
+		  if (
+		    	seletor.getCidade() != null && seletor.getCidade().trim().length() > 0
+		    	) {
+			  		sql += AND + " UPPER(ENDERECO.localidade) LIKE UPPER ('%" + seletor.getCidade() + "%')";
+		  }
+		  
+		  if (
+			    seletor.getUnidade() != null && seletor.getUnidade().trim().length() > 0
+			    ) {
+			  		sql += AND + " UPPER(UNIDADE.nome) LIKE UPPER ('%" + seletor.getUnidade() + "%')";
+		  }
+		  
+		  if (
+				seletor.getVacina() != null && seletor.getVacina().trim().length() > 0
+				) {
+				    sql += AND + " UPPER(VACINA.nome) LIKE UPPER ('%" + seletor.getVacina() + "%')";
+		  }
+		  
+		  if (
+				  seletor.getFabricante() != null && seletor.getFabricante().trim().length() > 0
+			   ) {
+			 		sql += AND + " UPPER(FABRICANTE.nome) LIKE UPPER ('%" + seletor.getFabricante() + "%')";
+		  }
+		  
+		  if (seletor.getTemOrdenacaoPorUnidade() != null) {
+			   sql += " order by nomeDaUnidade asc ";
+		  } else if (seletor.getTemOrdenacaoPorCidade() != null) {
+			  sql += " order by nomeDaCidade asc ";
+		  } else if (seletor.getTemOrdenacaoPorVacina() != null) {
+			  sql += " order by nomeDaVacina asc "; 
+		  }  else if (seletor.getTemOrdenacaoPorFabricante() != null) {
+			  sql += " order by nomeDoFabricante asc "; 
+		  }
+		return sql;
 	}
+	
+
 	
 	private VacinaDTO construirObjetoVacinaDTODoResultSet(ResultSet resultado) throws SQLException{
 		
