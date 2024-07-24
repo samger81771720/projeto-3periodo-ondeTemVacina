@@ -448,6 +448,7 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		  }  else if (seletor.getTemOrdenacaoPorFabricante() != null) {
 			  sql += " order by nomeDoFabricante asc "; 
 		  }
+		  
 		return sql;
 	}
 	
