@@ -53,7 +53,7 @@ public class VacinaController {
 	@Path("/{id}")
 	public boolean excluir(@PathParam("id")int id) throws ControleVacinasException{
 		if(!this.validarAcaoDeAdministrador()) {
-			throw new ControleVacinasException("O usuário logado não tem permissão para salvar um estoque no banco de dados.");
+			throw new ControleVacinasException("O usuário logado não tem permissão para excluir uma vacina no banco de dados.");
 		}
 		return vacinaService.excluir(id);
 	}
@@ -63,7 +63,7 @@ public class VacinaController {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Vacina salvar(Vacina novaVacina) throws ControleVacinasException{
 		if(!this.validarAcaoDeAdministrador()) {
-			throw new ControleVacinasException("O usuário logado não tem permissão para salvar um estoque no banco de dados.");
+			throw new ControleVacinasException("O usuário logado não tem permissão para salvar um novo registro  de vacina no banco de dados.");
 		}
 		return vacinaService.salvar(novaVacina);
 	}
@@ -73,7 +73,7 @@ public class VacinaController {
 	@Produces(MediaType.TEXT_PLAIN)
 	public boolean alterar(Vacina vacinaParaAlterar) throws ControleVacinasException{
 		if(!this.validarAcaoDeAdministrador()) {
-			throw new ControleVacinasException("O usuário logado não tem permissão para salvar um estoque no banco de dados.");
+			throw new ControleVacinasException("O usuário logado não tem permissão para alterar um registro de vacina no banco de dados.");
 		}
 		return vacinaService.alterar(vacinaParaAlterar);
 	}
