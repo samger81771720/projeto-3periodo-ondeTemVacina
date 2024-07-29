@@ -2,11 +2,8 @@ package model.service;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import model.dto.EstoqueDTO;
 import model.dto.VacinaDTO;
 import model.entity.Estoque;
-import model.entity.Unidade;
 import model.repository.EstoqueRepository;
 import model.seletor.EstoqueSeletor;
 import model.seletor.VacinaSeletor;
@@ -43,7 +40,7 @@ public class EstoqueService {
 		return estoqueRepository.consultarEstoquesDaUnidadePorId(estoqueDaUnidade);
 	}
 	
-	public List<EstoqueDTO> consultarEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor){
+	public List<Estoque> consultarEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor){
 		return estoqueRepository.consultarEstoquesComFiltrosComoAdministrador(seletor);
 	}
 	

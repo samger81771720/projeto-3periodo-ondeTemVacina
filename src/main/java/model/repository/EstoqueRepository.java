@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import model.dto.EstoqueDTO;
 import model.dto.VacinaDTO;
 import model.entity.Estoque;
 import model.seletor.EstoqueSeletor;
@@ -240,9 +239,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return listagemComFiltrosSelecionados;
 	}
 	
-	public List<EstoqueDTO> consultarEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor){
+	public List<Estoque> consultarEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor){
 		
-		ArrayList<EstoqueDTO> listagemComFiltrosSelecionados = new ArrayList<>();
+		ArrayList<Estoque> listagemComFiltrosSelecionados = new ArrayList<>();
 		
 		Connection conn = Banco.getConnection();
 		Statement stmt = Banco.getStatement(conn);
@@ -258,8 +257,9 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 				+ " UNIDADE.nome as nomeDaUnidade, "
 				+ " ENDERECO.localidade as nomeDaCidade, "
 				+ " ENDERECO.id as id_EnderecoDaUnidade, "
-				+ " ESTOQUE.idUnidade as idDaUnidadeQuePossuiVacinaEmEstoque, "
-				+ " ESTOQUE.idVacina as idDaVacinaQueUnidadePossuiEmEstoque "
+				+ " ESTOQUE.quantidade as quantidadeEmEstoque, "
+				+ " ESTOQUE.dataLote as dataDoLote, "
+				+ " ESTOQUE.validade as validadeDoLote "
 				+ " FROM "
 				+ " VACINAS.VACINA "
 				+ " JOIN "
@@ -272,9 +272,8 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 				+ " VACINAS.ENDERECO ON VACINAS.UNIDADE.idEndereco = VACINAS.ENDERECO.id "
 				+ " WHERE " + hack;
 		
-		
 		if(seletor.temFiltro()) {
-			 sql = preencherFiltrosEstoquesComFiltrosComoAdministrador(seletor,sql);
+			 sql = preencherFiltrosDaConsultaDeEstoquesComoAdministrador(seletor, sql);
 		}
 		
 		if(seletor.temPaginacao()) {
@@ -285,8 +284,8 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		try {
 			resultado = stmt.executeQuery(sql);
 			while(resultado.next()) {
-				EstoqueDTO estoqueDTO = construirObjetoEstoqueDTODoResultSet(resultado);
-				listagemComFiltrosSelecionados.add(estoqueDTO);
+				Estoque estoque = construirObjetoEstoqueDoResultSet(resultado);
+				listagemComFiltrosSelecionados.add(estoque);
 			}
 		} catch(SQLException erro){
 			System.out.println(
@@ -403,7 +402,7 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return sql;
 	}
 	
-	private String preencherFiltrosEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor, String sql) {
+	private String preencherFiltrosDaConsultaDeEstoquesComoAdministrador(EstoqueSeletor seletor, String sql) {
 		
 		  final String AND = " and ";
 				
@@ -452,47 +451,31 @@ public class EstoqueRepository implements BaseRepository<Estoque>{
 		return sql;
 	}
 	
-
-	
 	private VacinaDTO construirObjetoVacinaDTODoResultSet(ResultSet resultado) throws SQLException{
-		
 		VacinaDTO vacinaDTO = new VacinaDTO();
-		
 		VacinaRepository vacinaRepository = new VacinaRepository();
 		vacinaDTO.setVacina(vacinaRepository.consultarPorId(resultado.getInt("idVacina")));
-		
 		FabricanteRepository fabricanteRepository = new FabricanteRepository();
 		vacinaDTO.setFabricante(fabricanteRepository.consultarPorId(resultado.getInt("idFabricante")));
-		
 		UnidadeRepository unidadeRepository = new UnidadeRepository();
 		vacinaDTO.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("idUnidade")));
-		
 		return vacinaDTO;
 	}
 	
-private EstoqueDTO construirObjetoEstoqueDTODoResultSet(ResultSet resultado) throws SQLException{
-		
-		EstoqueDTO estoqueDTO = new EstoqueDTO();
-		
+	private Estoque construirObjetoEstoqueDoResultSet(ResultSet resultado) throws SQLException{
+		Estoque estoque = new Estoque();
 		UnidadeRepository unidadeRepository = new UnidadeRepository();
-		estoqueDTO.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("id_Unidade")));
-		
-		EnderecoRepository enderecoRepository = new EnderecoRepository();
-		estoqueDTO.setEndereco(enderecoRepository.consultarPorId(resultado.getInt("id_EnderecoDaUnidade")));
-		
+		estoque.setUnidade(unidadeRepository.consultarPorId(resultado.getInt("id_Unidade")));
 		VacinaRepository vacinaRepository = new VacinaRepository();
-		estoqueDTO.setVacina(vacinaRepository.consultarPorId(resultado.getInt("id_Vacina")));
-		
-		FabricanteRepository fabricanteRepository = new FabricanteRepository();
-		estoqueDTO.setFabricante(fabricanteRepository.consultarPorId(resultado.getInt("id_Fabricante")));
-		
-		EstoqueRepository estoqueRepository = new EstoqueRepository();
-		estoqueDTO.setEstoque(estoqueRepository.consultarPorIds(
-				resultado.getInt("idDaUnidadeQuePossuiVacinaEmEstoque"), 
-				resultado.getInt("idDaVacinaQueUnidadePossuiEmEstoque"))
-		);
-		
-		return estoqueDTO;
+		estoque.setVacina(vacinaRepository.consultarPorId(resultado.getInt("id_Vacina")));
+		estoque.setQuantidade(resultado.getInt("quantidadeEmEstoque"));
+		if(resultado.getDate("dataDoLote") != null) {
+			estoque.setDataLote(resultado.getDate("dataDoLote").toLocalDate());
+		}
+		if(resultado.getDate("validadeDoLote") != null) {
+			estoque.setValidade(resultado.getDate("validadeDoLote").toLocalDate());
+		}
+		return estoque;
 	}
 
 	@Override

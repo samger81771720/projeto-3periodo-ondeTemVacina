@@ -16,13 +16,9 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Context;
 import jakarta.ws.rs.core.MediaType;
-import model.dto.EstoqueDTO;
 import model.dto.VacinaDTO;
-import model.entity.Contato;
-import model.entity.Endereco;
 import model.entity.Estoque;
 import model.entity.Pessoa;
-import model.entity.Unidade;
 import model.repository.PessoaRepository;
 import model.seletor.EstoqueSeletor;
 import model.seletor.VacinaSeletor;
@@ -99,7 +95,7 @@ public class EstoqueController {
 	@Path("/consultarEstoquesComFiltrosComoAdministrador")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<EstoqueDTO> consultarEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor) throws ControleVacinasException{
+	public List<Estoque> consultarEstoquesComFiltrosComoAdministrador(EstoqueSeletor seletor) throws ControleVacinasException{
 		if(!this.validarAcaoDeAdministrador()) {
 			throw new ControleVacinasException("O usuário logado não tem permissão para efetuar a consulta com filtros dos estoques das unidades.");
 		}
